@@ -8,10 +8,26 @@
     display: block;
     margin: 0 auto;
 }
+@php
+ $data= json_decode($details->reg_tracking);
+@endphp
 </style>
 <div class="page-wrapper">
     <div class="container-fluid">
+         @if (session('success'))
+        <div class="alert alert-success alert-block mt-3">
+            <button type="button" class="close" data-dismiss="alert">X</button>
+            <strong>{{ session('success') }}</strong>
+        </div>
+        @endif
+        @if (session('error'))
+        <div class="alert alert-danger alert-block mt-3">
+            <button type="button" class="close" data-dismiss="alert">X</button>
+            <strong>{{ session('error') }}</strong>
+        </div>
+        @endif
         <div class="card-body" style="display:flex;justify-content:end;">
+             @if($data->report_status == 2)
             <a data-toggle="modal" data-target="#rejectModal_{{$report->id}}">
                 @if($report->custom_layout == null)
                 <button class="btn btn-primary btn-sm ml-2">Upload Custom Layout</button>
@@ -19,7 +35,11 @@
                 <button class="btn btn-warning btn-sm ml-2">Update Custom Layout</button>
                 @endif
             </a>
-                     <a  href="{{ route('approve.layout.status', ['id' => $report->id, 'layout_status' => $report->layout_status, 'layout_type' => 2]) }}"  style="margin-left:10px;"><button class="btn btn-success btn-sm ml-2">Approve</button></a>
+            @if($report->custom_layout)
+            <a href="{{ route('approve.layout.status', ['id' => $details->id, 'layout_status' => $report->layout_status, 'layout_type' => 2 , 'client_id' => $details->id ]) }}"
+                style="margin-left:10px;"><button class="btn btn-success btn-sm ml-2">Approve</button></a>
+            @endif
+           @endif
             <a style="margin-left:10px;"><button class="btn btn-primary btn-sm ml-2"
                     onclick="history.back()">back</button></a>
                    

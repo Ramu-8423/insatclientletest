@@ -47,15 +47,15 @@ class ClientPublicController extends Controller
              return redirect()->back()->with('error','something went wrong!');
         }     
       }
-    
     public function client_agreement(Request $request){
-      
+         
          $id = session('client_login_id');
          $company_name = $request->company_name;
          $cin_number = $request->cin_number;
          $company_address = $request->company_address;
          $signatory_name = $request->signatory_name;
          $a_signatory_desi = $request->signatory_designation;
+         
          $case_timeline = $request->case_timeline;
          $person_name = $request->person_name;
          $person_phone = $request->person_phone;
@@ -187,18 +187,18 @@ class ClientPublicController extends Controller
                             }
                          }
 
-    $update = DB::table('client_details')->where('id', $id)->update([
-    'a_company_name' => $company_name,
-    'a_cin_number' => $cin_number,
-    'a_company_address' => $company_address,
-    'a_signatory_name' => $signatory_name,
-    'a_signatory_desi' => $a_signatory_desi,
-    'a_case_timeline' => $case_timeline,
-    'a_other_person_info' => $a_other_person_info,
-    'remark_status' => $remark_status,
-    'progress_status' => 2,
-    'reg_tracking' => DB::raw("JSON_SET(reg_tracking, '$.agreement_status', 1)")
-]);
+                    $update = DB::table('client_details')->where('id', $id)->update([
+                    'a_company_name' => $company_name,
+                    'a_cin_number' => $cin_number,
+                    'a_company_address' => $company_address,
+                    'a_signatory_name' => $signatory_name,
+                    'a_signatory_desi' => $a_signatory_desi,
+                    'a_case_timeline' => $case_timeline,
+                    'a_other_person_info' => $a_other_person_info,
+                    'remark_status' => $remark_status,
+                    'progress_status' => 2,
+                    'reg_tracking' => DB::raw("JSON_SET(reg_tracking, '$.agreement_status', 1)")
+                ]);
 
      if($update){
          return redirect()->back()->with('success', 'Updated Successfully.');
@@ -206,6 +206,9 @@ class ClientPublicController extends Controller
          return redirect()->back()->with('error', 'Failed to update.');
      }
     }
+    
+    
+    
     
     public function client_register(){
       return view('admin.client_register');  
@@ -441,24 +444,28 @@ class ClientPublicController extends Controller
      }
      
        public function report($id, $layout_type, $layout_status) {
+            $ids = session('client_login_id');
             if ($layout_type == 1) {
                 $column_layout = DB::table('verifications')->where('id', 1)->first();
                 $details = DB::table('report_layout')->where('id', $id)->first();
-                
+                $detail = DB::table('client_details')->where('id', $ids)->first();
                 return view('report.report')->with([
                     'column_layout' => $column_layout,
                     'id' => $id,
                     'layout_type' => $layout_type,
                     'layout_status' => $layout_status,
+                    'detail' => $detail,
                     'details' => $details
                 ]);
             } if($layout_type == 2) {
                $report_details = DB::table('report_layout')->where('id',$id)->first();
-                return view('report.getuploadupdate')->with(['report' => $report_details]);
+                $details = DB::table('client_details')->where('id', $ids)->first();
+                return view('report.getuploadupdate')
+              
+                ->with('report', $report_details)
+                ->with('details', $details);
             }
         }
-
-        
           public function Customfile(Request $request){
              $request->validate([
                  'id' => 'required',
@@ -505,17 +512,19 @@ class ClientPublicController extends Controller
         
           public function getuploadupdate($id){
            $report_details = DB::table('report_layout')->where('id',$id)->first();
-          
            return view('report.getuploadupdate')->with(['report' => $report_details]);
         }
         
        public function updateAgreementStatus(Request $request){
         $agreement_status = $request->agreement_status;
         $report = $request->report;
+        $reportedit = $request->reportedit;
+        $finalsubmit = $request->finalsubmit;
+        $finalsubmit0 = $request->finalsubmit0;
         $id = $request->id;
         if($agreement_status){
           DB::table('client_details')->where('id', $id)->update([
-            'reg_tracking' => DB::raw("JSON_SET(reg_tracking, '$.agreement_status', 0)")
+            'reg_tracking' => DB::raw("JSON_SET(reg_tracking, '$.agreement_status', 2)")
         ]);  
         }
         if($report){
@@ -527,7 +536,16 @@ class ClientPublicController extends Controller
              DB::table('client_details')->where('id', $id)->update([
             'reg_tracking' => DB::raw("JSON_SET(reg_tracking, '$.report_status', 2)") ]); // 2==  open fror edit
         }
-        return redirect()->back();
+         if($finalsubmit)
+        {
+           DB::table('client_details')->where('id', $id)->update(['final_status' => 1]);
+
+        }
+         if($finalsubmit0)
+        {
+             DB::table('client_details')->where('id', $id)->update(['final_status' => 0]);
+        }
+        return redirect()->back()->with('message', 'Registration');
 }
 }
 

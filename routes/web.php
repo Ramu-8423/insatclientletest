@@ -103,7 +103,7 @@ Route::get('/report/{id}/{layout_type}/{layout_status}', [ClientPublicController
 Route::post('/Customfile',[ClientPublicController::class, 'Customfile'])->name('Customfile');
 Route::post('/client_details_order',[ClientPublicController::class,'client_details_order'])->name('client_details_order');
 
-Route::get('/report/{id}/{layout_status}{layout_type}', [ClientPublicController::class, 'layoutstatus'])->name('approve.layout.status');
+Route::get('/reports/{id}/{layout_status}/{layout_type}', [ClientPublicController::class, 'layoutstatus'])->name('approve.layout.status');
 
 route::get('/getuploadupdate/{id}', [ClientPublicController::class, 'getuploadupdate'])->name('getuploadupdate');
 // Route::post('/upload',[InvoiceController::class, 'uploadInvoice'])->name('update.invoice');

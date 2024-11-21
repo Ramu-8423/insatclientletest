@@ -1,6 +1,10 @@
 @extends('admin.body.adminmaster')
 
 @section('admin')
+@php
+ $data= json_decode($detail->reg_tracking);
+@endphp
+
 <style>
 input {
     box-sizing: border-box;
@@ -97,10 +101,11 @@ th>b {
     </div>
 </div>
 <div class="card-body" style="display:flex;justify-content:end;">
-  <a href="{{ route('approve.layout.status', ['id' => $id, 'layout_status' => $layout_status , 'layout_type' => 1]) }}" style="margin-left:10px;">
+ @if($data->report_status == 2)
+    <a href="{{ route('approve.layout.status', ['id' => $id, 'layout_status' => $layout_status , 'layout_type' => 1]) }}" style="margin-left:10px;">
     <button class="btn btn-success btn-sm">Approve</button>
 </a>
-
+  @endif
 </div>
    <script
                                 src="https://cdnjs.cloudflare.com/ajax/libs/Sortable/1.14.0/Sortable.min.js"></script>

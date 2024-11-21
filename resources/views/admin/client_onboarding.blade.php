@@ -30,7 +30,7 @@
                     <div class="d-flex justify-content-between align-items-center">
                         <ul class="nav nav-tabs" role="tablist">
                             <li class="nav-item">
-                                <a class="nav-link active" data-toggle="tab" href="#Registration" role="tab">
+                                <a class="nav-link active {{$details->final_status ==1? 'btn-danger': '' }}" data-toggle="tab" href="#Registration" role="tab">
                                     <span class="hidden-sm-up"></span>
                                     <span class="hidden-xs-down">Registration Details</span>
                                 </a>
@@ -175,7 +175,6 @@
                                     </label>
                                     <div class="col-sm-1 text-center">:</div>
                                     <div class="col-sm-8">
-                                        
                                         @if($details->payment_preference==1)
                                         <label for="fname"
                                             class="col-sm-3 text-left control-label col-form-label"><b>Prepaid</b></label>
@@ -187,9 +186,9 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="tab-pane  p-20" id="Agreement" role="tabpanel">
-                             <h1 class="custom-heading">Agreement Details</h1>
+                        <div class="tab-pane  " id="Agreement" role="tabpanel">
                              @if($data->agreement_status == 1)
+                               <h1 class="custom-heading ml-3">Agreement Details</h1>
                             <div class="container mt-1">
                                 <div class="row mt-1">
                                     <div class="col-12">
@@ -298,13 +297,16 @@
                                         </table>
                                     </div>
                                 </div>
-                                 <div class="card-body" style="display: flex; justify-content: end;">
+                                     <div class="card-body" style="display: flex; justify-content: end;">
+                                    @if($data->report_status !== 1)
                                     <form method="post" action="{{ route('updatestatus') }}">
                                         @csrf
                                         <input type="hidden" name="id" value="{{$details->id}}">
                                         <input type="hidden" name="agreement_status" value="agreement_status">
-                                        <button type="submit" class="btn btn-primary">Edit</button>
+                                        <button type="submit" class="btn btn-primary btn-sm">Edit</button>
+                                        
                                     </form>
+                                     @endif
                                 </div>
                             </div>
                              @else
@@ -520,7 +522,6 @@
                          @endif
                             <!--client report form start end-->
                         </div>
-
                         <!-- Agreement tab end-->
                         <div class="tab-pane p-20" id="Report" role="tabpanel">
                             <div>
@@ -570,32 +571,70 @@
                                                 <button class="btn btn-secondary btn-sm">Unknown</button>
                                                 @endif
                                             </td>
-
                                             <td class="text-center">
+                                                @if($data->report_status == 1)
                                                 @if($report->layout_type == 2)
-                                                <a
-                                                    href="{{route('report', ['id' => $report->id ,'layout_status' => $report->layout_status , 'layout_type' => 1 ] )}}"><button
-                                                        class="btn btn-primary btn-sm">Default Layout</button></a>
+                                                    <button class="btn btn-warning btn-sm" disabled>Default Layout</button>
                                                 @else
-                                                <a
-                                                    href="{{route('report', ['id' => $report->id ,'layout_status' => $report->layout_status , 'layout_type' => 2 ] )}}"><button
-                                                        class="btn btn-primary btn-sm">Custom Layout</button></a>
-                                                <!--<a  data-toggle="modal" data-target="#rejectModal_{{$report->id}}"><button class="btn btn-primary btn-sm">Custom Layout</button></a>-->
+                                                    <button class="btn btn-warning btn-sm" disabled>Custom Layout</button>
                                                 @endif
+                                            @else
+                                                @if($report->layout_type == 2)
+                                                    <a href="{{ route('report', ['id' => $report->id, 'layout_status' => $report->layout_status, 'layout_type' => 1, 'client_id' => $id]) }}">
+                                                        <button class="btn btn-primary btn-sm">Default Layout</button>
+                                                    </a>
+                                                @else
+                                                    <a href="{{ route('report', ['id' => $report->id, 'layout_status' => $report->layout_status, 'layout_type' => 2, 'client_id' => $id]) }}">
+                                                        <button class="btn btn-primary btn-sm">Custom Layout</button>
+                                                    </a>
+                                                @endif
+                                            @endif
                                             </td>
 
                                         </tr>
                                         @endforeach
                                     </tbody>
                                 </table>
-                                    <div class="card-body" style="display: flex; justify-content: end;">
+                                 @if($details->final_status ==1)
+                            <!--      <div class="card-body" style="display: flex; justify-content: end;">-->
+                            <!-- <form method="post" action="{{ route('updatestatus') }}">-->
+                            <!--    @csrf-->
+                            <!--    <input type="hidden" name="id" value="{{$details->id}}">-->
+                            <!--    <input type="hidden" name="finalsubmit0" value="finalsubmit0">-->
+                            <!--     <button type="submit" class="btn btn-success btn-sm">Enable Edit</button>-->
+                            <!--</form>-->
+                            <!-- </div>-->
+                                 @else
+                                   <div class="card-body" style="display: flex; justify-content: end;">
+                                   @if($data->report_status == 0 || $data->report_status == 2)
+                                 <div class="card-body" style="display: flex; justify-content: end;">
+                                    @if($msg)
+                                    <a href="#" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#approvalModal">Save</a>
+                                    @else
                                     <form method="post" action="{{ route('updatestatus') }}">
                                         @csrf
                                         <input type="hidden" name="id" value="{{$details->id}}">
                                         <input type="hidden" name="report" value="report">
-                                        <button type="submit" class="btn btn-success btn-sm">save</button>
+                                        <button type="submit" class="btn btn-success btn-sm">Save</button>
+                                    </form>
+                                    @endif
+                                </div>
+                                @elseif($data->report_status == 1 || $data->report_status == 2)
+                                <div class="card-body" style="display: flex; justify-content: end;">
+                                    <form method="post" action="{{ route('updatestatus') }}">
+                                        @csrf
+                                        <input type="hidden" name="id" value="{{$details->id}}">
+                                        <input type="hidden" name="reportedit" value="report">
+                                        <button type="submit" class="btn btn-success btn-sm">Edit</button>
+                                        <a href="#" class="btn btn-primary btn-sm" data-toggle="modal"
+                                        data-target="#finalsubmit">Final Submit</a>
                                     </form>
                                 </div>
+                                @endif
+                                </div>
+                                 @endif
+                                 
+                               
                             </div>
                         </div>
                         
@@ -607,26 +646,36 @@
                                     <tr>
                                         <th scope="col">Sr.Num.</th>
                                         <th scope="col">Type</th>
+                                         <th scope="col">location_type</th>
                                         <th scope="col">Charge(per case)</th>
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <tr>
-                                        <th scope="row">1</th>
-                                        <td>Address Verification</td>
-                                        <td>{{$details->address_charge}} ₹</td>
-                                    </tr>
-                                    <tr>
-                                        <th scope="row">2</th>
-                                        <td>Site Investigation Charge</td>
-                                        <td>{{$details->site_charge}} ₹</td>
-                                    </tr>
-                                    <tr>
-                                        <th scope="row">3</th>
-                                        <td>Digital Verification</td>
-                                        <td>{{$details->digital_charge}} ₹</td>
-                                    </tr>
-                                </tbody>
+                                     @foreach($detail as $value)
+                               <tr>
+                                    <th scope="row">{{ $loop->iteration}}</th>
+                                    <td>
+                                        @if($value->project_type==1)
+                                        Address Verification
+                                        @elseif($value->project_type==2)
+                                        Site Verification
+                                        @elseif($value->project_type==3)
+                                        Digital Address Verification
+                                        @endif
+                                        </td>
+                                    <td>
+                                        @if($value->metro_status ==1)
+                                        Metro
+                                        @elseif($value->metro_status ==2)
+                                        Non Metro
+                                        @endif
+                                     </td>
+                                    <td>
+                                       {{$value->amount}} 
+                                    </td>
+                                </tr>
+                               @endforeach
+                            </tbody>
                             </table>
                             @else
                             <div class="row">
@@ -640,7 +689,7 @@
                             @endif
                         </div>
                         <div class="tab-pane p-20" id="Status" role="tabpanel">
-                            @if($details->progress_status==4&&$details->remark_status==0)
+                            @if($details->final_status==1)
                             <div class="row">
                                 <div class=" col-lg-3"> </div>
                                 <div
@@ -681,4 +730,28 @@
     </div>
 </div>
 <!--modal for verification report-->
+<!--modal for final submit-->
+<div class="modal fade" id="finalsubmit" tabindex="-1" aria-labelledby="finalsubmit" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <!--You cannot change the details. -->
+                <h5 class="modal-title text-danger" id="finalsubmit">Please ensure that you agree with the final submission.You cannot change the details</h5> 
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-footer">
+                <form method="post" action="{{ route('updatestatus') }}">
+                    @csrf
+                    <input type="hidden" name="id" value="{{$details->id}}">
+                    <input type="hidden" name="finalsubmit" value="finalsubmit">
+                     <button type="submit" class="btn btn-success btn-sm">&nbsp;&nbsp;Submit&nbsp;&nbsp;</button>
+                </form>
+                <button type="button" class="btn btn-secondary btn-sm" data-dismiss="modal">Cancel</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!--modal for final submit-->
 @endsection
