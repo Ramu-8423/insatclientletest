@@ -27,7 +27,7 @@
         </div>
         @endif
         <div class="card-body" style="display:flex;justify-content:end;">
-             @if($data->report_status == 2)
+             @if($data->report_status == 0 || $data->report_status == 2)
             <a data-toggle="modal" data-target="#rejectModal_{{$report->id}}">
                 @if($report->custom_layout == null)
                 <button class="btn btn-primary btn-sm ml-2">Upload Custom Layout</button>
@@ -36,7 +36,7 @@
                 @endif
             </a>
             @if($report->custom_layout)
-            <a href="{{ route('approve.layout.status', ['id' => $details->id, 'layout_status' => $report->layout_status, 'layout_type' => 2 , 'client_id' => $details->id ]) }}"
+            <a href="{{ route('approve.layout.status', ['client_id' => $details->id, 'layout_status' => $report->layout_status, 'layout_type' => 2 , 'id' => $report->id]) }}"
                 style="margin-left:10px;"><button class="btn btn-success btn-sm ml-2">Approve</button></a>
             @endif
            @endif

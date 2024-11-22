@@ -101,8 +101,8 @@ th>b {
     </div>
 </div>
 <div class="card-body" style="display:flex;justify-content:end;">
- @if($data->report_status == 2)
-    <a href="{{ route('approve.layout.status', ['id' => $id, 'layout_status' => $layout_status , 'layout_type' => 1]) }}" style="margin-left:10px;">
+ @if($data->report_status == 0 || $data->report_status == 2)
+    <a href="{{ route('approve.layout.status', ['client_id' => $details->client_id, 'layout_status' => $layout_status , 'layout_type' => 1, 'id' => $details->id]) }}" style="margin-left:10px;">
     <button class="btn btn-success btn-sm">Approve</button>
 </a>
   @endif

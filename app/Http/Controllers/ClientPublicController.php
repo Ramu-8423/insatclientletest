@@ -20,7 +20,6 @@ class ClientPublicController extends Controller
     public function client_login(){
       return view('admin.client_login');  
     }
-    
      public function mark_as_completed(? string $id){
        $up = DB::table('client_details')->where('id',$id)->update([
              'progress_status'=>5
@@ -502,12 +501,14 @@ class ClientPublicController extends Controller
                return response()->json(['status' => '$request']);
             }
             
-            public function layoutstatus($id, $layout_status, $layout_type) {
-                $update = DB::table('report_layout')->where('id', $id)->update([
+            public function layoutstatus($id, $layout_status, $layout_type,$client_id) {
+                //dd($id,$layout_status,$layout_type,$client_id);
+               // dd($client_id);
+                $update = DB::table('report_layout')->where('id', $client_id)->update([
                     'layout_status' => 2,
                     'layout_type' => $layout_type
                 ]);
-                return redirect()->route('client_onboarding')->with('success', 'Approved successfully');
+                return redirect()->route('client_onboarding',$id)->with('success', 'Approved successfully')->with('message',2);
         }
         
           public function getuploadupdate($id){
@@ -531,21 +532,23 @@ class ClientPublicController extends Controller
              DB::table('client_details')->where('id', $id)->update([
             'reg_tracking' => DB::raw("JSON_SET(reg_tracking, '$.report_status', 1)")
         ]);  
+        return redirect()->back()->with('message',2);
         }
          if($reportedit){
              DB::table('client_details')->where('id', $id)->update([
             'reg_tracking' => DB::raw("JSON_SET(reg_tracking, '$.report_status', 2)") ]); // 2==  open fror edit
+             return redirect()->back()->with('message',2);
         }
          if($finalsubmit)
         {
            DB::table('client_details')->where('id', $id)->update(['final_status' => 1]);
-
+            return redirect()->back()->with('message',2);
         }
          if($finalsubmit0)
         {
              DB::table('client_details')->where('id', $id)->update(['final_status' => 0]);
         }
-        return redirect()->back()->with('message', 'Registration');
+        return redirect()->back();
 }
 }
 

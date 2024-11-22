@@ -10,6 +10,7 @@
 
 }
 </style>
+
 <style>
       input {
             box-sizing: border-box;
@@ -19,7 +20,10 @@
 
 @php
  $data= json_decode($details->reg_tracking);
+  $message = session('message')??1;
 @endphp
+
+
 
 <div class="page-wrapper">
     <div class="container-fluid">
@@ -30,31 +34,38 @@
                     <div class="d-flex justify-content-between align-items-center">
                         <ul class="nav nav-tabs" role="tablist">
                             <li class="nav-item">
-                                <a class="nav-link active {{$details->final_status ==1? 'btn-danger': '' }}" data-toggle="tab" href="#Registration" role="tab">
+                                <a class="nav-link {{$data->reg_status ==2? 'btn-success': 'btn-danger' }}" data-toggle="tab" href="#Registration" role="tab">
                                     <span class="hidden-sm-up"></span>
                                     <span class="hidden-xs-down">Registration Details</span>
                                 </a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link" data-toggle="tab" href="#Agreement" role="tab">
+                                <a class="nav-link {{$data->agreement_status ==1? 'btn-success': 'btn-danger' }}
+                                {{$message ==1 ? 'active' : '' }}
+                                " data-toggle="tab" href="#Agreement" role="tab">
                                     <span class="hidden-sm-up"></span>
                                     <span class="hidden-xs-down">Agreement Details</span>
                                 </a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link" data-toggle="tab" href="#Report" role="tab">
+                                <a class="nav-link {{$data->report_status ==1 && $details->final_status ==1 ? 'btn-success': 'btn-danger' }}
+                                 {{ $message ==2 ? 'active' : '' }}
+                                " data-toggle="tab" href="#Report" role="tab">
                                     <span class="hidden-sm-up"></span>
                                     <span class="hidden-xs-down">Report Layout</span>
                                 </a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link" data-toggle="tab" href="#Payment" role="tab">
+                               
+                                <a class="nav-link {{ $details->progress_status>=5? 'btn-success': 'btn-danger' }}
+                                {{$message ==3 ? 'active' : '' }}
+                                " data-toggle="tab" href="#Payment" role="tab">
                                     <span class="hidden-sm-up"></span>
                                     <span class="hidden-xs-down">Payment Details</span>
                                 </a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link" data-toggle="tab" href="#Status" role="tab">
+                                <a class="nav-link {{$details->final_status ==1 && $details->progress_status>=4 ? 'btn-success': 'btn-danger' }}" data-toggle="tab" href="#Status" role="tab">
                                     <span class="hidden-sm-up"></span>
                                     <span class="hidden-xs-down">Status</span>
                                 </a>
@@ -67,7 +78,7 @@
 
                         <!-- registration tab-->
 
-                        <div class="tab-pane active" id="Registration" role="tabpanel">
+                        <div class="tab-pane " id="Registration" role="tabpanel">
                             <div class="card-body">
                                 <h2 class="card-title custom-heading">Registration Details</h2>
                                 <div class="form-group row">
@@ -186,7 +197,7 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="tab-pane  " id="Agreement" role="tabpanel">
+                        <div class="tab-pane  {{$message ==1 ? 'active' : '' }}" id="Agreement" role="tabpanel">
                              @if($data->agreement_status == 1)
                                <h1 class="custom-heading ml-3">Agreement Details</h1>
                             <div class="container mt-1">
@@ -523,7 +534,7 @@
                             <!--client report form start end-->
                         </div>
                         <!-- Agreement tab end-->
-                        <div class="tab-pane p-20" id="Report" role="tabpanel">
+                        <div class="tab-pane p-20 {{$message ==2 ? 'active' : '' }}" id="Report" role="tabpanel">
                             <div>
                                 <h3 class="custom-heading">Report Layout</h3>
                                 <table class="table table-sm">
@@ -638,9 +649,9 @@
                             </div>
                         </div>
                         
-                        <div class="tab-pane p-20" id="Payment" role="tabpanel">
+                        <div class="tab-pane p-20 {{$message ==3 ? 'active' : '' }}" id="Payment" role="tabpanel">
                             <h1 class="custom-heading">Payment Details</h1>
-                            @if($details->progress_status>=4)
+                            @if($details->progress_status>=5)
                             <table class="table  table-sm">
                                 <thead>
                                     <tr>
@@ -689,17 +700,29 @@
                             @endif
                         </div>
                         <div class="tab-pane p-20" id="Status" role="tabpanel">
-                            @if($details->final_status==1)
+                           
                             <div class="row">
-                                <div class=" col-lg-3"> </div>
-                                <div
-                                    class=" col-lg-6 custom-box d-flex flex-column justify-content-center align-items-center">
-                                    <h1>Congratulations..</h1>
-                                    <h3>You have successfully onboarded.</h3>
+                                <div class="container mt-5">
+                              <div class="card shadow border-0" style="background-color:;">
+                                <div class="card-body text-center mt-3">
+                                    @if($details->progress_status>=5 && $details->final_status ==1 &&
+                                    $data->report_status ==1 && $data->agreement_status ==1 && $data->agreement_status ==1)
+                                    <h1 class="font-weight-bold ">
+                                   Congratulations..
+                                    </h1>
+                                    <h3 class="font-weight-bold mt-3 ">
+                                   Client successfully onboarded..
+                                  </h3>
+                                   @else
+                                    <h3 class="font-weight-bold ">
+                                   Please make sure all details are submitted
+                                    </h3>
+                                   @endif
                                 </div>
-                                <div class=" col-lg-3"></div>
+                              </div>
                             </div>
-                            @endif
+                            </div>
+                          
                         </div>
                     </div>
                 </div>
