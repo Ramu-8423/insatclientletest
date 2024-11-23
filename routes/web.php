@@ -97,21 +97,18 @@ Route::any('/pdf', function () {
 Route::get('/invoiceform/{status}',[InvoiceController::class, 'invoice'])->name('invoice');
 Route::post('/updateinvoice',[InvoiceController::class, 'updateinvoice'])->name('update.spendings');
 Route::get('/download-file', [InvoiceController::class, 'downloadFile'])->name('download.file');
-
-
 Route::get('/report/{id}/{layout_type}/{layout_status}', [ClientPublicController::class, 'report'])->name('report');
 Route::post('/Customfile',[ClientPublicController::class, 'Customfile'])->name('Customfile');
 Route::post('/client_details_order',[ClientPublicController::class,'client_details_order'])->name('client_details_order');
-
 Route::get('/reports/{client_id}/{layout_status}/{layout_type}/{id}', [ClientPublicController::class, 'layoutstatus'])->name('approve.layout.status');
-
 route::get('/getuploadupdate/{id}', [ClientPublicController::class, 'getuploadupdate'])->name('getuploadupdate');
 // Route::post('/upload',[InvoiceController::class, 'uploadInvoice'])->name('update.invoice');
-
 // CREATED BY RAMU SHARMA END
 // here all route for client onboarding status rej-traking
 Route::post('/updatestatus', [ClientPublicController::class, 'updateAgreementStatus'])->name('updatestatus');
 // here all route for client onboarding status rej-traking end
 
-
+route::get('/newcostompdf', function(){
+ return view('report.costom');   
+});
 

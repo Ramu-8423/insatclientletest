@@ -47,14 +47,12 @@ class ClientPublicController extends Controller
         }     
       }
     public function client_agreement(Request $request){
-         
          $id = session('client_login_id');
          $company_name = $request->company_name;
          $cin_number = $request->cin_number;
          $company_address = $request->company_address;
          $signatory_name = $request->signatory_name;
          $a_signatory_desi = $request->signatory_designation;
-         
          $case_timeline = $request->case_timeline;
          $person_name = $request->person_name;
          $person_phone = $request->person_phone;
@@ -63,12 +61,10 @@ class ClientPublicController extends Controller
          $pan_card = $request->file('pan_card');
          $gst = $request->file('gst');
          $quotation_doc = $request->file('quotation_doc');
-         
          $remark_status = $request->remark_status;
          if($remark_status==1){
              $remark_status = 0;
          }
-         
          $a_other_person_info = [
              [
              "person_name"=>$person_name[0],
@@ -105,19 +101,20 @@ class ClientPublicController extends Controller
                     }else{
                        $quotation_doc = null; 
                     }
-          
-          
                      $filePaths = [];
                     $allowedFileTypes = ['pdf', 'jpg', 'jpeg', 'png'];
                   if ($pan_card) {
+                     
                         $rand = Str::random(8);
                         $extension = $pan_card->getClientOriginalExtension();
                         $fileName = $rand . '.' . $extension;
                         $filePath = 'agreement_doc/' . $fileName;
+                        $filePath_insert = env('APP_URL').'agreement_doc/' . $fileName;
+                       // dd($pan_card,$filePath_insert,$filePath);
                         if (!in_array(strtolower($extension), $allowedFileTypes)) {
                             return redirect()->back()->with('error', 'Invalid PAN Card file type. Only PDF, JPG, JPEG, and PNG are allowed.');
                         }
-                        try {
+                        try{
                             $fileContents = file_get_contents($pan_card->getPathname());
                             if ($fileContents === false) {
                                 return redirect()->back()->with('error', 'Failed to read PAN Card file contents.');
@@ -127,8 +124,8 @@ class ClientPublicController extends Controller
                             if ($saved === false) {
                                 return redirect()->back()->with('error', 'Failed to save the PAN Card file.');
                             }
-                            $filePaths['a_pan_card'] = $filePath;
-                                DB::table('client_details')->where('id', $id)->update(['a_pan_card'=>$filePath]);
+                            $filePaths['a_pan_card'] = $filePath_insert;
+                                DB::table('client_details')->where('id', $id)->update(['a_pan_card'=>$filePath_insert]);
                         } catch (\Exception $e) {
                             return redirect()->back()->with('error', 'An error occurred while uploading PAN Card: ' . $e->getMessage());
                         }
@@ -138,6 +135,7 @@ class ClientPublicController extends Controller
                                     $extension = $gst->getClientOriginalExtension();
                                     $fileName = $rand . '.' . $extension;
                                     $filePath = 'agreement_doc/' . $fileName;
+                                    $filePath_insert = env('APP_URL').'agreement_doc/' . $fileName;
                                     if (!in_array(strtolower($extension), $allowedFileTypes)) {
                                         return redirect()->back()->with('error', 'Invalid GST file type. Only PDF, JPG, JPEG, and PNG are allowed.');
                                     }
@@ -153,8 +151,8 @@ class ClientPublicController extends Controller
                                         return redirect()->back()->with('error', 'Failed to save the GST file.');
                                     }
                             
-                                    $filePaths['a_gst'] = $filePath;
-                                    DB::table('client_details')->where('id', $id)->update(['a_gst'=>$filePath]);
+                                    $filePaths['a_gst'] = $filePath_insert;
+                                    DB::table('client_details')->where('id', $id)->update(['a_gst'=>$filePath_insert]);
                                 } catch (\Exception $e) {
                                     return redirect()->back()->with('error', 'An error occurred while uploading GST: ' . $e->getMessage());
                                 }
@@ -164,6 +162,7 @@ class ClientPublicController extends Controller
                                 $extension = $quotation_doc->getClientOriginalExtension();
                                 $fileName = $rand . '.' . $extension;
                                 $filePath = 'agreement_doc/' . $fileName;
+                                $filePath_insert = env('APP_URL').'agreement_doc/' . $fileName;
                                 if (!in_array(strtolower($extension), $allowedFileTypes)) {
                                     return redirect()->back()->with('error', 'Invalid Quotation Document file type. Only PDF, JPG, JPEG, and PNG are allowed.');
                                 }
@@ -179,8 +178,8 @@ class ClientPublicController extends Controller
                                     return redirect()->back()->with('error', 'Failed to save the Quotation Document file.');
                                 }
                         
-                                $filePaths['a_quotation_doc'] = $filePath;
-                                DB::table('client_details')->where('id', $id)->update(['a_quotation_doc'=>$filePath]);
+                                $filePaths['a_quotation_doc'] = $filePath_insert;
+                                DB::table('client_details')->where('id', $id)->update(['a_quotation_doc'=>$filePath_insert]);
                             } catch (\Exception $e) {
                                 return redirect()->back()->with('error', 'An error occurred while uploading Quotation Document: ' . $e->getMessage());
                             }
@@ -195,7 +194,6 @@ class ClientPublicController extends Controller
                     'a_case_timeline' => $case_timeline,
                     'a_other_person_info' => $a_other_person_info,
                     'remark_status' => $remark_status,
-                    'progress_status' => 2,
                     'reg_tracking' => DB::raw("JSON_SET(reg_tracking, '$.agreement_status', 1)")
                 ]);
 

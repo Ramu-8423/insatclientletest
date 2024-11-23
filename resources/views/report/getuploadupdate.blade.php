@@ -4,7 +4,7 @@
 .responsive-image {
     width: 100%;
     height: 500px;
-    object-fit: cover;
+    object-fit: contain; /* Ensures the image is fully visible */
     display: block;
     margin: 0 auto;
 }

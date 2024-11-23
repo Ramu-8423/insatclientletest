@@ -9,10 +9,12 @@
             <ul id="sidebarnav" class="p-t-30">
                 <li class="sidebar-item"> <a class="sidebar-link waves-effect waves-dark sidebar-link" href="{{route('client_onboarding')}}" aria-expanded="false"><i class="mdi mdi-view-dashboard"></i><span class="hide-menu">OnBoarding</span></a>
                 </li>
-                
-                
-
-               @if($login_row->progress_status==4&&$login_row->remark_status==0)
+     
+             
+               @if($login_row->progress_status==5 && $login_row->remark_status==0 && $login_row->final_status ==1 && $data->report_status ==1 && $data->agreement_status ==1 && $data->reg_status ==2)
+               
+               
+                 
                 <li class="sidebar-item"> <a class="sidebar-link waves-effect waves-dark sidebar-link" href="{{route('dashboard',0)}}" aria-expanded="false"><i class="mdi mdi-plus-box"></i><span class="hide-menu">Dashboard</span></a>
                 </li>
                 

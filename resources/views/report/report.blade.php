@@ -110,7 +110,9 @@ th>b {
    <script
                                 src="https://cdnjs.cloudflare.com/ajax/libs/Sortable/1.14.0/Sortable.min.js"></script>
                             <script>
+                            @if($data->report_status == 0 || $data->report_status == 2)
                                 var client_id_js = @json($id);
+                                 @endif
                                 var sortable = new Sortable(document.getElementById('sortable-body'), {
                                     animation: 150,
                                     handle: 'tr', // Allow row dragging

@@ -40,16 +40,16 @@
  @php
     $login_row = session('session_client_details');
     $login_row = DB::table('client_details')->where('id',session('client_login_id'))->first();
+    $data= json_decode($login_row->reg_tracking); 
  @endphp
  
 
-@includeIf('admin.body.header', ['login_row' => $login_row])
-@includeIf('admin.body.sidebar', ['login_row' => $login_row])
+@includeIf('admin.body.header',  ['login_row' => $login_row, 'data' => $data])
+@includeIf('admin.body.sidebar', ['login_row' => $login_row, 'data' => $data])
     @yield('admin')
     
     {{-- @includeIf('admin.body.footer') --}}
     
-
 
 
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@mdi/font/css/materialdesignicons.min.css">

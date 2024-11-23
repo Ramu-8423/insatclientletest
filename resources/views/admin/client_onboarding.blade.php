@@ -27,6 +27,18 @@
 
 <div class="page-wrapper">
     <div class="container-fluid">
+         @if (session('success'))
+        <div class="alert alert-success alert-block mt-3">
+            <button type="button" class="close" data-dismiss="alert">X</button>
+            <strong>{{ session('success') }}</strong>
+        </div>
+        @endif
+        @if (session('error'))
+        <div class="alert alert-danger alert-block mt-3">
+            <button type="button" class="close" data-dismiss="alert">X</button>
+            <strong>{{ session('error') }}</strong>
+        </div>
+        @endif
         <div class="row">
             <div class="col-lg-12">
                 <div class="card">
@@ -56,7 +68,6 @@
                                 </a>
                             </li>
                             <li class="nav-item">
-                               
                                 <a class="nav-link {{ $details->progress_status>=5? 'btn-success': 'btn-danger' }}
                                 {{$message ==3 ? 'active' : '' }}
                                 " data-toggle="tab" href="#Payment" role="tab">
@@ -65,7 +76,7 @@
                                 </a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link {{$details->final_status ==1 && $details->progress_status>=4 ? 'btn-success': 'btn-danger' }}" data-toggle="tab" href="#Status" role="tab">
+                                <a class="nav-link {{$details->final_status ==1 && $details->progress_status>=5 ? 'btn-success': 'btn-danger' }}" data-toggle="tab" href="#Status" role="tab">
                                     <span class="hidden-sm-up"></span>
                                     <span class="hidden-xs-down">Status</span>
                                 </a>
@@ -75,9 +86,7 @@
                     </div>
                     <!-- Tab panes -->
                     <div class="tab-content tabcontent-border">
-
                         <!-- registration tab-->
-
                         <div class="tab-pane " id="Registration" role="tabpanel">
                             <div class="card-body">
                                 <h2 class="card-title custom-heading">Registration Details</h2>
@@ -278,7 +287,7 @@
                                                 <tr data-id="3">
                                                     <td colspan="4">
                                                         @if($details->a_pan_card!=null)
-                                                        <a href="{{env('APP_URL').$details->a_pan_card}}"
+                                                        <a href="{{$details->a_pan_card}}"
                                                             target="_blank">View
                                                             Pancard</a>
                                                         @else
@@ -287,7 +296,7 @@
                                                     </td>
                                                     <td colspan="4">
                                                         @if($details->a_gst!=null)
-                                                        <a href="{{env('APP_URL').$details->a_gst}}"
+                                                        <a href="{{$details->a_gst}}"
                                                             target="_blank">View GST
                                                             Certificate</a>
                                                         @else
@@ -296,7 +305,7 @@
                                                     </td>
                                                     <td colspan="4">
                                                         @if($details->a_quotation_doc!=null)
-                                                        <a href="{{env('APP_URL').$details->a_quotation_doc}}"
+                                                        <a href="{{$details->a_quotation_doc}}"
                                                             target="_blank">View
                                                             Qutotation Doc</a>
                                                         @else
@@ -690,12 +699,15 @@
                             </table>
                             @else
                             <div class="row">
-                                <div class=" col-lg-3"> </div>
-                                <div
-                                    class=" col-lg-6 custom-box d-flex flex-column justify-content-center align-items-center">
-                                    <h4>Waiting for admin to update verification charges..</h4>
+                                  <div class="container mt-5">
+                              <div class="card shadow border-0" style="background-color:;">
+                                <div class="card-body text-center mt-3">
+                                    <h3 class="font-weight-bold ">
+                                     Waiting for admin to update verification charges..
+                                    </h3>
                                 </div>
-                                <div class=" col-lg-3"> </div>
+                              </div>
+                            </div>
                             </div>
                             @endif
                         </div>
@@ -711,7 +723,7 @@
                                    Congratulations..
                                     </h1>
                                     <h3 class="font-weight-bold mt-3 ">
-                                   Client successfully onboarded..
+                                   You are  successfully onboarded..
                                   </h3>
                                    @else
                                     <h3 class="font-weight-bold ">
