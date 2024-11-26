@@ -108,7 +108,4 @@ route::get('/getuploadupdate/{id}', [ClientPublicController::class, 'getuploadup
 Route::post('/updatestatus', [ClientPublicController::class, 'updateAgreementStatus'])->name('updatestatus');
 // here all route for client onboarding status rej-traking end
 
-route::get('/newcostompdf', function(){
- return view('report.costom');   
-});
 
