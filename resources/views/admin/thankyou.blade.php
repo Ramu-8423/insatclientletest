@@ -92,7 +92,7 @@ html,body {
         </div>
     </div>
     <div class="_footer">
-        <a class="btn" href="https://instalocate.io/">Back to homepage</a>
+        <a class="btn" href="https://client.instalocate.io/">Back to homepage</a>
     </div>
 </div>
 
