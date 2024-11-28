@@ -307,7 +307,7 @@ class ClientPublicController extends Controller
             'payment_preference' => $request->payment_preference,
             'password' => Hash::make($request->password),
             'status'=>1,
-            'progress_status'=>1,
+            'progress_status'=>0,
             'report_layout_order'=>json_encode(["1","2","3","4","5","6","7","8","9","10","11","12","13","14","15","16","17"]),
             'a_other_person_info'=>json_encode($a_other_person_info),
             'reference_id' => $referenceId,  // Store the reference ID
