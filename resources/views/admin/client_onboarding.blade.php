@@ -7,25 +7,23 @@
     text-align: left;
     margin: 20px 0;
     text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7);
-
 }
 </style>
 
 <style>
-      input {
-            box-sizing: border-box;
-            border: 1px solid #82eb82 !important;
-        }
+input {
+    box-sizing: border-box;
+    border: 1px solid #82eb82 !important;
+}
 </style>
-
 @php
- $data= json_decode($details->reg_tracking);
-  $message = session('message')??1;
-  $progress = $details->progress_status + 1 ;
+$data= json_decode($details->reg_tracking);
+$message = session('message')??1;
+$progress = $details->progress_status + 1 ;
 @endphp
 <div class="page-wrapper">
     <div class="container-fluid">
-         @if (session('success'))
+        @if (session('success'))
         <div class="alert alert-success alert-block mt-3">
             <button type="button" class="close" data-dismiss="alert">X</button>
             <strong>{{ session('success') }}</strong>
@@ -76,7 +74,8 @@
                                 </a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link  {{$details->final_status ==1 ? 'btn-success': 'btn-danger' }} {{$progress ==4 ? 'active' : '' }}" data-toggle="tab" href="#Status" role="tab">
+                                <a class="nav-link  {{$details->final_status ==1 ? 'btn-success': 'btn-danger' }} {{$progress ==4 ? 'active' : '' }}"
+                                    data-toggle="tab" href="#Status" role="tab">
                                     <span class="hidden-sm-up"></span>
                                     <span class="hidden-xs-down">Status</span>
                                 </a>
@@ -87,7 +86,8 @@
                     <!-- Tab panes -->
                     <div class="tab-content tabcontent-border">
                         <!-- registration tab-->
-                        <div class="tab-pane {{ $data->reg_status == 1 ? 'active' : '' }}" id="Registration" role="tabpanel">
+                        <div class="tab-pane {{ $data->reg_status == 1 ? 'active' : '' }}" id="Registration"
+                            role="tabpanel">
                             <div class="card-body">
                                 <h2 class="card-title custom-heading">Registration Details</h2>
                                 <div class="form-group row">
@@ -207,8 +207,9 @@
                             </div>
                         </div>
                         <div class="tab-pane  {{$progress == 1 ? 'active' : '' }}" id="Agreement" role="tabpanel">
-                             @if($data->agreement_status == 1)
-                               <h1 class="custom-heading ml-3">Agreement Details</h1>
+                            @if($data->agreement_status == 1)
+                            <div class="card-body">
+                            <h1 class="custom-heading ">Agreement Details</h1>
                             <div class="container mt-1">
                                 <div class="row mt-1">
                                     <div class="col-12">
@@ -287,8 +288,7 @@
                                                 <tr data-id="3">
                                                     <td colspan="4">
                                                         @if($details->a_pan_card!=null)
-                                                        <a href="{{$details->a_pan_card}}"
-                                                            target="_blank">View
+                                                        <a href="{{$details->a_pan_card}}" target="_blank">View
                                                             Pancard</a>
                                                         @else
                                                         No Pan card available.
@@ -296,8 +296,7 @@
                                                     </td>
                                                     <td colspan="4">
                                                         @if($details->a_gst!=null)
-                                                        <a href="{{$details->a_gst}}"
-                                                            target="_blank">View GST
+                                                        <a href="{{$details->a_gst}}" target="_blank">View GST
                                                             Certificate</a>
                                                         @else
                                                         No gst document available!
@@ -305,8 +304,7 @@
                                                     </td>
                                                     <td colspan="4">
                                                         @if($details->a_quotation_doc!=null)
-                                                        <a href="{{$details->a_quotation_doc}}"
-                                                            target="_blank">View
+                                                        <a href="{{$details->a_quotation_doc}}" target="_blank">View
                                                             Qutotation Doc</a>
                                                         @else
                                                         Qutotation document not available
@@ -317,7 +315,7 @@
                                         </table>
                                     </div>
                                 </div>
-                                     <div class="card-body" style="display: flex; justify-content: end;">
+                                <div class="card-body" style="display: flex; justify-content: end;">
                                     @if($data->complete_status == 0)
                                     <form method="post" action="{{ route('updatestatus') }}">
                                         @csrf
@@ -328,217 +326,191 @@
                                     @endif
                                 </div>
                             </div>
-                             @else
+                            </div>
+                            @else
                             <!--client Agreement form start-->
-                             <div class="card-body">
-                            <form action="{{route('client_agreement')}}" method="post" enctype="multipart/form-data"
-                                class="form-horizontal">
-                                @csrf
-                                <input type="hidden" name="id" value="{{$id}}">
-                                <input type="hidden" name="remark_status" value="{{$details->remark_status}}">
-                                <h4 class="card-title custom-heading">Agreement Details</h4>
-                                <div class="form-group row">
-                                    <div class="col-sm-1"></div>
-                                    <label for="fname" class="col-sm-3 text-left control-label col-form-label">Company
-                                        Name :</label>
-                                    <div class="col-sm-8">
-                                        <input
-                                            type="text"
-                                            class="form-control" id="fname" name="company_name"
-                                            placeholder="Enter company name.." value="{{$details->a_company_name}}">
+                            <div class="card-body">
+                                <form action="{{route('client_agreement')}}" method="post" enctype="multipart/form-data"
+                                    class="form-horizontal">
+                                    @csrf
+                                    <input type="hidden" name="id" value="{{$id}}">
+                                    <input type="hidden" name="remark_status" value="{{$details->remark_status}}">
+                                    <h4 class="card-title custom-heading">Agreement Details</h4>
+                                    <div class="form-group row">
+                                        <div class="col-sm-1"></div>
+                                        <label for="fname"
+                                            class="col-sm-3 text-left control-label col-form-label">Company
+                                            Name :</label>
+                                        <div class="col-sm-8">
+                                            <input type="text" class="form-control" id="fname" name="company_name"
+                                                placeholder="Enter company name.." value="{{$details->a_company_name}}">
+                                        </div>
                                     </div>
-                                </div>
-                                <div class="form-group row">
-                                     <div class="col-sm-1"></div>
-                                    <label for="lname" class="col-sm-3 text-left control-label col-form-label">CIN
-                                        Number :</label>
-                                    <div class="col-sm-8">
-                                        <input
-                                            type="text"
-                                            class="form-control" id="cono1" name="cin_number"
-                                            placeholder="Enter CIN Number" value="{{$details->a_cin_number}}">
+                                    <div class="form-group row">
+                                        <div class="col-sm-1"></div>
+                                        <label for="lname" class="col-sm-3 text-left control-label col-form-label">CIN
+                                            Number :</label>
+                                        <div class="col-sm-8">
+                                            <input type="text" class="form-control" id="cono1" name="cin_number"
+                                                placeholder="Enter CIN Number" value="{{$details->a_cin_number}}">
+                                        </div>
                                     </div>
-                                </div>
-                                <div class="form-group row">
-                                     <div class="col-sm-1"></div>
-                                    <label for="fname" class="col-sm-3 text-left control-label col-form-label">Company
-                                        Address :</label>
-                                    <div class="col-sm-8">
-                                        <input
-                                            type="text"
-                                            class="form-control" id="fname" name="company_address"
-                                            placeholder="Enter compnay address.."
-                                            value="{{$details->a_company_address}}">
+                                    <div class="form-group row">
+                                        <div class="col-sm-1"></div>
+                                        <label for="fname"
+                                            class="col-sm-3 text-left control-label col-form-label">Company
+                                            Address :</label>
+                                        <div class="col-sm-8">
+                                            <input type="text" class="form-control" id="fname" name="company_address"
+                                                placeholder="Enter compnay address.."
+                                                value="{{$details->a_company_address}}">
+                                        </div>
                                     </div>
-                                </div>
 
-                                <div class="form-group row">
-                                     <div class="col-sm-1"></div>
-                                    <label for="lname"
-                                        class="col-sm-3 text-left control-label col-form-label">Authorized Signatory
-                                        Name :</label>
-                                    <div class="col-sm-8">
-                                        <input
-                                            type="text"
-                                            class="form-control" id="lname" name="signatory_name"
-                                            placeholder="Enter authorized signatory name.."
-                                            value="{{$details->a_signatory_name}}">
+                                    <div class="form-group row">
+                                        <div class="col-sm-1"></div>
+                                        <label for="lname"
+                                            class="col-sm-3 text-left control-label col-form-label">Authorized Signatory
+                                            Name :</label>
+                                        <div class="col-sm-8">
+                                            <input type="text" class="form-control" id="lname" name="signatory_name"
+                                                placeholder="Enter authorized signatory name.."
+                                                value="{{$details->a_signatory_name}}">
+                                        </div>
                                     </div>
-                                </div>
-                                <div class="form-group row">
-                                     <div class="col-sm-1"></div>
-                                    <label for="email1"
-                                        class="col-sm-3 text-left control-label col-form-label">Authorized Signatory
-                                        Designation :</label>
-                                    <div class="col-sm-8">
-                                        <input
-                                            type="text"
-                                            class="form-control" id="email1" name="signatory_designation"
-                                            placeholder=" Enter authorized signatory designation.."
-                                            value="{{$details->a_signatory_desi}}">
+                                    <div class="form-group row">
+                                        <div class="col-sm-1"></div>
+                                        <label for="email1"
+                                            class="col-sm-3 text-left control-label col-form-label">Authorized Signatory
+                                            Designation :</label>
+                                        <div class="col-sm-8">
+                                            <input type="text" class="form-control" id="email1"
+                                                name="signatory_designation"
+                                                placeholder=" Enter authorized signatory designation.."
+                                                value="{{$details->a_signatory_desi}}">
+                                        </div>
                                     </div>
-                                </div>
-                                <h4 class="card-title" style=" text-decoration-line: underline;">Case Timeline In Day :
-                                </h4>
-                                <div class="form-group row">
-                                     <div class="col-sm-1"></div>
-                                    <label for="email1" class="col-sm-3 text-left control-label col-form-label">Case
-                                        Timeline :</label>
-                                    <div class="col-sm-6">
-                                        <input
-                                            type="text"
-                                            class="form-control" id="cono1" name="case_timeline"
-                                            placeholder="Enter Case Timeline.." value="{{$details->a_case_timeline}}">
+                                    <h4 class="card-title" style=" text-decoration-line: underline;">Case Timeline In
+                                        Day :
+                                    </h4>
+                                    <div class="form-group row">
+                                        <div class="col-sm-1"></div>
+                                        <label for="email1" class="col-sm-3 text-left control-label col-form-label">Case
+                                            Timeline :</label>
+                                        <div class="col-sm-6">
+                                            <input type="text" class="form-control" id="cono1" name="case_timeline"
+                                                placeholder="Enter Case Timeline.."
+                                                value="{{$details->a_case_timeline}}">
+                                        </div>
                                     </div>
-                                </div>
-                                @php
-                                $other_person = json_decode($details->a_other_person_info);
-                                @endphp
-                                <h4 class="card-title" style=" text-decoration-line: underline;">Escalation Matrix upto
-                                    3 level</h4>
-                                <div class="form-group row">
-                                    <label for="email1"
-                                        class="col-sm-1 text-right control-label col-form-label">1.</label>
-                                    <div class="col-sm-3">
-                                        <input
-                                            type="text"
-                                            class="form-control" placeholder="Person Name" name="person_name[]"
-                                            value="{{$other_person[0]->person_name}}">
+                                    @php
+                                    $other_person = json_decode($details->a_other_person_info);
+                                    @endphp
+                                    <h4 class="card-title" style=" text-decoration-line: underline;">Escalation Matrix
+                                        upto
+                                        3 level</h4>
+                                    <div class="form-group row">
+                                        <label for="email1"
+                                            class="col-sm-1 text-right control-label col-form-label">1.</label>
+                                        <div class="col-sm-3">
+                                            <input type="text" class="form-control" placeholder="Person Name"
+                                                name="person_name[]" value="{{$other_person[0]->person_name}}">
+                                        </div>
+                                        <div class="col-sm-3">
+                                            <input type="text" class="form-control" placeholder="Contact Number"
+                                                name="person_phone[]" value="{{$other_person[0]->person_phone}}">
+                                        </div>
+                                        <div class="col-sm-3">
+                                            <input type="email" class="form-control" placeholder="Email"
+                                                name="person_email[]" value="{{$other_person[0]->person_email}}">
+                                        </div>
+                                        <div class="col-sm-2">
+                                            <input type="text" class="form-control" placeholder="Designation"
+                                                name="person_designation[]"
+                                                value="{{$other_person[0]->person_designation}}">
+                                        </div>
                                     </div>
-                                    <div class="col-sm-3">
-                                        <input
-                                            type="text"
-                                            class="form-control" placeholder="Contact Number" name="person_phone[]"
-                                            value="{{$other_person[0]->person_phone}}">
+                                    <div class="form-group row">
+                                        <label for="email1"
+                                            class="col-sm-1 text-right control-label col-form-label">2.</label>
+                                        <div class="col-sm-3">
+                                            <input type="text" class="form-control" placeholder="Person Name"
+                                                name="person_name[]" value="{{$other_person[1]->person_name}}">
+                                        </div>
+                                        <div class="col-sm-3">
+                                            <input type="text" class="form-control" placeholder="Contact Number"
+                                                id="cono1" name="person_phone[]"
+                                                value="{{$other_person[1]->person_phone}}">
+                                        </div>
+                                        <div class="col-sm-3">
+                                            <input type="email" class="form-control" placeholder="Email"
+                                                name="person_email[]" value="{{$other_person[1]->person_email}}">
+                                        </div>
+                                        <div class="col-sm-2">
+                                            <input type="text" class="form-control" placeholder="Designation"
+                                                name="person_designation[]"
+                                                value="{{$other_person[1]->person_designation}}">
+                                        </div>
                                     </div>
-                                    <div class="col-sm-3">
-                                        <input
-                                            type="email"
-                                            class="form-control" placeholder="Email" name="person_email[]"
-                                            value="{{$other_person[0]->person_email}}">
+                                    <div class="form-group row">
+                                        <label for="email1"
+                                            class="col-sm-1 text-right control-label col-form-label">3.</label>
+                                        <div class="col-sm-3">
+                                            <input type="text" class="form-control" placeholder="Person Name"
+                                                name="person_name[]" value="{{$other_person[2]->person_name}}">
+                                        </div>
+                                        <div class="col-sm-3">
+                                            <input type="text" class="form-control" placeholder="Contact Number"
+                                                id="cono1" name="person_phone[]"
+                                                value="{{$other_person[2]->person_phone}}">
+                                        </div>
+                                        <div class="col-sm-3">
+                                            <input type="email" class="form-control" placeholder="Email"
+                                                name="person_email[]" value="{{$other_person[2]->person_email}}">
+                                        </div>
+                                        <div class="col-sm-2">
+                                            <input type="text" class="form-control" placeholder="Designation"
+                                                name="person_designation[]"
+                                                value="{{$other_person[2]->person_designation}}">
+                                        </div>
                                     </div>
-                                    <div class="col-sm-2">
-                                        <input
-                                            type="text"
-                                            class="form-control" placeholder="Designation" name="person_designation[]"
-                                            value="{{$other_person[0]->person_designation}}">
+                                    <h4 class="card-title" style=" text-decoration-line: underline;">Upload Documents
+                                    </h4>
+                                    <div class="form-group row">
+                                        <div class="col-sm-1"></div>
+                                        <label for="cono1" class="col-sm-3  control-label col-form-label">PAN Card
+                                            :</label>
+                                        <div class="col-sm-8">
+                                            <input type="file" class="form-control" id="cono1" placeholder=""
+                                                name="pan_card">
+                                        </div>
                                     </div>
-                                </div>
-                                <div class="form-group row">
-                                    <label for="email1"
-                                        class="col-sm-1 text-right control-label col-form-label">2.</label>
-                                    <div class="col-sm-3">
-                                        <input
-                                            type="text"
-                                            class="form-control" placeholder="Person Name" name="person_name[]"
-                                            value="{{$other_person[1]->person_name}}">
+                                    <div class="form-group row">
+                                        <div class="col-sm-1"></div>
+                                        <label for="cono1" class="col-sm-3  control-label col-form-label">GST
+                                            Certificate :</label>
+                                        <div class="col-sm-8">
+                                            <input type="file" class="form-control" id="cono1" placeholder=""
+                                                name="gst">
+                                        </div>
                                     </div>
-                                    <div class="col-sm-3">
-                                        <input
-                                            type="text"
-                                            class="form-control" placeholder="Contact Number" id="cono1" name="person_phone[]"
-                                            value="{{$other_person[1]->person_phone}}">
+                                    <div class="form-group row">
+                                        <div class="col-sm-1"></div>
+                                        <label for="cono1" class="col-sm-3  control-label col-form-label">Approved
+                                            Quotation Documents : </label>
+                                        <div class="col-sm-8">
+                                            <input type="file" class="form-control" id="cono1" placeholder=""
+                                                name="quotation_doc">
+                                        </div>
                                     </div>
-                                    <div class="col-sm-3">
-                                        <input
-                                            type="email"
-                                            class="form-control" placeholder="Email" name="person_email[]"
-                                            value="{{$other_person[1]->person_email}}">
+                                    <div class="border-top">
+                                        <div class="card-body" style="display:flex;justify-content:end;">
+                                            <button type="submit" class="btn btn-primary" name="submit">Save</button>
+                                        </div>
                                     </div>
-                                    <div class="col-sm-2">
-                                        <input
-                                            type="text"
-                                            class="form-control" placeholder="Designation" name="person_designation[]"
-                                            value="{{$other_person[1]->person_designation}}">
-                                    </div>
-                                </div>
-                                <div class="form-group row">
-                                    <label for="email1"
-                                        class="col-sm-1 text-right control-label col-form-label">3.</label>
-                                    <div class="col-sm-3">
-                                        <input
-                                            type="text"
-                                            class="form-control" placeholder="Person Name" name="person_name[]"
-                                            value="{{$other_person[2]->person_name}}">
-                                    </div>
-                                    <div class="col-sm-3">
-                                        <input
-                                            type="text"
-                                            class="form-control" placeholder="Contact Number" id="cono1" name="person_phone[]"
-                                            value="{{$other_person[2]->person_phone}}">
-                                    </div>
-                                    <div class="col-sm-3">
-                                        <input
-                                            type="email"
-                                            class="form-control" placeholder="Email" name="person_email[]"
-                                            value="{{$other_person[2]->person_email}}">
-                                    </div>
-                                    <div class="col-sm-2">
-                                        <input
-                                            type="text"
-                                            class="form-control" placeholder="Designation" name="person_designation[]"
-                                            value="{{$other_person[2]->person_designation}}">
-                                    </div>
-                                </div>
-                                <h4 class="card-title" style=" text-decoration-line: underline;">Upload Documents </h4>
-                                <div class="form-group row">
-                                     <div class="col-sm-1"></div>
-                                    <label for="cono1" class="col-sm-3  control-label col-form-label">PAN Card
-                                        :</label>
-                                    <div class="col-sm-8">
-                                        <input
-                                            type="file"
-                                            class="form-control" id="cono1" placeholder="" name="pan_card">
-                                    </div>
-                                </div>
-                                <div class="form-group row">
-                                     <div class="col-sm-1"></div>
-                                    <label for="cono1" class="col-sm-3  control-label col-form-label">GST
-                                        Certificate :</label>
-                                    <div class="col-sm-8">
-                                        <input
-                                            type="file"
-                                            class="form-control" id="cono1" placeholder="" name="gst">
-                                    </div>
-                                </div>
-                                <div class="form-group row">
-                                     <div class="col-sm-1"></div>
-                                    <label for="cono1" class="col-sm-3  control-label col-form-label">Approved
-                                        Quotation Documents : </label>
-                                    <div class="col-sm-8">
-                                        <input
-                                            type="file"
-                                            class="form-control" id="cono1" placeholder="" name="quotation_doc">
-                                    </div>
-                                </div>
-                                <div class="border-top">
-                                    <div class="card-body" style="display:flex;justify-content:end;">
-                                        <button type="submit" class="btn btn-primary" name="submit">Save</button>
-                                    </div>
-                                </div>
-                            </form>
-                        </div>
-                         @endif
+                                </form>
+                            </div>
+                            @endif
                             <!--client report form start end-->
                         </div>
                         <!-- Agreement tab end-->
@@ -593,47 +565,51 @@
                                             <td class="text-center">
                                                 @if($data->report_status == 1)
                                                 @if($report->layout_type == 2)
-                                                    <button class="btn btn-warning btn-sm" disabled>Default Layout</button>
+                                                <button class="btn btn-warning btn-sm" disabled>Default Layout</button>
                                                 @else
-                                                    <button class="btn btn-warning btn-sm" disabled>Custom Layout</button>
+                                                <button class="btn btn-warning btn-sm" disabled>Custom Layout</button>
                                                 @endif
-                                            @else
+                                                @else
                                                 @if($report->layout_type == 2)
-                                                    <a href="{{ route('report', ['id' => $report->id, 'layout_status' => $report->layout_status, 'layout_type' => 1, 'client_id' => $id]) }}">
-                                                        <button class="btn btn-primary btn-sm">Default Layout</button>
-                                                    </a>
+                                                <a
+                                                    href="{{ route('report', ['id' => $report->id, 'layout_status' => $report->layout_status, 'layout_type' => 1, 'client_id' => $id]) }}">
+                                                    <button class="btn btn-primary btn-sm">Default Layout</button>
+                                                </a>
                                                 @else
-                                                    <a href="{{ route('report', ['id' => $report->id, 'layout_status' => $report->layout_status, 'layout_type' => 2, 'client_id' => $id]) }}">
-                                                        <button class="btn btn-primary btn-sm">Custom Layout</button>
-                                                    </a>
+                                                <a
+                                                    href="{{ route('report', ['id' => $report->id, 'layout_status' => $report->layout_status, 'layout_type' => 2, 'client_id' => $id]) }}">
+                                                    <button class="btn btn-primary btn-sm">Custom Layout</button>
+                                                </a>
                                                 @endif
-                                            @endif
+                                                @endif
                                             </td>
 
                                         </tr>
                                         @endforeach
                                     </tbody>
                                 </table>
-                                 @if($data->complete_status ==1)
-                            <!--<div class="card-body" style="display: flex; justify-content: end;">-->
-                            <!--    <form method="post" action="{{ route('updatestatus') }}">-->
-                            <!--        @csrf-->
-                            <!--        <input type="hidden" name="id" value="{{$details->id}}">-->
-                            <!--        <input type="hidden" name="enableedit0" value="enableedit0">-->
-                            <!--        <button type="submit" class="btn btn-success btn-sm">Enable Edit</button>-->
-                            <!--    </form>-->
-                            <!--</div>-->
-                            @else
-                         <!--this this innner loop form save and edit-->
-                          @if($data->agreement_status == 0)
+                                @if($data->complete_status ==1)
+                                <!--<div class="card-body" style="display: flex; justify-content: end;">-->
+                                <!--    <form method="post" action="{{ route('updatestatus') }}">-->
+                                <!--        @csrf-->
+                                <!--        <input type="hidden" name="id" value="{{$details->id}}">-->
+                                <!--        <input type="hidden" name="enableedit0" value="enableedit0">-->
+                                <!--        <button type="submit" class="btn btn-success btn-sm">Enable Edit</button>-->
+                                <!--    </form>-->
+                                <!--</div>-->
+                                @else
+                                <!--this this innner loop form save and edit-->
+                                @if($data->agreement_status == 0)
                                 <div class="card-body" style="display: flex; justify-content: end;">
-                                    <a href="#" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#agreement_status">Save</a>
+                                    <a href="#" class="btn btn-primary btn-sm" data-toggle="modal"
+                                        data-target="#agreement_status">Save</a>
                                 </div>
-                            @else
+                                @else
                                 @if($msg)
-                                    <div class="card-body" style="display: flex; justify-content: end;">
-                                        <a href="#" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#approvalModal">Save</a>
-                                    </div>
+                                <div class="card-body" style="display: flex; justify-content: end;">
+                                    <a href="#" class="btn btn-primary btn-sm" data-toggle="modal"
+                                        data-target="#approvalModal">Save</a>
+                                </div>
                                 @elseif($data->report_status == 1)
                                 <div class="card-body" style="display: flex; justify-content: end;">
                                     <form method="post" action="{{ route('updatestatus') }}">
@@ -644,22 +620,22 @@
                                     </form>
                                 </div>
                                 @else
-                                    <div class="card-body" style="display: flex; justify-content: end;">
-                                        <form method="post" action="{{ route('updatestatus') }}">
-                                            @csrf
-                                            <input type="hidden" name="id" value="{{ $details->id }}">
-                                            <input type="hidden" name="report" value="report">
-                                            <button type="submit" class="btn btn-success btn-sm">Save</button>
-                                        </form>
-                                    </div>
+                                <div class="card-body" style="display: flex; justify-content: end;">
+                                    <form method="post" action="{{ route('updatestatus') }}">
+                                        @csrf
+                                        <input type="hidden" name="id" value="{{ $details->id }}">
+                                        <input type="hidden" name="report" value="report">
+                                        <button type="submit" class="btn btn-success btn-sm">Save</button>
+                                    </form>
+                                </div>
                                 @endif
-                            @endif
-                         <!--this this innner loop form save and edit-->
-                            @endif
-                               
+                                @endif
+                                <!--this this innner loop form save and edit-->
+                                @endif
+
                             </div>
                         </div>
-                        
+
                         <div class="tab-pane p-20 {{$progress == 3 ? 'active' : '' }}" id="Payment" role="tabpanel">
                             <h1 class="custom-heading">Payment Details</h1>
                             @if($data->payment_status == 1)
@@ -668,86 +644,77 @@
                                     <tr>
                                         <th scope="col">Sr.Num.</th>
                                         <th scope="col">Type</th>
-                                         <th scope="col">location_type</th>
+                                        <th scope="col">location_type</th>
                                         <th scope="col">Charge(per case)</th>
                                     </tr>
                                 </thead>
                                 <tbody>
-                                     @foreach($detail as $value)
-                               <tr>
-                                    <th scope="row">{{ $loop->iteration}}</th>
-                                    <td>
-                                        @if($value->project_type==1)
-                                        Address Verification
-                                        @elseif($value->project_type==2)
-                                        Site Verification
-                                        @elseif($value->project_type==3)
-                                        Digital Address Verification
-                                        @endif
+                                    @foreach($detail as $value)
+                                    <tr>
+                                        <th scope="row">{{ $loop->iteration}}</th>
+                                        <td>
+                                            @if($value->project_type==1)
+                                            Address Verification
+                                            @elseif($value->project_type==2)
+                                            Site Verification
+                                            @elseif($value->project_type==3)
+                                            Digital Address Verification
+                                            @endif
                                         </td>
-                                    <td>
-                                        @if($value->metro_status ==1)
-                                        Metro
-                                        @elseif($value->metro_status ==2)
-                                        Non Metro
-                                        @endif
-                                     </td>
-                                    <td>
-                                       {{$value->amount}} 
-                                    </td>
-                                </tr>
-                               @endforeach
-                            </tbody>
+                                        <td>
+                                            @if($value->metro_status ==1)
+                                            Metro
+                                            @elseif($value->metro_status ==2)
+                                            Non Metro
+                                            @endif
+                                        </td>
+                                        <td>
+                                            {{$value->amount}}
+                                        </td>
+                                    </tr>
+                                    @endforeach
+                                </tbody>
                             </table>
                             @else
                             <div class="row">
-                                  <div class="container mt-5">
-                              <div class="card shadow border-0" style="background-color:;">
-                                <div class="card-body text-center mt-3">
-                                    <h3 class="font-weight-bold ">
-                                     Waiting for admin to update verification charges..
-                                    </h3>
+                                <div class="container mt-5">
+                                    <div class="card shadow border-0" style="background-color:;">
+                                        <div class="card-body text-center mt-3">
+                                            <h3 class="font-weight-bold ">
+                                                Waiting for admin to update verification charges..
+                                            </h3>
+                                        </div>
+                                    </div>
                                 </div>
-                              </div>
-                            </div>
                             </div>
                             @endif
                         </div>
                         <div class="tab-pane p-20  {{$progress ==4 ? 'active' : '' }}" id="Status" role="tabpanel">
-                           
-                            <div class="row">
-                              <div class="container mt-5">
-                              <div class="card shadow border-0" style=" box-shadow: 0 4px 8px rgba(0, 0, 0, 0.4);">
-                               @php
-                                    $agr = $data->agreement_status == 0 ? 'Agreement details Pending' : null;
-                                    $pem = $data->payment_status == 0 ? 'Payment details Pending' : null;
-                                    $rep = $data->report_status == 0 ? 'Report details Pending' : null;
-                                    $pending = array_filter([$agr, $pem, $rep]);
-                                @endphp
-                                
-                               @if ($pending)
-                                    <div class="alert alert-warning">
-                                        <strong>Pending:</strong> {{ implode(', ', $pending) }}
-                                    </div>
-                                @else
-                                 @if($details->final_status == 0)
-                                    <div class="card-body text-center mb-3">
-                                       <h4 class="mb-3 mt-3">Please wait for final approval</h4>
-                                        <!--<a href="#" class="btn btn-success  animated-border" data-toggle="modal" data-target="#finalsubmit">-->
-                                        <!--    Final Submit-->
-                                        <!--</a>-->
-                                    </div>
-                                     @else
-                                     <div class="alert alert-success">
+                               <div class="container mt-5">
+                                    <div class="card-body text-center mt-3" style=" box-shadow: 0 4px 8px rgba(0, 0, 0, 0.4);">
+                                        @php
+                                        $agr = $data->agreement_status == 0 ? 'Agreement details Pending' : null;
+                                        $pem = $data->payment_status == 0 ? 'Payment details Pending' : null;
+                                        $rep = $data->report_status == 0 ? 'Report details Pending' : null;
+                                        $pending = array_filter([$agr, $pem, $rep]);
+                                        @endphp
+                                        @if ($pending)
+                                        <div class="alert alert-warning">
+                                            <strong>Pending:</strong> {{ implode(', ', $pending) }}
+                                        </div>
+                                        @else
+                                        @if($details->final_status == 0)
+                                        <div class="card-body text-center mb-3">
+                                            <h4 class="mb-4 ">Please wait for final approval</h4>
+                                        </div>
+                                        @else
+                                        <div class="alert alert-success mt-3 m-2 text-center">
                                             <strong>Success:</strong> Onboarding completed successfully.
                                         </div>
-                                      @endif
-                                @endif
-                               
-                              </div>
-                            </div>
-                            </div>
-                          
+                                        @endif
+                                        @endif
+                                    </div>
+                                </div>
                         </div>
                     </div>
                 </div>
@@ -785,7 +752,8 @@
         <div class="modal-content">
             <div class="modal-header">
                 <!--You cannot change the details. -->
-                <h5 class="modal-title text-danger" id="finalsubmit">Please ensure that you agree with the final submission.</h5> 
+                <h5 class="modal-title text-danger" id="finalsubmit">Please ensure that you agree with the final
+                    submission.</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
@@ -795,7 +763,7 @@
                     @csrf
                     <input type="hidden" name="id" value="{{$details->id}}">
                     <input type="hidden" name="finalsubmit" value="finalsubmit">
-                     <button type="submit" class="btn btn-success btn-sm">&nbsp;&nbsp;Submit&nbsp;&nbsp;</button>
+                    <button type="submit" class="btn btn-success btn-sm">&nbsp;&nbsp;Submit&nbsp;&nbsp;</button>
                 </form>
                 <button type="button" class="btn btn-secondary btn-sm" data-dismiss="modal">Cancel</button>
             </div>
@@ -804,11 +772,13 @@
 </div>
 <!--modal for final submit-->
 <!--agreement details modal-->
-<div class="modal fade" id="agreement_status" tabindex="-1" aria-labelledby="agreement_statusModalLabel" aria-hidden="true">
+<div class="modal fade" id="agreement_status" tabindex="-1" aria-labelledby="agreement_statusModalLabel"
+    aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title text-danger" id="agreement_statusModalLabel">Kindly ensure the Agreement Details are submitted before continuing</h5>
+                <h5 class="modal-title text-danger" id="agreement_statusModalLabel">Kindly ensure the Agreement Details
+                    are submitted before continuing</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>

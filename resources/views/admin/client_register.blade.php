@@ -13,17 +13,14 @@
     background: url({{asset('images/cover2.png')}})no-repeat center center fixed;
     background-size: cover;
 }
-
 .logo img {
     width: 80px;
     height: 80px;
 }
-
 .logo h2 {
     margin: 0;
     font-size: 1.5rem;
 }
-
 .form-control:focus {
     box-shadow: 0 0 5px 3px rgba(184, 16, 219, 0.5); /* Adjust the color and spread as needed */
     border-color: #b810db; /* Optional: to change the border color as well */

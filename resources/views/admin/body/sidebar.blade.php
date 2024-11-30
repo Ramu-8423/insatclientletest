@@ -15,8 +15,8 @@
                @if($login_row->progress_status==5 && $login_row->remark_status==0 && $login_row->final_status ==1 && $data->report_status ==1 && $data->agreement_status ==1 && $data->reg_status ==2)
                --}}
                
+               @if($login_row->final_status ==1)
                
-                 
                 <li class="sidebar-item"> <a class="sidebar-link waves-effect waves-dark sidebar-link" href="{{route('dashboard',0)}}" aria-expanded="false"><i class="mdi mdi-plus-box"></i><span class="hide-menu">Dashboard</span></a>
                 </li>
                 
@@ -50,7 +50,7 @@
                        <a class="sidebar-link waves-effect waves-dark sidebar-link" href="{{ route('invoice',1)}}" aria-expanded="false"><i class="mdi mdi-wallet"></i><span class="hide-menu">Invoice </span></a>
                  </li> 
                       
-                  {{--@endif--}}
+                  @endif
                  
             </ul>
         </nav>
