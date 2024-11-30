@@ -21,10 +21,8 @@
 @php
  $data= json_decode($details->reg_tracking);
   $message = session('message')??1;
+  $progress = $details->progress_status + 1 ;
 @endphp
-
-
-
 <div class="page-wrapper">
     <div class="container-fluid">
          @if (session('success'))
@@ -44,39 +42,41 @@
                 <div class="card">
                     <!-- Nav tabs -->
                     <div class="d-flex justify-content-between align-items-center">
-                        <ul class="nav nav-tabs" role="tablist">
+                        <ul class="nav nav-tabs " role="tablist">
                             <li class="nav-item">
-                                <a class="nav-link {{$data->reg_status ==2? 'btn-success': 'btn-danger' }}" data-toggle="tab" href="#Registration" role="tab">
+                                <a class="nav-link {{$data->reg_status ==2? 'btn-success': 'btn-danger' }} 
+                                " data-toggle="tab" href="#Registration" role="tab">
                                     <span class="hidden-sm-up"></span>
                                     <span class="hidden-xs-down">Registration Details</span>
                                 </a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link {{$data->agreement_status ==1? 'btn-success': 'btn-danger' }}
-                                {{$message ==1 ? 'active' : '' }}
+                                <a class="nav-link {{$data->agreement_status ==1? 'btn-success': 'btn-danger' }} 
+                                {{$progress == 1 ? 'active' : '' }}
+                                
                                 " data-toggle="tab" href="#Agreement" role="tab">
                                     <span class="hidden-sm-up"></span>
                                     <span class="hidden-xs-down">Agreement Details</span>
                                 </a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link {{$data->report_status ==1 && $details->final_status ==1 ? 'btn-success': 'btn-danger' }}
-                                 {{ $message ==2 ? 'active' : '' }}
+                                <a class="nav-link {{$data->report_status ==1  ? 'btn-success': 'btn-danger' }}
+                                {{ $progress ==2 ? 'active' : '' }}
                                 " data-toggle="tab" href="#Report" role="tab">
                                     <span class="hidden-sm-up"></span>
                                     <span class="hidden-xs-down">Report Layout</span>
                                 </a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link {{ $details->progress_status>=5? 'btn-success': 'btn-danger' }}
-                                {{$message ==3 ? 'active' : '' }}
+                                <a class="nav-link  {{ $data->payment_status ==1 ? 'btn-success': 'btn-danger' }}
+                                 {{$progress ==3 ? 'active' : '' }}
                                 " data-toggle="tab" href="#Payment" role="tab">
                                     <span class="hidden-sm-up"></span>
                                     <span class="hidden-xs-down">Payment Details</span>
                                 </a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link {{$details->final_status ==1 && $details->progress_status>=5 ? 'btn-success': 'btn-danger' }}" data-toggle="tab" href="#Status" role="tab">
+                                <a class="nav-link  {{$details->final_status ==1 ? 'btn-success': 'btn-danger' }} {{$progress ==4 ? 'active' : '' }}" data-toggle="tab" href="#Status" role="tab">
                                     <span class="hidden-sm-up"></span>
                                     <span class="hidden-xs-down">Status</span>
                                 </a>
@@ -87,7 +87,7 @@
                     <!-- Tab panes -->
                     <div class="tab-content tabcontent-border">
                         <!-- registration tab-->
-                        <div class="tab-pane " id="Registration" role="tabpanel">
+                        <div class="tab-pane {{ $data->reg_status == 1 ? 'active' : '' }}" id="Registration" role="tabpanel">
                             <div class="card-body">
                                 <h2 class="card-title custom-heading">Registration Details</h2>
                                 <div class="form-group row">
@@ -206,7 +206,7 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="tab-pane  {{$message ==1 ? 'active' : '' }}" id="Agreement" role="tabpanel">
+                        <div class="tab-pane  {{$progress == 1 ? 'active' : '' }}" id="Agreement" role="tabpanel">
                              @if($data->agreement_status == 1)
                                <h1 class="custom-heading ml-3">Agreement Details</h1>
                             <div class="container mt-1">
@@ -318,15 +318,14 @@
                                     </div>
                                 </div>
                                      <div class="card-body" style="display: flex; justify-content: end;">
-                                    @if($data->report_status !== 1)
+                                    @if($data->complete_status == 0)
                                     <form method="post" action="{{ route('updatestatus') }}">
                                         @csrf
                                         <input type="hidden" name="id" value="{{$details->id}}">
                                         <input type="hidden" name="agreement_status" value="agreement_status">
                                         <button type="submit" class="btn btn-primary btn-sm">Edit</button>
-                                        
                                     </form>
-                                     @endif
+                                    @endif
                                 </div>
                             </div>
                              @else
@@ -543,7 +542,7 @@
                             <!--client report form start end-->
                         </div>
                         <!-- Agreement tab end-->
-                        <div class="tab-pane p-20 {{$message ==2 ? 'active' : '' }}" id="Report" role="tabpanel">
+                        <div class="tab-pane p-20  {{$progress == 2 ? 'active' : '' }}" id="Report" role="tabpanel">
                             <div>
                                 <h3 class="custom-heading">Report Layout</h3>
                                 <table class="table table-sm">
@@ -615,52 +614,55 @@
                                         @endforeach
                                     </tbody>
                                 </table>
-                                 @if($details->final_status ==1)
-                            <!--      <div class="card-body" style="display: flex; justify-content: end;">-->
-                            <!-- <form method="post" action="{{ route('updatestatus') }}">-->
-                            <!--    @csrf-->
-                            <!--    <input type="hidden" name="id" value="{{$details->id}}">-->
-                            <!--    <input type="hidden" name="finalsubmit0" value="finalsubmit0">-->
-                            <!--     <button type="submit" class="btn btn-success btn-sm">Enable Edit</button>-->
-                            <!--</form>-->
-                            <!-- </div>-->
-                                 @else
-                                   <div class="card-body" style="display: flex; justify-content: end;">
-                                   @if($data->report_status == 0 || $data->report_status == 2)
-                                 <div class="card-body" style="display: flex; justify-content: end;">
-                                    @if($msg)
-                                    <a href="#" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#approvalModal">Save</a>
-                                    @else
-                                    <form method="post" action="{{ route('updatestatus') }}">
-                                        @csrf
-                                        <input type="hidden" name="id" value="{{$details->id}}">
-                                        <input type="hidden" name="report" value="report">
-                                        <button type="submit" class="btn btn-success btn-sm">Save</button>
-                                    </form>
-                                    @endif
+                                 @if($data->complete_status ==1)
+                            <!--<div class="card-body" style="display: flex; justify-content: end;">-->
+                            <!--    <form method="post" action="{{ route('updatestatus') }}">-->
+                            <!--        @csrf-->
+                            <!--        <input type="hidden" name="id" value="{{$details->id}}">-->
+                            <!--        <input type="hidden" name="enableedit0" value="enableedit0">-->
+                            <!--        <button type="submit" class="btn btn-success btn-sm">Enable Edit</button>-->
+                            <!--    </form>-->
+                            <!--</div>-->
+                            @else
+                         <!--this this innner loop form save and edit-->
+                          @if($data->agreement_status == 0)
+                                <div class="card-body" style="display: flex; justify-content: end;">
+                                    <a href="#" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#agreement_status">Save</a>
                                 </div>
-                                @elseif($data->report_status == 1 || $data->report_status == 2)
+                            @else
+                                @if($msg)
+                                    <div class="card-body" style="display: flex; justify-content: end;">
+                                        <a href="#" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#approvalModal">Save</a>
+                                    </div>
+                                @elseif($data->report_status == 1)
                                 <div class="card-body" style="display: flex; justify-content: end;">
                                     <form method="post" action="{{ route('updatestatus') }}">
                                         @csrf
                                         <input type="hidden" name="id" value="{{$details->id}}">
                                         <input type="hidden" name="reportedit" value="report">
                                         <button type="submit" class="btn btn-success btn-sm">Edit</button>
-                                        <a href="#" class="btn btn-primary btn-sm" data-toggle="modal"
-                                        data-target="#finalsubmit">Final Submit</a>
                                     </form>
                                 </div>
+                                @else
+                                    <div class="card-body" style="display: flex; justify-content: end;">
+                                        <form method="post" action="{{ route('updatestatus') }}">
+                                            @csrf
+                                            <input type="hidden" name="id" value="{{ $details->id }}">
+                                            <input type="hidden" name="report" value="report">
+                                            <button type="submit" class="btn btn-success btn-sm">Save</button>
+                                        </form>
+                                    </div>
                                 @endif
-                                </div>
-                                 @endif
-                                 
+                            @endif
+                         <!--this this innner loop form save and edit-->
+                            @endif
                                
                             </div>
                         </div>
                         
-                        <div class="tab-pane p-20 {{$message ==3 ? 'active' : '' }}" id="Payment" role="tabpanel">
+                        <div class="tab-pane p-20 {{$progress == 3 ? 'active' : '' }}" id="Payment" role="tabpanel">
                             <h1 class="custom-heading">Payment Details</h1>
-                            @if($details->progress_status>=5)
+                            @if($data->payment_status == 1)
                             <table class="table  table-sm">
                                 <thead>
                                     <tr>
@@ -711,26 +713,37 @@
                             </div>
                             @endif
                         </div>
-                        <div class="tab-pane p-20" id="Status" role="tabpanel">
+                        <div class="tab-pane p-20  {{$progress ==4 ? 'active' : '' }}" id="Status" role="tabpanel">
                            
                             <div class="row">
-                                <div class="container mt-5">
-                              <div class="card shadow border-0" style="background-color:;">
-                                <div class="card-body text-center mt-3">
-                                    @if($details->progress_status>=5 && $details->final_status ==1 &&
-                                    $data->report_status ==1 && $data->agreement_status ==1 && $data->agreement_status ==1)
-                                    <h1 class="font-weight-bold ">
-                                   Congratulations..
-                                    </h1>
-                                    <h3 class="font-weight-bold mt-3 ">
-                                   You are  successfully onboarded..
-                                  </h3>
-                                   @else
-                                    <h3 class="font-weight-bold ">
-                                   Please make sure all details are submitted
-                                    </h3>
-                                   @endif
-                                </div>
+                              <div class="container mt-5">
+                              <div class="card shadow border-0" style=" box-shadow: 0 4px 8px rgba(0, 0, 0, 0.4);">
+                               @php
+                                    $agr = $data->agreement_status == 0 ? 'Agreement details Pending' : null;
+                                    $pem = $data->payment_status == 0 ? 'Payment details Pending' : null;
+                                    $rep = $data->report_status == 0 ? 'Report details Pending' : null;
+                                    $pending = array_filter([$agr, $pem, $rep]);
+                                @endphp
+                                
+                               @if ($pending)
+                                    <div class="alert alert-warning">
+                                        <strong>Pending:</strong> {{ implode(', ', $pending) }}
+                                    </div>
+                                @else
+                                 @if($details->final_status == 0)
+                                    <div class="card-body text-center mb-3">
+                                       <h4 class="mb-3 mt-3">Please wait for final approval</h4>
+                                        <!--<a href="#" class="btn btn-success  animated-border" data-toggle="modal" data-target="#finalsubmit">-->
+                                        <!--    Final Submit-->
+                                        <!--</a>-->
+                                    </div>
+                                     @else
+                                     <div class="alert alert-success">
+                                            <strong>Success:</strong> Onboarding completed successfully.
+                                        </div>
+                                      @endif
+                                @endif
+                               
                               </div>
                             </div>
                             </div>
@@ -743,19 +756,19 @@
     </div>
 </div>
 
-<!--modal for verification report-->
 <div class="modal fade" id="approvalModal" tabindex="-1" aria-labelledby="approvalModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title text-danger" id="approvalModalLabel">You cannot save the details. Please ensure the following are approved  </h5>
+                <h5 class="modal-title text-danger" id="approvalModalLabel">You cannot save the details. Please ensure
+                    the following are approved </h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
             <div class="modal-body">
                 <div class="form-group">
-                     <p class="mb-0 h5 ">{!! str_replace(',', ',<br>', $msg) !!}</p>
+                    <p class="mb-0 h5 ">{!! str_replace(',', ',<br>', $msg) !!}</p>
                 </div>
             </div>
             <div class="modal-footer">
@@ -765,13 +778,14 @@
     </div>
 </div>
 <!--modal for verification report-->
+
 <!--modal for final submit-->
 <div class="modal fade" id="finalsubmit" tabindex="-1" aria-labelledby="finalsubmit" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
                 <!--You cannot change the details. -->
-                <h5 class="modal-title text-danger" id="finalsubmit">Please ensure that you agree with the final submission.You cannot change the details</h5> 
+                <h5 class="modal-title text-danger" id="finalsubmit">Please ensure that you agree with the final submission.</h5> 
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
@@ -789,4 +803,21 @@
     </div>
 </div>
 <!--modal for final submit-->
+<!--agreement details modal-->
+<div class="modal fade" id="agreement_status" tabindex="-1" aria-labelledby="agreement_statusModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title text-danger" id="agreement_statusModalLabel">Kindly ensure the Agreement Details are submitted before continuing</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary btn-sm" data-dismiss="modal">Cancel</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!--for payment modal-->
 @endsection

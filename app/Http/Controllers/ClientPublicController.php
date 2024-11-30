@@ -184,7 +184,10 @@ class ClientPublicController extends Controller
                                 return redirect()->back()->with('error', 'An error occurred while uploading Quotation Document: ' . $e->getMessage());
                             }
                          }
-
+                    $reportst = DB::table('client_details')->where('id', $id)->value(DB::raw("JSON_EXTRACT(reg_tracking, '$.report_status')"));
+                    $paymentst = DB::table('client_details')->where('id', $id)->value(DB::raw("JSON_EXTRACT(reg_tracking, '$.payment_status')"));        
+                    $progress = ($reportst == 1 && $paymentst == 1) ? 3 : (($reportst == 1 && $paymentst == 0) ? 2 : 1);
+                    
                     $update = DB::table('client_details')->where('id', $id)->update([
                     'a_company_name' => $company_name,
                     'a_cin_number' => $cin_number,
@@ -192,6 +195,7 @@ class ClientPublicController extends Controller
                     'a_signatory_name' => $signatory_name,
                     'a_signatory_desi' => $a_signatory_desi,
                     'a_case_timeline' => $case_timeline,
+                    'progress_status' => $progress, // Dynamically set value
                     'a_other_person_info' => $a_other_person_info,
                     'remark_status' => $remark_status,
                     'reg_tracking' => DB::raw("JSON_SET(reg_tracking, '$.agreement_status', 1)")
@@ -404,7 +408,6 @@ class ClientPublicController extends Controller
             return view('report_layout.index')->with('report', $report);
         }
 ///////////////
-
       public function upload(Request $request)
         {
         $request->validate([
@@ -420,10 +423,6 @@ class ClientPublicController extends Controller
 
         return redirect()->route('report.layout.index')->with('success', 'File uploaded successfully');
     }
-    
-    
-
-     
     public function update_layout_order(Request $request){
           //$order = $request->input('order', []);
          $order = $request->order;
@@ -436,10 +435,8 @@ class ClientPublicController extends Controller
              'report_layout_order'=>json_encode($order)
             ]);
          } 
-            
         return response()->json(['status' => '$request']);
      }
-     
        public function report($id, $layout_type, $layout_status) {
             $ids = session('client_login_id');
             if ($layout_type == 1) {
@@ -489,7 +486,6 @@ class ClientPublicController extends Controller
              }
              return back()->with('error', 'Please select a file to upload.');
 }
-
          public function client_details_order(Request $request){
                 $order = $request->order;
                 $client_id = $request->id;
@@ -498,7 +494,6 @@ class ClientPublicController extends Controller
                    ]);
                return response()->json(['status' => '$request']);
             }
-            
             public function layoutstatus($id, $layout_status, $layout_type,$client_id) {
                 //dd($id,$layout_status,$layout_type,$client_id);
                // dd($client_id);
@@ -508,46 +503,60 @@ class ClientPublicController extends Controller
                 ]);
                 return redirect()->route('client_onboarding',$id)->with('success', 'Approved successfully')->with('message',2);
         }
-        
           public function getuploadupdate($id){
            $report_details = DB::table('report_layout')->where('id',$id)->first();
            return view('report.getuploadupdate')->with(['report' => $report_details]);
         }
         
-       public function updateAgreementStatus(Request $request){
+   public function updateAgreementStatus(Request $request){
         $agreement_status = $request->agreement_status;
         $report = $request->report;
         $reportedit = $request->reportedit;
         $finalsubmit = $request->finalsubmit;
-        $finalsubmit0 = $request->finalsubmit0;
+        $enableedit0 = $request->enableedit0;
         $id = $request->id;
         if($agreement_status){
           DB::table('client_details')->where('id', $id)->update([
-            'reg_tracking' => DB::raw("JSON_SET(reg_tracking, '$.agreement_status', 2)")
+          'progress_status' => 0,
+            'reg_tracking' => DB::raw("JSON_SET(reg_tracking, '$.agreement_status', 0)")
         ]);  
         }
-        if($report){
+      if($report){
+             $paymentStatus = DB::table('client_details')
+            ->where('id', $id)
+            ->value(DB::raw("JSON_EXTRACT(reg_tracking, '$.payment_status')"));
+             $progress = ($paymentStatus == 1)?3 : 2 ;
              DB::table('client_details')->where('id', $id)->update([
-            'reg_tracking' => DB::raw("JSON_SET(reg_tracking, '$.report_status', 1)")
-        ]);  
-        return redirect()->back()->with('message',2);
-        }
-         if($reportedit){
-             DB::table('client_details')->where('id', $id)->update([
-            'reg_tracking' => DB::raw("JSON_SET(reg_tracking, '$.report_status', 2)") ]); // 2==  open fror edit
-             return redirect()->back()->with('message',2);
-        }
-         if($finalsubmit)
+             'progress_status' =>$progress,
+             'reg_tracking' => DB::raw("JSON_SET(reg_tracking, '$.report_status', 1)")  // 1 ==  open fror complete save
+             ]);
+             return redirect()->back()->with('success', 'Report layout saved successfully!');
+       }
+      if($reportedit){
+            DB::table('client_details')->where('id',$id)->update([
+            'progress_status' => 1,
+            'reg_tracking' => DB::raw("JSON_SET(reg_tracking, '$.report_status', 0 , '$.complete_status', 0)") //final sunmit ke sath wala edit
+            ]);
+       }
+        if($finalsubmit)
         {
-           DB::table('client_details')->where('id', $id)->update(['final_status' => 1]);
-            return redirect()->back()->with('message',2);
+            DB::table('client_details')->where('id',$id)->update([
+            'progress_status' => 3,
+            'final_status' => 1,
+            'reg_tracking' => DB::raw("JSON_SET(reg_tracking, '$.complete_status', 1)")
+            ]);
+             return redirect()->back();
         }
-         if($finalsubmit0)
-        {
-             DB::table('client_details')->where('id', $id)->update(['final_status' => 0]);
+        if($enableedit0)
+        { 
+             DB::table('client_details')->where('id',$id)->update([
+             'progress_status' => 1,
+             'final_status' => 0,
+             'reg_tracking' => DB::raw("JSON_SET(reg_tracking, '$.complete_status', 0)")
+             ]);
         }
         return redirect()->back();
-}
+    }
 }
 
 
