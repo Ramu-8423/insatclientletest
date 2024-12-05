@@ -106,22 +106,48 @@
 </style>
 
 
+
 <div class="row">
     <div class="col-md-12">
         <div class="card">
             <div class="card-body">
-                <div class="row justify-content-start">
-                    <div class="col">
-                        <a href="{{ route('dashboard',0) }}" class="btn btn-link fw-bold fs-4 {{ $status_id == 0 ? 'active-link' : '' }}">All Cases</a>
-                        <a href="{{ route('dashboard',1) }}" class="btn btn-link fw-bold fs-4 {{ $status_id == 1 ? 'active-link' : '' }}">Pending Cases</a>
-                        <a href="{{ route('dashboard',2) }}" class="btn btn-link fw-bold fs-4 {{ $status_id == 2 ? 'active-link' : '' }}">Insuff Cases</a>
-                        <a href="{{ route('dashboard',3) }}" class="btn btn-link fw-bold fs-4 {{ $status_id == 3 ? 'active-link' : '' }}">Hold Cases</a>
-                        <a href="{{ route('dashboard',4) }}" class="btn btn-link fw-bold fs-4 {{ $status_id == 4 ? 'active-link' : '' }}">Rejected Cases</a>
-                        <a href="{{ route('dashboard',5) }}" class="btn btn-link fw-bold fs-4 {{ $status_id == 5 ? 'active-link' : '' }}">Reopen Cases</a>
-                        <a href="{{ route('dashboard',8) }}" class="btn btn-link fw-bold fs-4 {{ $status_id == 8 ? 'active-link' : '' }}">Completed</a>
-                        <a href="{{ route('dashboard',14) }}" class="btn btn-link fw-bold fs-4 {{ $status_id == 14 ? 'active-link' : '' }}">Closed</a>
-                    </div>
-                </div>
+                <ul class="list-unstyled row g-3">
+                    <!-- First Row -->
+                    <li class="col-6 col-md-2-4 col-lg-2">
+                        <a href="{{ route('dashboard', 0) }}" class="btn btn-link fw-bold-4 {{ $status_id == 0 ? 'active-link' : '' }}">
+                            All Cases <b style="color:{{ $status_id == 0 ? '#a400ff;font-size:1rem;' : '#4c5d45' }}">({{$totals->total_case}})</b>
+                        </a>
+                    </li>
+                    <li class="col-6 col-md-2-4 col-lg-2">
+                        <a href="{{ route('dashboard', 1) }}" class="btn btn-link fw-bold-4 {{ $status_id == 1 ? 'active-link' : '' }}">
+                            Pending Cases <b style="color:{{ $status_id == 1 ? '#a400ff;font-size:1rem;' : '#4c5d45' }}">({{$totals->pending_case}})</b>
+                        </a>
+                    </li>
+                    <li class="col-6 col-md-2-4 col-lg-2">
+                        <a href="{{ route('dashboard', 2) }}" class="btn btn-link fw-bold-4 {{ $status_id == 2 ? 'active-link' : '' }}">
+                            Insuff Cases <b style="color:{{ $status_id == 2 ? '#a400ff;font-size:1rem;' : '#4c5d45' }}">({{$totals->insuff_case}})</b>
+                        </a>
+                    </li>
+                    <li class="col-6 col-md-2-4 col-lg-2">
+                        <a href="{{ route('dashboard', 18) }}" class="btn btn-link fw-bold-4 {{ $status_id == 18 ? 'active-link' : '' }}">
+                            Rejected Cases <b style="color:{{ $status_id == 18 ? '#a400ff;font-size:1rem;' : '#4c5d45' }}">({{$totals->rejected_case}})</b>
+                        </a>
+                    </li>
+                    <li class="col-6 col-md-2-4 col-lg-2">
+                        <a href="{{ route('dashboard', 5) }}" class="btn btn-link fw-bold-4 {{ $status_id == 5 ? 'active-link' : '' }}">
+                            Reopen Cases <b style="color:{{ $status_id == 5 ? '#a400ff;font-size:1rem;' : '#4c5d45' }}">({{$totals->re_open_case}})</b>
+                        </a>
+                    </li>
+
+                    <!-- Second Row -->
+                    <li class="col-6 col-md-2-4 col-lg-2">
+                        <a href="{{ route('dashboard', 8) }}" class="btn btn-link fw-bold-4 {{ $status_id == 8 ? 'active-link' : '' }}">
+                            Completed Cases <b style="color:{{ $status_id == 8 ? '#a400ff;font-size:1rem;' : '#4c5d45' }}">({{$totals->completed_case}})</b>
+                        </a>
+                    </li>
+                    
+                   
+                </ul>
             </div>
         </div>
     </div>
@@ -188,9 +214,6 @@
                               <thead>
                                  <tr>
                                     <th scope="col"><strong>Case ID</strong></th>
-                                     @if($status_id==8)
-                                    <th>Action</th>
-                                    @endif
                                     <th scope="col"><strong>Employee ID</strong></th>
                                     <th scope="col"><strong>Location</strong></th>
                                     <th scope="col"><strong>Project Type</strong></th>
@@ -217,15 +240,16 @@
                                     <th scope="col"><strong>Case Closer Date</strong></th>
                                     <th scope="col"><strong>Case Completed Date</strong></th>
                                     <th scope="col"><strong>End Date</strong></th>
+                                    <th scope="col"><strong>Action</strong></th>
+                                    @if($status_id==8)
+                                    <th scope="col"><strong>Report</strong></th>
+                                    @endif
                                 </tr>
                              </thead>
                           <tbody>
                             @foreach($cases as $case)
                             <tr>
                                 <td>{{ $case->case_id }}</td>
-                                 @if($status_id==8)
-                                <td><button type="btn" class="btn btn-primary btn-sm">Action</button></td>
-                                @endif
                                 <td>{{ $case->employee_id??'N/A'; }}</td>
                                 <td>{{ $case->location??'N/A'; }}</td>
                                 <td>{{ $case->project_type ==1?'Address Verification':'Site Investigation'}}</td>
@@ -240,7 +264,7 @@
                              @elseif($case->case_status==3)
                                     {{ 'Hold' }}
                              @elseif($case->case_status==4)
-                                    {{ 'Rejected' }}
+                                    {{ 'Rejected By Vendor' }}
                              @elseif($case->case_status==5)
                                     {{ 'Re-Open' }}
                              @elseif($case->case_status==6)
@@ -259,6 +283,16 @@
                                     {{ 'Rport Submitted by Vendor' }}
                              @elseif($case->case_status==14)
                                     {{ 'Closed' }}
+                             @elseif($case->case_status==15)
+                                  'Rejected By admin'
+                              @elseif($case->case_status==16)
+                                 'Allocated'
+                              @elseif($case->case_status==17)
+                                  'Insuff Cleared'
+                            @elseif($case->case_status==18)
+                               'Rejected By Client'
+                            @else
+                               'Unknown Status'
                              @endif
                                 
                                 </td>
@@ -283,6 +317,21 @@
                                 <td>{{ $case->case_closer_date??'N/A'}}</td>
                                 <td>{{ $case->case_completed_date??'N/A'}}</td>
                                 <td>{{ $case->end_date??'N/A'}}</td>
+                                <td>
+                                    <a href="{{route('casetracking',$case->case_id)}}">
+                                        <button class="btn btn-primary btn-sm">view</button>
+                                    </a>
+                                </td>
+                                
+                                @if($status_id==8)
+                                <td>
+                                    <a href="{{route('download_report',
+                                    ['client_id'=>$case->client_id,'project_type'=>$case->project_type,'case_id'=>$case->case_id])}}">
+                                        <button class="btn btn-success btn-sm">view</button>
+                                    </a>
+                                </td>
+                                @endif
+                                
                             </tr>
                             @endforeach
                         </tbody>

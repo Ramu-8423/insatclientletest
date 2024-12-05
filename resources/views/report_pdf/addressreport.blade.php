@@ -1,411 +1,341 @@
-<!DOCTYPE html>
-<html lang="en">
+<!--{{-- resources/views/user/userlist.blade.php --}}-->
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Address Verification Report</title>
-    <style>
-   body {
-    font-family: 'Times New Roman', serif;
-    margin: 0;
-    padding: 0;
-    background-color: #fff;
-}
+@extends('admin.body.adminmaster')
 
-.container {
-    width: 100%; /* Utilize full width for A4 page */
-    max-width: 750px; /* Limit width for readability */
-    margin: 0 auto;
-    padding: 20px;
-    border: 1px solid #000;
-    box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
-    page-break-inside: avoid; /* Prevent breaking inside elements */
-}
-
-.header-section {
-    display: flex; /* Flexbox layout for alignment */
-    justify-content: center; /* Center content horizontally */
-    align-items: center; /* Center content vertically */
-    margin-bottom: 20px; /* Reduced space for A4 fitting */
-    padding: 10px 0; /* Padding for spacing */
-    gap: 20px; /* Space between the logo and text */
-    flex-wrap: wrap; /* Allow content to wrap on smaller screens */
-}
-
-.company-logo {
-    display: flex; /* Flexbox for centering */
-    justify-content: center; /* Center the logo horizontally */
-    align-items: center; /* Center the logo vertically */
-    flex: 1 1 auto; /* Allow the logo to grow and shrink */
-    max-width: 200px; /* Smaller max width for A4 fitting */
-    text-align: center; /* Center text if any */
-}
-
-.company-logo img {
-    max-width: 100%; /* Ensure image scales properly */
-    height: auto; /* Maintain aspect ratio */
-}
-
-.report-summary {
-    flex: 1 1 auto; /* Allow text to grow and shrink */
-    max-width: 400px; /* Maximum width for text container */
-    text-align: center; /* Center align text */
-}
-
-.report-summary table {
-    width: 100%; /* Full width of the container */
-    table-layout: auto; /* Ensure table width is dynamic */
-    border-collapse: collapse; /* Collapse borders for neat look */
-}
-
-.report-summary th, .report-summary td {
-    padding: 5px 10px; /* Padding for cells */
-    text-align: left; /* Align text to the left */
-    border: 1px solid #000; /* Add border */
-}
-
-.report-summary th {
-    background-color: #f2f2f2; /* Background color for headers */
-    font-weight: bold; /* Bold text for headers */
-}
-
-h1, h2 {
-    font-size: 16px; /* Slightly smaller for A4 fitting */
-    color: #000;
-    text-transform: uppercase;
-    margin: 10px 0; /* Reduced margin for A4 fitting */
-    text-align: center;
-}
-
-.report-details {
-    width: 100%;
-    margin-bottom: 15px; /* Reduced margin for fitting */
-    border-collapse: collapse;
-}
-
-.report-details th, .report-details td {
-    border: 1px solid #000;
-    padding: 8px; /* Reduced padding for A4 fitting */
-    text-align: left;
-}
-
-.report-details th {
-    background-color: #f2f2f2;
-    font-weight: bold;
-}
-
-.image-section {
-    margin: 10px 0; /* Reduced margin for A4 fitting */
-    text-align: center;
-}
-
-.image-section img {
-    max-width: 100%; /* Use full width */
-    height: auto; /* Maintain aspect ratio */
-    margin: 0 auto; /* Center align */
-}
-
-.signature-section {
-    margin-top: 30px; /* Reduced margin for A4 fitting */
-    text-align: center;
-}
-
-.signature-section img {
-    max-width: 150px;
-    height: auto;
-}
-
-.footer {
-    text-align: center;
-    margin-top: 30px; /* Reduced margin for A4 fitting */
-    font-size: 12px;
-    color: #555;
-}
-
-.page-break {
-    page-break-before: always;
-}
-
-/*Css For Button*/
-.button-container {
-    display: flex;
-    justify-content: center; /* Align buttons to the right */
-    gap: 15px; /* Increased spacing between buttons */
-    margin-right: 20px; /* Optional: Add some margin to the right side of the container */
-}
-
-.btn-reject {
-    background-color: #ff6347; /* Tomato color */
-    color: white;
-    border: none;
-    padding: 15px 30px; /* Larger button size */
-    font-size: 18px; /* Larger font size */
-    border-radius: 8px;
-    cursor: pointer;
-}
-
-.btn-complete {
-    background-color: #20b2aa; /* Light Sea Green color */
-    color: white;
-    border: none;
-    padding: 15px 30px; /* Larger button size */
-    font-size: 18px; /* Larger font size */
-    border-radius: 8px;
-    cursor: pointer;
-}
-
-.btn-reject:hover, .btn-complete:hover {
-    opacity: 0.9; /* Subtle transparency on hover */
-    transform: scale(1.05); /* Slight scale effect on hover */
-    transition: transform 0.2s;
-}
-
-
-
-
-@media print {
-    body {
-        margin: 0;
-        padding: 0;
-        background-color: #fff;
-    }
-
-    .container {
+@section('admin')
+<div class="page-wrapper">
+    <div class="container-fluid">
+        
+  <style>
+    .table {
         width: 100%;
-        border: none;
-        box-shadow: none;
-        padding: 0;
-        margin: 0;
-        max-width: 100%; /* Use full width for printing */
+        overflow-y: auto; /* Enable scrolling inside the table */
+    }
+    .table th, .table td {
+        vertical-align: middle;
+        border: 1px solid #000;
+        padding: 5px; /* Reduce padding */
+        line-height: 1.2; /* Adjust line height */
+    }
+    .table th{
+        color:black;
+        font-weight:bold;
+    }
+    
+    .header {
+        background-color: #2e2e61;
+        color: #fff;
+        text-align: center;
+        padding: 10px; /* Reduce padding */
+    }
+    .sub-header {
+        background-color: #d3d3d3;
+        text-align: center;
+        font-weight: bold;
+    }
+    .logo {
+        width: 50px;
     }
 
-    .header-section, .footer {
-        page-break-after: avoid; /* Avoid breaks after headers */
+    b{
+        color:black;
+        font-weight:bold;
     }
-
-    .page-break {
-        page-break-before: always;
-    }
-}
+    
 </style>
-</head>
 
-<body>
-    <div class="container">
-        <!-- Header Section -->
-        <div class="header-section">
-            <div class="company-logo">
-                <img src="https://via.placeholder.com/150x50.png?text=Company+Logo" alt="Company Logo">
-            </div>
-            <div class="report-summary">
-                <table>
-                    <tr>
-                        <th scope="col">Company Name</th>
-                        <td scope="col">Founder Code Technology</td>
-                    </tr>
-                    <tr>
-                        <th scope="col">Company Ref. Num</th>
-                        <td scope="col">12334 Q S D DWQdq 5</td>
-                    </tr>
+
+    <div class="container mt-5">
+        <div class="row d-flex justify-content-end align-items-center">
+            <button class="btn btn-primary btn-sm" onclick="goBack()">back</button>
+        </div>
+       
+        <div class="row mt-3">
+            <div class="col-12">
+                <table class="table table-bordered">
+                    <tbody id="sortable-body">
+                        <tr data-id="1" style="background-color:#cec7c7;text-align:center;">
+                            <th colspan="12">BASIC DETAILS</th>
+                        </tr>
+                   
+                    
+                        <tr data-id="2">
+                            <th colspan="4" style="width: 33%;">Name of the Candidate</th>
+                            <td colspan="8" style="width: 67%;">{{$details->candidate_name}}</td>
+                        </tr>
+                        <tr data-id="3">
+                            <th colspan="4">Address of the Candidate</th>
+                            <td colspan="8">{{$details->address}}</td>
+                        </tr>
+                        <tr data-id="4">
+                            <th colspan="4">Father's Name</th>
+                            <td colspan="8">{{$details->father_name}}</td>
+                        </tr>
+                        <tr data-id="5">
+                            <th colspan="4">Period of Stay</th>
+                            <th colspan="2">From</th>
+                            <td colspan="2">{{$details->period_of_stay_from}}</td>
+                            <th colspan="2">To</th>
+                            <td colspan="2">{{$details->period_of_stay_to}}</td>
+                        </tr>
+                        <tr data-id="6">
+                            <th colspan="4">Telephone No.</th>
+                            <td colspan="8">{{$details->mobile}}</td>
+                        </tr>
+                  
+
+                    
+                        <tr data-id="7" style="background-color:#cec7c7;text-align:center;">
+                            <th colspan="12" >VERIFICATION DETAILS</th>
+                        </tr>
+                   
+                  
+                        <tr data-id="8">
+                            <th colspan="4">Name of the Respondent</th>
+                            <td colspan="8">{{$details->respondent_name}}</td>
+                        </tr>
+                        <tr data-id="9">
+                            <th colspan="4">Relationship with Candidate</th>
+                            <td colspan="8">{{$details->rel_with_candi}}</td>
+                        </tr>
+                        <tr data-id="10">
+                            <th colspan="4">Landmark</th>
+                            <td colspan="8">{{$details->landmark}}</td>
+                        </tr>
+                        <tr data-id="11">
+                            <th colspan="4">Date of Visit</th>
+                            <td colspan="8">{{$details->visited_date}}</td>
+                        </tr>
+                        <tr data-id="12">
+                            <th colspan="4">Residence Status</th>
+                            <th colspan="1">Owned</th>
+                            <td colspan="1">{{$details->residence_status==1?'✔️' : 'N/A'}}</td>
+                            <th colspan="1">Rented</th>
+                            <td colspan="2">{{$details->residence_status==2?'✔️' : 'N/A'}}</td>
+                            <th colspan="1">Others</th>
+                            <td colspan="2">{{$details->residence_status==3?'✔️' : 'N/A'}}</td>
+                        </tr>
+                        <tr data-id="13">
+                            <th colspan="4">Residence Type</th>
+                            <th colspan="1">Present</th>
+                            <td colspan="1">{{$details->residence_type==1?'✔️' : 'N/A'}}</td>
+                            <th colspan="1">Permanent</th>
+                            <td colspan="2">{{$details->residence_type==2?'✔️' : 'N/A'}}</td>
+                            <th colspan="1">Previous</th>
+                            <td colspan="2">{{$details->residence_type==3?'✔️' : 'N/A'}}</td>
+                        </tr>
+                        <tr data-id="14">
+                            <th colspan="4">Period of Stay</th>
+                            <th colspan="1">From</th>
+                            <td colspan="4">{{$details->stay_period_form}}</td>
+                            <th colspan="1">To</th>
+                            <td colspan="2">{{$details->stay_period_to}}</td>
+                        </tr>
+                        <tr data-id="15">
+                            <th colspan="4">Signature of Respondent</th>
+                            <td colspan="8">
+                                @if(!empty($details->respondent_sign))
+                                    <img src="{{ asset($details->respondent_sign) }}" alt="Respondent Signature" style="max-width: 100px; height: auto;">
+                                @else
+                                    <span>No Signature Available</span>
+                                @endif
+                            </td>
+                        </tr>
+                        <tr data-id="16">
+                            <th colspan="4">Field Agent Remarks</th>
+                            <td colspan="8">{{$details->complete_remark}}</td>
+                        </tr>
+                        <tr data-id="17">
+                            <th colspan="4">Field Agent Name</th>
+                            <td colspan="3">{{$details->v_field_agent_name}}</td>
+                            <th colspan="2">Field Agent Signature</th>
+                            <td colspan="3">
+                                 @if(!empty($details->v_signature))
+                                    <img src="{{ asset($details->v_signature) }}" alt="Vendor Signature" style="max-width: 100px; height: auto;">
+                                @else
+                                    <span>No Signature Available</span>
+                                @endif
+                            </td>
+                        </tr>
+                    </tbody>
                 </table>
             </div>
         </div>
-
-        <!-- Report Summary -->
-        <h1>Vendors Details</h1>
-
-        <!-- Applicant Details -->
-        <table class="report-details">
-        <tr>
-            <th>Vendor_ID</th>
-            <td>{{ $vendor->vendor_id }}</td>
-            <th>Vendor Name</th>
-            <td>{{ $vendor->name }}</td>
-        </tr>
-        <tr>
-            <th>Signature</th>
-            <td>{{ $vendor->signature }}</td>
-            <th>Remark</th>
-            <td>{{ $vendor->remark }}</td>
-        </tr>
-    </table>
-
-        <!-- Case Details Table -->
-        <h2>Candidates Details</h2>
-        <table class="report-details">
-            <tr>
-                <th>Candidate Name</th>
-                <td>Akash</td>
-                <th>Emp ID</th>
-                <td>Emp-7890</td>
-            </tr>
-            <tr>
-                <th>Father Name</th>
-                <td>XYZ</td>
-                <th>Mother Name</th>
-                <td>XYZ</td>
-            </tr>
-            <tr>
-                <th>Email</th>
-                <td>xyz@gmail.com</td>
-                <th>Mobile Number</th>
-                <td>9999999999</td>
-            </tr>
-        </table>
-
-        <!-- Respondent Information Table -->
-        <h2>Address Details</h2>
-        <table class="report-details">
-            <tr>
-                <th>State</th>
-                <td>Uttar Pradesh</td>
-                <th>City</th>
-                <td>Lucknow</td>
-            </tr>
-            <tr>
-                <th>Pincode</th>
-                <td>226010</td>
-                <th>Address Type</th>
-                <td>Permanent</td>
-            </tr>
-            <tr>
-                <th>Stay From</th>
-                <td>22/10/2023</td>
-                <th>Stay To</th>
-                <td>21/10/2025</td>
-            </tr>
-        </table>
-
-        <!-- Residence Details -->
-        <h2>Verification Details</h2>
-        <table class="report-details">
-            <tr>
-                <th>Respondent Name</th>
-                <td>ABCD</td>
-                <th>Relation With Candidates</th>
-                <td>XYZZZ</td>
-            </tr>
-            <tr>
-                <th>Landmark</th>
-                <td>Near Foundercode</td>
-                <th>Visited Date</th>
-                <td>22 July 2024</td>
-            </tr>
-            <tr>
-                <th>Residence status</th>
-                <td>XYZZZ</td>
-                <th>Resedence Type</th>
-                <td>Self</td>
-            </tr>
-            <tr>
-                <th>Peroid of Stay From</th>
-                <td>22-10-2022</td>
-                <th>Peroid of stay To</th>
-                <td>22-12-2024</td>
-            </tr>
-            <tr>
-                <th>Respondent Signature</th>
-                <td>
-                    <img src="https://via.placeholder.com/150x50.png?text=Signature" alt="Respondent Signature">
-                </td>
-            </tr>
-        </table>
-
-        <!-- Address Breakdown -->
-        <!--<h2>Address Breakdown</h2>-->
-        <!--<table class="report-details">-->
-        <!--    <tr>-->
-        <!--        <th>House</th>-->
-        <!--        <td>123 Main St</td>-->
-        <!--    </tr>-->
-        <!--    <tr>-->
-        <!--        <th>Gate</th>-->
-        <!--        <td>Gate A</td>-->
-        <!--    </tr>-->
-        <!--    <tr>-->
-        <!--        <th>Door</th>-->
-        <!--        <td>Door 5</td>-->
-        <!--    </tr>-->
-        <!--    <tr>-->
-        <!--        <th>Near Landmark</th>-->
-        <!--        <td>Next to the Grocery Store</td>-->
-        <!--    </tr>-->
-        <!--</table>-->
-
-        <!-- Address Image Sections -->
-        <div class="image-section">
-            <h2>House Image</h2>
-            <img src="https://via.placeholder.com/600x400.png?text=House+Image" alt="House Image">
-        </div>
-        <div class="image-section">
-            <h2>Gate Images</h2>
-            <img src="https://via.placeholder.com/600x400.png?text=Gate+Image" alt="Gate Image">
-        </div>
-        <div class="image-section">
-            <h2>Door Image</h2>
-            <img src="https://via.placeholder.com/600x400.png?text=Door+Image" alt="Door Image">
-        </div>
-        <div class="image-section">
-            <h2>Near By Landmark Image</h2>
-            <img src="https://via.placeholder.com/600x400.png?text=Near By Landmark+Image" alt="Near BY Landmark Image">
-        </div>
-        <div class="image-section">
-            <h2>ID Proof Image</h2>
-            <img src="https://via.placeholder.com/600x400.png?text=ID Proof+Image" alt="ID Proof Image">
-        </div>
-
-        <!-- ID Proof & Signature -->
-        <!--<h2>ID Proof & Signature</h2>-->
-        <!--<table class="report-details">-->
-        <!--    <tr>-->
-        <!--        <th>ID Proof</th>-->
-        <!--        <td>Valid ID Proof</td>-->
-        <!--    </tr>-->
-        <!--    <tr>-->
-        <!--        <th>Respondent Signature</th>-->
-        <!--        <td>-->
-        <!--            <img src="https://via.placeholder.com/150x50.png?text=Signature" alt="Respondent Signature">-->
-        <!--        </td>-->
-        <!--    </tr>-->
-        <!--</table>-->
-
-        <!-- Signature Section -->
-        <!--<div class="signature-section">-->
-        <!--    <p><strong>Signature of Verifier:</strong></p>-->
-        <!--    <img src="https://via.placeholder.com/150x50.png?text=Signature" alt="Verifier Signature">-->
-        <!--</div>-->
         
-        <!--<h2>Action</h2>-->
-        <!--<table class="report-details">-->
-        <!--<tr>-->
-            <!-- Buttons for Reject and Mark as Completed -->
-        <!--    <th> Rejected </th>-->
-        <!--    <td>-->
-        <!--    <button type="button" class="btn btn-danger btn-sm">Reject</button>-->
-        <!--    </td>-->
-        <!--    <th>Mark As completed</th>-->
-        <!--    <td>-->
-        <!--    <button type="button" class="btn btn-success btn-sm">Mark as Completed</button>-->
-        <!--    </td>-->
-        <!--</tr>-->
-        <!--</table>-->
+         <div class="row el-element-overlay">
+                  <div class="col-lg-3 col-md-6">
+                    <div class="card">
+                        <div class="el-card-item">
+                            <div class="el-card-avatar el-overlay-1">
+                                <img src="{{ asset($details->house) }}" alt="user" />
+                                <div class="el-overlay">
+                                    <ul class="list-style-none el-info">
+                                        <li class="el-item">
+                                            <a class="btn default btn-outline image-popup-vertical-fit el-link" href="{{ asset($details->house) }}">
+                                                <i class="mdi mdi-magnify-plus"></i>
+                                            </a>
+                                        </li>
+                                        <li class="el-item">
+                                            <a class="btn default btn-outline el-link" href="{{route('download.file',['file'=>env('APP_URL').$details->house])}}">
+                                                <i class="mdi mdi-briefcase-download"></i>
+                                               
+                                            </a>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                            <div class="el-card-content">
+                                <h4 class="m-b-1">House</h4> 
+                                
+                                @php 
+                                    $house_address = json_decode($details->house_address, true);
+                                @endphp
+                                
+                                @if($house_address)
+                                <p><strong>Latitude:</strong> {{ $house_address['latitude'] }}</p>
+                                <p><strong>Longitude:</strong> {{ $house_address['longitude'] }}</p>
+                                <p><strong>Address:</strong> {{ $house_address['address'] }}</p>
+                                <p><strong>Date:</strong> {{ $house_address['date'] }}</p>
+                                @endif
+                            </div>
+                        </div>
+                    </div>
+                </div>
 
-        <!-- Footer -->
-        <!--<div class="footer">-->
-        <!--    <p>Confidential | Page 1 of 7</p>-->
-        <!--</div>-->
-
-        <!-- Page Break for Additional Pages -->
-        <!--<div class="page-break"></div>-->
-        <h1>Action</h1>
-        <div class="button-container">
-            <button class="btn-reject">Rejected</button>
-            <button class="btn-complete">Mark as Completed</button>
-        </div>
-
+                    
+                    <div class="col-lg-3 col-md-6">
+                        <div class="card">
+                            <div class="el-card-item">
+                                <div class="el-card-avatar el-overlay-1"> <img src="{{ asset($details->gate) }}" alt="user" />
+                                    <div class="el-overlay">
+                                        <ul class="list-style-none el-info">
+                                            <li class="el-item"><a class="btn default btn-outline image-popup-vertical-fit el-link" href="{{ asset($details->gate) }}"><i class="mdi mdi-magnify-plus"></i></a></li>
+                                            <li class="el-item">
+                                                <a class="btn default btn-outline el-link" href="{{route('download.file',['file'=>env('APP_URL').$details->gate])}}">
+                                                  <i class="mdi mdi-briefcase-download"></i>
+                                                </a>
+                                             </li>   
+                                        </ul>
+                                    </div>
+                                </div>
+                                <div class="el-card-content">
+                                    <h4 class="m-b-1">Gate</h4>
+                                    @php 
+                                       $gate_address = json_decode($details->gate_address, true);
+                                    @endphp
+                                @if($gate_address)
+                                <p><strong>Latitude:</strong> {{ $gate_address['latitude'] }}</p>
+                                <p><strong>Longitude:</strong> {{ $gate_address['longitude'] }}</p>
+                                <p><strong>Address:</strong> {{ $gate_address['address'] }}</p>
+                                <p><strong>Date:</strong> {{ $gate_address['date'] }}</p>
+                                @endif
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                     <div class="col-lg-3 col-md-6">
+                        <div class="card">
+                            <div class="el-card-item">
+                                <div class="el-card-avatar el-overlay-1"> <img src="{{ asset($details->door) }}" alt="user" />
+                                    <div class="el-overlay">
+                                        <ul class="list-style-none el-info">
+                                            <li class="el-item"><a class="btn default btn-outline image-popup-vertical-fit el-link" href="{{ asset($details->door) }}"><i class="mdi mdi-magnify-plus"></i></a></li>
+                                            <li class="el-item"><a class="btn default btn-outline el-link" href="{{route('download.file',['file'=>env('APP_URL').$details->door])}}">
+                                              <i class="mdi mdi-briefcase-download"></i>
+                                               </a>
+                                             </li>  
+                                        </ul>
+                                    </div>
+                                </div>
+                                <div class="el-card-content">
+                                    <h4 class="m-b-1">Door</h4> 
+                                    @php 
+                                       $door_address = json_decode($details->door_address, true);
+                                    @endphp
+                                    
+                                    @if($door_address)
+                                <p><strong>Latitude:</strong> {{ $door_address['latitude'] }}</p>
+                                <p><strong>Longitude:</strong> {{ $door_address['longitude'] }}</p>
+                                <p><strong>Address:</strong> {{ $door_address['address'] }}</p>
+                                <p><strong>Date:</strong> {{ $door_address['date'] }}</p>
+                                @endif
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                     <div class="col-lg-3 col-md-6">
+                        <div class="card">
+                            <div class="el-card-item">
+                                <div class="el-card-avatar el-overlay-1"> <img src="{{ asset($details->near_landmark) }}" alt="user" />
+                                    <div class="el-overlay">
+                                        <ul class="list-style-none el-info">
+                                            <li class="el-item"><a class="btn default btn-outline image-popup-vertical-fit el-link" href="{{ asset($details->near_landmark) }}"><i class="mdi mdi-magnify-plus"></i></a></li>
+                                            <li class="el-item"><a class="btn default btn-outline el-link" href="{{route('download.file',['file'=>env('APP_URL').$details->near_landmark])}}">
+                                               <i class="mdi mdi-briefcase-download"></i>
+                                                </a>
+                                             </li>  
+                                        </ul>
+                                    </div>
+                                </div>
+                                <div class="el-card-content">
+                                    <h4 class="m-b-1">Near Landmark</h4> 
+                                     @php 
+                                       $near_landmark_address = json_decode($details->near_landmark_address, true);
+                                    @endphp
+                                
+                                @if($near_landmark_address)
+                                    <p><strong>Latitude:</strong> {{ $near_landmark_address['latitude'] }}</p>
+                                    <p><strong>Longitude:</strong> {{ $near_landmark_address['longitude'] }}</p>
+                                    <p><strong>Address:</strong> {{ $near_landmark_address['address'] }}</p>
+                                    <p><strong>Date:</strong> {{ $near_landmark_address['date'] }}</p>
+                                    @endif
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-3 col-md-6">
+                        <div class="card">
+                            <div class="el-card-item">
+                                <div class="el-card-avatar el-overlay-1"> <img src="{{ asset($details->id_proof) }}" alt="user" />
+                                    <div class="el-overlay">
+                                        <ul class="list-style-none el-info">
+                                            <li class="el-item"><a class="btn default btn-outline image-popup-vertical-fit el-link" href="{{ asset($details->id_proof) }}"><i class="mdi mdi-magnify-plus"></i></a></li>
+                                            <li class="el-item"><a class="btn default btn-outline el-link" href="{{route('download.file',['file'=>env('APP_URL').$details->id_proof])}}">
+                                               <i class="mdi mdi-briefcase-download"></i>
+                                                </a>
+                                             </li>  
+                                        </ul>
+                                    </div>
+                                </div>
+                                <div class="el-card-content">
+                                    <h4 class="m-b-1">ID Proof</h4> 
+                                    @php 
+                                       $id_proof_address = json_decode($details->id_proof_address, true);
+                                    @endphp
+                                
+                                @if($id_proof_address)
+                                    <p><strong>Latitude:</strong> {{ $id_proof_address['latitude'] }}</p>
+                                    <p><strong>Longitude:</strong> {{ $id_proof_address['longitude'] }}</p>
+                                    <p><strong>Address:</strong> {{ $id_proof_address['address'] }}</p>
+                                    <p><strong>Date:</strong> {{ $id_proof_address['date'] }}</p>
+                                    @endif
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+         </div>
+        
         
     </div>
-</body>
 
-</html>
+
+
+ <!---->
+
+    </div>
+    
+    
+</div>
+</div>
+<!--</div>-->
+@endsection

@@ -86,8 +86,6 @@ Route::any('/dashboard/{id}', [DashboardController::class, 'dashboard'])->name('
 Route::any('/newallocation', [AllocationController::class, 'newallocation'])->name('newallocation');
 Route::get('/wallet', [WalletController::class, 'wallet'])->name('wallet');
 
-Route::any('/addressreportpdf',[ReportPdfController::class, 'addressreportpdf'])->name('addressreportpdf');
-Route::any('/sitereportpdf',[ReportPdfController::class, 'sitereportpdf'])->name('sitereportpdf');
 
 Route::any('/pdf', function () {
     return view('pdf');
@@ -107,5 +105,23 @@ route::get('/getuploadupdate/{id}', [ClientPublicController::class, 'getuploadup
 // here all route for client onboarding status rej-traking
 Route::post('/updatestatus', [ClientPublicController::class, 'updateAgreementStatus'])->name('updatestatus');
 // here all route for client onboarding status rej-traking end
+Route::get('/costom', [InvoiceController::class, 'costom'])->name('costom');
+Route::get('/downloadcostompdf', [InvoiceController::class, 'downloadcostompdf'])->name('downloadcostompdf');
+
+Route::any('/casetracking/{case_id}', [DashboardController::class, 'casetracking'])->name('casetracking');
+Route::post('/clear_insuff', [DashboardController::class, 'clear_insuff'])->name('clear_insuff');
+Route::post('/reject_case_client', [DashboardController::class, 'reject_case_client'])->name('reject_case_client');
+Route::post('/reopen_case_client', [DashboardController::class, 'reopen_case_client'])->name('reopen_case_client');
+Route::get('/download_report/{client_id}/{project_type}/{case_id}', [DashboardController::class, 'download_report'])->name('download_report');
+
+
+
+
+Route::get('/addressreportpdf/{case_id}',[ReportPdfController::class, 'addressreportpdf'])->name('addressreportpdf');
+Route::get('/sitereportpdf/{case_id}',[ReportPdfController::class, 'sitereportpdf'])->name('sitereportpdf');
+
+
+
+
 
 

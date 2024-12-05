@@ -475,7 +475,7 @@ class ClientPublicController extends Controller
                  $filePath = env('APP_URL') . '/spendingfile/' . $filename;
                  $file->move(public_path('spendingfile'), $filename); 
                  $data = [
-                     'custom_layout' => $filePath,
+                     'file' => $filePath,
                      'layout_type' => 2,
                      'updated_at' => now(),
                  ];

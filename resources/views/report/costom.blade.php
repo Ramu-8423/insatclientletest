@@ -57,9 +57,10 @@ td {
     height: 17px;
 }
 </style>
-</style>
+</style>       
 <div class="page-wrapper">
     <div class="container-fluid">
+         <a href="{{route('downloadcostompdf')}}" class="button btn btn-primary">Download PDF</a>
         <div class="card p-5">
             <div class="text-center">
                 <h2>Company Details</h2>

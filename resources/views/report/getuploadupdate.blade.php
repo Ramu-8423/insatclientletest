@@ -48,13 +48,13 @@
             <div class="col-sm-7">
                 <div style="display: flex; justify-content: center; align-items: center; height: 500px;">
     @if($report->custom_layout)
-        @if(pathinfo($report->custom_layout, PATHINFO_EXTENSION) == 'pdf')
-            <iframe src="{{ $report->custom_layout }}" width="100%" height="100%" style="border: none;"
+        @if(pathinfo($report->file, PATHINFO_EXTENSION) == 'pdf')
+            <iframe src="{{ $report->file }}" width="100%" height="100%" style="border: none;"
                 class="responsive-image"></iframe>
         @else
             <div style="display: flex; justify-content: center; align-items: center; width: 100%;">
-                <a href="{{ $report->custom_layout }}" target="_blank">
-                    <img src="{{ $report->custom_layout }}" alt="Image" class="responsive-image">
+                <a href="{{ $report->file }}" target="_blank">
+                    <img src="{{ $report->file }}" alt="Image" class="responsive-image">
                 </a>
             </div>
         @endif
