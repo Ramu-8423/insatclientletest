@@ -135,7 +135,7 @@
                             <th colspan="4">Signature of Respondent</th>
                             <td colspan="8">
                                 @if(!empty($details->respondent_sign))
-                                    <img src="{{ asset($details->respondent_sign) }}" alt="Respondent Signature" style="max-width: 100px; height: auto;">
+                                    <img src="{{env('APP_ADMIN_URL').$details->respondent_sign}}" alt="Respondent Signature" style="max-width: 100px; height: auto;">
                                 @else
                                     <span>No Signature Available</span>
                                 @endif
@@ -151,7 +151,7 @@
                             <th colspan="2">Field Agent Signature</th>
                             <td colspan="3">
                                  @if(!empty($details->v_signature))
-                                    <img src="{{ asset($details->v_signature) }}" alt="Vendor Signature" style="max-width: 100px; height: auto;">
+                                    <img src="{{env('APP_ADMIN_URL').$details->v_signature}}" alt="Vendor Signature" style="max-width: 100px; height: auto;">
                                 @else
                                     <span>No Signature Available</span>
                                 @endif
@@ -167,16 +167,16 @@
                     <div class="card">
                         <div class="el-card-item">
                             <div class="el-card-avatar el-overlay-1">
-                                <img src="{{ asset($details->house) }}" alt="user" />
+                                <img src="{{env('APP_ADMIN_URL').$details->house}}" alt="user" />
                                 <div class="el-overlay">
                                     <ul class="list-style-none el-info">
                                         <li class="el-item">
-                                            <a class="btn default btn-outline image-popup-vertical-fit el-link" href="{{ asset($details->house) }}">
+                                            <a class="btn default btn-outline image-popup-vertical-fit el-link" href="{{env('APP_ADMIN_URL').$details->house}}">
                                                 <i class="mdi mdi-magnify-plus"></i>
                                             </a>
                                         </li>
                                         <li class="el-item">
-                                            <a class="btn default btn-outline el-link" href="{{route('download.file',['file'=>env('APP_URL').$details->house])}}">
+                                            <a class="btn default btn-outline el-link" href="{{route('download.file',['file'=>env('APP_ADMIN_URL').$details->house])}}">
                                                 <i class="mdi mdi-briefcase-download"></i>
                                                
                                             </a>
@@ -206,12 +206,12 @@
                     <div class="col-lg-3 col-md-6">
                         <div class="card">
                             <div class="el-card-item">
-                                <div class="el-card-avatar el-overlay-1"> <img src="{{ asset($details->gate) }}" alt="user" />
+                                <div class="el-card-avatar el-overlay-1"> <img src="{{env('APP_ADMIN_URL').$details->gate}}" alt="user" />
                                     <div class="el-overlay">
                                         <ul class="list-style-none el-info">
-                                            <li class="el-item"><a class="btn default btn-outline image-popup-vertical-fit el-link" href="{{ asset($details->gate) }}"><i class="mdi mdi-magnify-plus"></i></a></li>
+                                            <li class="el-item"><a class="btn default btn-outline image-popup-vertical-fit el-link" href="{{env('APP_ADMIN_URL').$details->gate}}"><i class="mdi mdi-magnify-plus"></i></a></li>
                                             <li class="el-item">
-                                                <a class="btn default btn-outline el-link" href="{{route('download.file',['file'=>env('APP_URL').$details->gate])}}">
+                                                <a class="btn default btn-outline el-link" href="{{route('download.file',['file'=>env('APP_ADMIN_URL').$details->gate])}}">
                                                   <i class="mdi mdi-briefcase-download"></i>
                                                 </a>
                                              </li>   
@@ -236,11 +236,11 @@
                      <div class="col-lg-3 col-md-6">
                         <div class="card">
                             <div class="el-card-item">
-                                <div class="el-card-avatar el-overlay-1"> <img src="{{ asset($details->door) }}" alt="user" />
+                                <div class="el-card-avatar el-overlay-1"> <img src="{{env('APP_ADMIN_URL').$details->door}}" alt="user" />
                                     <div class="el-overlay">
                                         <ul class="list-style-none el-info">
-                                            <li class="el-item"><a class="btn default btn-outline image-popup-vertical-fit el-link" href="{{ asset($details->door) }}"><i class="mdi mdi-magnify-plus"></i></a></li>
-                                            <li class="el-item"><a class="btn default btn-outline el-link" href="{{route('download.file',['file'=>env('APP_URL').$details->door])}}">
+                                            <li class="el-item"><a class="btn default btn-outline image-popup-vertical-fit el-link" href="{{env('APP_ADMIN_URL').$details->door}}"><i class="mdi mdi-magnify-plus"></i></a></li>
+                                            <li class="el-item"><a class="btn default btn-outline el-link" href="{{route('download.file',['file'=>env('APP_ADMIN_URL').$details->door])}}">
                                               <i class="mdi mdi-briefcase-download"></i>
                                                </a>
                                              </li>  
@@ -266,11 +266,11 @@
                      <div class="col-lg-3 col-md-6">
                         <div class="card">
                             <div class="el-card-item">
-                                <div class="el-card-avatar el-overlay-1"> <img src="{{ asset($details->near_landmark) }}" alt="user" />
+                                <div class="el-card-avatar el-overlay-1"> <img src="{{env('APP_ADMIN_URL').$details->near_landmark}}" alt="user" />
                                     <div class="el-overlay">
                                         <ul class="list-style-none el-info">
-                                            <li class="el-item"><a class="btn default btn-outline image-popup-vertical-fit el-link" href="{{ asset($details->near_landmark) }}"><i class="mdi mdi-magnify-plus"></i></a></li>
-                                            <li class="el-item"><a class="btn default btn-outline el-link" href="{{route('download.file',['file'=>env('APP_URL').$details->near_landmark])}}">
+                                            <li class="el-item"><a class="btn default btn-outline image-popup-vertical-fit el-link" href="{{env('APP_ADMIN_URL').$details->near_landmark}}"><i class="mdi mdi-magnify-plus"></i></a></li>
+                                            <li class="el-item"><a class="btn default btn-outline el-link" href="{{route('download.file',['file'=>env('APP_ADMIN_URL').$details->near_landmark])}}">
                                                <i class="mdi mdi-briefcase-download"></i>
                                                 </a>
                                              </li>  
@@ -296,11 +296,11 @@
                     <div class="col-lg-3 col-md-6">
                         <div class="card">
                             <div class="el-card-item">
-                                <div class="el-card-avatar el-overlay-1"> <img src="{{ asset($details->id_proof) }}" alt="user" />
+                                <div class="el-card-avatar el-overlay-1"> <img src="{{env('APP_ADMIN_URL').$details->id_proof}}" alt="user" />
                                     <div class="el-overlay">
                                         <ul class="list-style-none el-info">
-                                            <li class="el-item"><a class="btn default btn-outline image-popup-vertical-fit el-link" href="{{ asset($details->id_proof) }}"><i class="mdi mdi-magnify-plus"></i></a></li>
-                                            <li class="el-item"><a class="btn default btn-outline el-link" href="{{route('download.file',['file'=>env('APP_URL').$details->id_proof])}}">
+                                            <li class="el-item"><a class="btn default btn-outline image-popup-vertical-fit el-link" href="{{env('APP_ADMIN_URL').$details->id_proof}}"><i class="mdi mdi-magnify-plus"></i></a></li>
+                                            <li class="el-item"><a class="btn default btn-outline el-link" href="{{route('download.file',['file'=>env('APP_ADMIN_URL').$details->id_proof])}}">
                                                <i class="mdi mdi-briefcase-download"></i>
                                                 </a>
                                              </li>  

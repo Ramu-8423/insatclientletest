@@ -60,7 +60,15 @@ td {
 </style>       
 <div class="page-wrapper">
     <div class="container-fluid">
+        <button id="downloadPdfBtn" style="margin-top: 20px;">Download as PDF</button>
+         <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+         <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.4.0/jspdf.umd.min.js"></script>
+
+
          <a href="{{route('downloadcostompdf')}}" class="button btn btn-primary">Download PDF</a>
+         
+     <div id="customDiv" >    
+         
         <div class="card p-5">
             <div class="text-center">
                 <h2>Company Details</h2>
@@ -383,6 +391,52 @@ td {
                 </div>
             </div>
         </div>
+        
+        
+      </div>  
+        
     </div>
 </div>
+
+<script>
+document.getElementById("downloadPdfBtn").addEventListener("click", async function () {
+    const { jsPDF } = window.jspdf;
+    const customDiv = document.getElementById("customDiv");
+    // Capture the div content as an image using html2canvas
+    html2canvas(customDiv, { scale: 3.5 }).then((canvas) => {
+        const imgData = canvas.toDataURL("image/jpeg", 0.5);  // 0.5 is for compression (lower value = more compression)
+        // Create a jsPDF instance
+        const pdf = new jsPDF("p", "mm", "a4");
+        // Calculate image width and height for A4
+        const imgWidth = 190; // A4 width in mm
+        const imgHeight = (canvas.height * imgWidth) / canvas.width;
+        // Add the image to PDF
+        pdf.addImage(imgData, "JPEG", 10, 10, imgWidth, imgHeight);
+        // Save the PDF
+        pdf.save("custom_report.pdf");
+    });
+});
+</script>
 @endsection
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

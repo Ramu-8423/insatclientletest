@@ -15,8 +15,32 @@ use App\Models\User;
 
 class DashboardController extends Controller
 {
+    public function reject_case_client(Request $request){
+               date_default_timezone_set("Asia/Calcutta");
+               $date = date('Y-m-d H:i:s');
+               
+               $case_id = $request->case_id;
+               $v_id = $request->v_id;
+               $reject_remark = $request->reject_remark;
+               
+               $track_details = DB::table('case_details')->select('project_type','track_status')->where('case_id',$case_id)->first();
+               $track_status = json_decode($track_details->track_status,true)??[];
+               $track_status[] = ['status'=>18,'date'=>$date,'reject_remark'=>$reject_remark];
+              
+               $a  = DB::table('case_details')->where('case_id',$case_id)->update(['track_status'=>json_encode($track_status)]);
+               $c = DB::table('case_allocated')->where('case_id',$case_id)
+                           ->where('v_id',$v_id)->where('case_status',8)
+                           ->update(['case_status'=>18]);
+               
+               if($a&&$c){
+                    return redirect()->back()->with('success','Successfully marked as rejected..');
+               }else{
+                   return redirect()->back()->with('error','Something went wrong!');
+               }
+         }
     
-       public function reopen_case_client(Request $request){
+    
+        public function reopen_case_client(Request $request){
                date_default_timezone_set("Asia/Calcutta");
                $date = date('Y-m-d H:i:s');
                
@@ -28,36 +52,27 @@ class DashboardController extends Controller
                                    ->where('v_id',$v_id)
                                    ->where('case_status',8)
                                    ->value('action_remark');
-                 $action_remark = json_decode($allocated_table)??[];       
+                 $action_remark = json_decode($allocated_table,true)??[];       
                 $action_remark['reopen'] = ['reopen_remark'=>$reopen_remark,'date'=>$date];
                
                $track_details = DB::table('case_details')->select('project_type','track_status')->where('case_id',$case_id)->first();
                $track_status = json_decode($track_details->track_status,true)??[];
-               $track_status[] = ['status'=>5,'date'=>$date,'reopen_remark'=>$reopen_remark];
+               $track_status[] = ['status'=>19,'date'=>$date,'reopen_remark'=>$reopen_remark];
                $project_type = $track_details->project_type;
                
-               
-               if($project_type==1 ||$project_type==3){
-                    $b  =    DB::table('v_report_submitted_addre')->where('case_id',$case_id)->where('case_status',2)->update(['case_status'=>4]);
-               }elseif($project_type==2){
-                    $b  =    DB::table('v_site_report_sub')->where('case_id',$case_id)->where('case_status',2)->update(['case_status'=>4]);
-               }
               
                $a  = DB::table('case_details')->where('case_id',$case_id)->update(['track_status'=>json_encode($track_status)]);
                $c = DB::table('case_allocated')->where('case_id',$case_id)
                            ->where('v_id',$v_id)->where('case_status',8)
-                           ->update(['case_status'=>5,'action_remark'=>json_encode($action_remark)]);
+                           ->update(['case_status'=>19,'action_remark'=>json_encode($action_remark)]);
                
-               if($a&&$b&&$c){
-                    return redirect()->back()->with('success','Successfully marked as completed..');
+               if($a&&$c){
+                    return redirect()->back()->with('success','Successfully marked for reopen..');
                }else{
                    return redirect()->back()->with('error','Something went wrong!');
                }
          }
-    
-    
-    
-    
+
         public function download_report(? string $client_id,? string $project_type,? string $case_id){
      
       $selected_report = DB::table('report_layout')
@@ -87,7 +102,7 @@ class DashboardController extends Controller
     }
     
     
-    public function clear_insuff(Request $request){
+        public function clear_insuff(Request $request){
                date_default_timezone_set("Asia/Calcutta");
                $date = date('Y-m-d H:i:s');
                
@@ -123,10 +138,8 @@ class DashboardController extends Controller
              }                                   
 
          } 
-         
-    
-    
-      public function casetracking(? string $id)
+        
+        public function casetracking(? string $id)
           {
               $data = DB::table('case_details')
              ->leftJoin('case_allocated','case_details.case_id','=','case_allocated.case_id')
@@ -173,10 +186,7 @@ class DashboardController extends Controller
               return view('case_tracking')->with('data', $data);
           }
     
-    
-    
-    
-          public function dashboard(Request $request, string $id) {
+        public function dashboard(Request $request, string $id) {
             $client_id = session('client_login_id');
         
             // Store filter parameters in the session if the request method is POST
@@ -233,7 +243,9 @@ class DashboardController extends Controller
             // Apply filters based on the status ID
             if ($id == 1) {
                 $query->whereNotIn('case_allocated.case_status', [2, 8]);
-            } elseif (in_array($id, [2,18,5,8])) {
+            }elseif(in_array($id, [19,5])){
+                $query->whereIn('case_allocated.case_status', [19,5]);
+            }elseif (in_array($id, [2,18,8])) {
                 $query->where('case_allocated.case_status', $id);
             }
         
@@ -255,7 +267,9 @@ class DashboardController extends Controller
             $cases = $query->where('case_details.client_id', $client_id)
                            ->orderBy('case_details.case_id', 'desc')
                            ->paginate($perPage);
-                           
+                
+                
+                  
                            
              $totals = DB::table('case_details')
                 ->leftJoin('case_allocated', 'case_details.case_id', '=', 'case_allocated.case_id')
@@ -264,7 +278,7 @@ class DashboardController extends Controller
                     COUNT(CASE WHEN case_allocated.case_status NOT IN (2,8) THEN 1 END) AS pending_case,
                     COUNT(CASE WHEN case_allocated.case_status = 2 THEN 1 END) AS insuff_case,
                     COUNT(CASE WHEN case_allocated.case_status = 18 THEN 1 END) AS rejected_case,
-                    COUNT(CASE WHEN case_allocated.case_status = 5 THEN 1 END) AS re_open_case,
+                    COUNT(CASE WHEN case_allocated.case_status in (19,5) THEN 1 END) AS re_open_case,
                     COUNT(CASE WHEN case_allocated.case_status = 8 THEN 1 END) AS completed_case
                 ")
                 ->where('case_details.client_id',$client_id)
@@ -273,7 +287,6 @@ class DashboardController extends Controller
             // Return the view with the cases and status ID
             return view('index')->with('cases', $cases)->with('status_id', $id)->with('totals',$totals);
         }
-
 
     
 }

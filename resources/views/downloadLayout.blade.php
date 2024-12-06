@@ -82,7 +82,7 @@
                 <div class="row" style="margin-bottom:10px;">
                     <div class="col-12 text-center">
                         <div class="header p-1">
-                            <img src="{{asset('images/com_icon.png')}}" alt="Logo" class="logo float-left" width="70px" height="70px" style="padding-left:5px;border-radius:50%;">
+                            <img src="{{env('APP_ADMIN_URL').'images/com_icon.png'}}" alt="Logo" class="logo float-left" width="70px" height="70px" style="padding-left:5px;border-radius:50%;">
                             <h4>INTUITIVE INFO SERVICES PVT. LTD.</h4>
                             <p>BETTER HIRING | SMART SCREENING</p>
                         </div>
@@ -114,10 +114,10 @@
                         <p>यदि क्षेत्र के कार्यकारी किसी भी तरीके से पैसे या अन्य वस्तु के लिए आग्रह करता है तो आपसे निवेदन है की इस नंबर +91 120 4149741  पर तुरंत सूचना करे l आप हमें  ई -मेल के माध्यम से सम्पर्क कर सकते है : Email : supportcs@iis-pl.com</p>
                     </div>
                     <div class="col-sm-2">
-                        <img src="{{asset('images/nogift.png')}}" style="width:100px;height:100px;">
+                        <img src="{{env('APP_ADMIN_URL').'images/nogift.png'}}" style="width:100px;height:100px;">
                     </div>
                     <div class="col-sm-2">
-                        <img src="{{asset('images/nocash.jpg')}}" style="width:100px;height:100px;">
+                        <img src="{{env('APP_ADMIN_URL').'images/nocash.jpg'}}" style="width:100px;height:100px;">
                     </div>
                  </div>
                 
@@ -138,7 +138,7 @@
             
                  <div class="row" style="margin-bottom:10px;">
                     <div class="col-12 text-center">
-                            <img src="{{asset('images/sitever.jpg')}}" alt="Logo" width="150px" height="70px">
+                            <img src="{{env('APP_ADMIN_URL').'images/sitever.jpg'}}" alt="Logo" width="150px" height="70px">
                     </div>
                  </div>
                  <div class="row" style="margin-bottom:10px;">
@@ -278,7 +278,7 @@
                          <tr>
                             <th colspan="6" style="width: 33%;">Stamp & Signature of Client / Company </th>
                             <td colspan="6" style="width: 67%;">
-                                <img src="{{asset('images/signature.png')}}" alt="signature" height="30px" width="100px">
+                                <img src="{{env('APP_ADMIN_URL').'images/signature.png'}}" alt="signature" height="30px" width="100px">
                             </td>
                          </tr>
                          
@@ -298,11 +298,11 @@
                      
                       <div class="row">
                          <div class="col-sm-5" style="padding-left:2rem;"><strong>Seal & Signature : </strong> &nbsp;&nbsp; 
-                         <img src="{{asset('images/signature.png')}}" alt="signature" height="30px" width="100px">
+                         <img src="{{env('APP_ADMIN_URL').'images/signature.png'}}" alt="signature" height="30px" width="100px">
                          </div>
                          <div class="col-sm-2"></div>
                          <div class="col-sm-5" style="padding-left:1rem;"><strong>Signature : </strong>&nbsp;&nbsp; 
-                         <img src="{{asset('images/signature.png')}}" alt="signature" height="30px" width="100px">
+                         <img src="{{env('APP_ADMIN_URL').'images/signature.png'}}" alt="signature" height="30px" width="100px">
                          </div>
                      </div>  
                      

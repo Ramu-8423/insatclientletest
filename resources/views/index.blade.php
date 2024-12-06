@@ -153,12 +153,6 @@
     </div>
 </div>
 
-
-
-
-
-
-
         
         
         <!-- ============================================================== -->
@@ -284,13 +278,15 @@
                              @elseif($case->case_status==14)
                                     {{ 'Closed' }}
                              @elseif($case->case_status==15)
-                                  'Rejected By admin'
+                                  Rejected By admin
                               @elseif($case->case_status==16)
-                                 'Allocated'
+                                 Allocated
                               @elseif($case->case_status==17)
-                                  'Insuff Cleared'
+                                  Insuff Cleared
                             @elseif($case->case_status==18)
-                               'Rejected By Client'
+                               Rejected By Client
+                             @elseif($case->case_status==19)
+                              Re-open by client
                             @else
                                'Unknown Status'
                              @endif

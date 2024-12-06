@@ -246,7 +246,11 @@
                                         @elseif($item['status']==16)
                                           No Action By Vendor
                                         @elseif($item['status']==17)
-                                          Insuff Cleared
+                                           Insuff Cleared
+                                        @elseif($item['status']==18)
+                                          Rejected By client
+                                        @elseif($item['status']==19)
+                                          Case re-opened by client
                                         @endif
                                     </b></span>
                                 </a>
@@ -436,6 +440,22 @@
                                                     <td colspan="4">{{$item['clear_remark']}}</td>
                                                 </tr> 
                                                 
+                                                 @elseif($item['status']==18)
+                                                 
+                                                 <tr>
+                                                    <th colspan="2">Date</th>
+                                                    <td colspan="4">{{$item['date']}}</td>
+                                                    <th colspan="2">Remark</th>
+                                                    <td colspan="4">{{$item['reject_remark']}}</td>
+                                                 </tr> 
+                                                 
+                                                 @elseif($item['status']==19)
+                                                     <tr>
+                                                        <th colspan="2">Date</th>
+                                                        <td colspan="4">{{$item['date']}}</td>
+                                                        <th colspan="2">Remark</th>
+                                                        <td colspan="4">{{$item['reopen_remark']}}</td>
+                                                    </tr> 
                                                 @else
                                                 
                                                 <tr>
@@ -509,10 +529,19 @@
                             </div>
                             <form method="post" action="{{route('reopen_case_client')}}" display="none">
                                 @csrf
+                                
+                            <div class="modal-body">
+                               <div class="row">
+                                  <div class="col-md-12">
+                                      <label class="control-label">Remark</label>
                                     <input type="hidden" name="case_id" value="{{$data->case_id}}">
                                     <input type="hidden" name="v_id" value="{{$data->v_id}}">
                                     <textarea  class="form-control form-white" name="reopen_remark" rows="4" cols="50" required></textarea>
-                                        
+                                  </div>
+                                </div>
+                            </div>
+                            
+                                    
                             <div class="modal-footer">
                                 <button type="submit" class="btn btn-danger waves-effect waves-light save-category">Submit</button>
                                 <button type="button" class="btn btn-secondary waves-effect" data-dismiss="modal">Close</button>
@@ -539,7 +568,7 @@
                                             <label class="control-label">Remark</label>
                                             <input type="hidden" name="case_id" value="{{$data->case_id}}">
                                             <input type="hidden" name="v_id" value="{{$data->v_id}}">
-                                           <textarea  class="form-control form-white" name="reject" rows="4" cols="50" required></textarea>
+                                           <textarea  class="form-control form-white" name="reject_remark" rows="4" cols="50" required></textarea>
 
                                         </div>
                                     </div>

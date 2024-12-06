@@ -213,7 +213,7 @@
                             <th colspan="4">Stamp & Signature of Client/Company </th>
                             <td colspan="8">   
                                @if(!empty($details->sign_comp))
-                                    <img src="{{ asset($details->sign_comp) }}" alt="Vendor Signature" style="max-width: 100px; height: auto;">
+                                    <img src="{{env('APP_ADMIN_URL').$details->sign_comp}}" alt="Vendor Signature" style="max-width: 100px; height: auto;">
                                 @else
                                     <span>No Signature Available</span>
                                 @endif
@@ -234,7 +234,7 @@
                             <th colspan="4">Seal & Signature</th>
                             <td colspan="8">
                                 @if(!empty($details->sign_comp))
-                                    <img src="{{ asset($details->sign_comp) }}" alt="Vendor Signature" style="max-width: 100px; height: auto;">
+                                    <img src="{{env('APP_ADMIN_URL').$details->sign_comp}}" alt="Vendor Signature" style="max-width: 100px; height: auto;">
                                 @else
                                     <span>No Signature Available</span>
                                 @endif
@@ -255,7 +255,7 @@
                             <th colspan="4">Signature</th>
                             <td colspan="8">
                                 @if(!empty($details->signature))
-                                    <img src="{{ asset($details->signature) }}" alt="Vendor Signature" style="max-width: 100px; height: auto;">
+                                    <img src="{{env('APP_ADMIN_URL').$details->signature}}" alt="Vendor Signature" style="max-width: 100px; height: auto;">
                                 @else
                                     <span>No Signature Available</span>
                                 @endif
@@ -280,16 +280,16 @@
                     <div class="card">
                         <div class="el-card-item">
                             <div class="el-card-avatar el-overlay-1">
-                                <img src="{{ asset($details->car_wash) }}" alt="user" />
+                                <img src="{{env('APP_ADMIN_URL').$details->car_wash}}" alt="user" />
                                 <div class="el-overlay">
                                     <ul class="list-style-none el-info">
                                         <li class="el-item">
-                                            <a class="btn default btn-outline image-popup-vertical-fit el-link" href="{{ asset($details->car_wash) }}">
+                                            <a class="btn default btn-outline image-popup-vertical-fit el-link" href="{{env('APP_ADMIN_URL').$details->car_wash}}">
                                                 <i class="mdi mdi-magnify-plus"></i>
                                             </a>
                                         </li>
                                         <li class="el-item">
-                                            <a class="btn default btn-outline el-link" href="{{route('download.file',['file'=>env('APP_URL').$details->car_wash])}}">
+                                            <a class="btn default btn-outline el-link" href="{{route('download.file',['file'=>env('APP_ADMIN_URL').$details->car_wash])}}">
                                                 <i class="mdi mdi-briefcase-download"></i>
                                                
                                             </a>
@@ -320,12 +320,12 @@
                     <div class="col-lg-3 col-md-6">
                         <div class="card">
                             <div class="el-card-item">
-                                <div class="el-card-avatar el-overlay-1"> <img src="{{ asset($details->car_repair) }}" alt="Car Repair" />
+                                <div class="el-card-avatar el-overlay-1"> <img src="{{env('APP_ADMIN_URL').$details->car_repair}}" alt="Car Repair" />
                                     <div class="el-overlay">
                                         <ul class="list-style-none el-info">
-                                            <li class="el-item"><a class="btn default btn-outline image-popup-vertical-fit el-link" href="{{ asset($details->car_repair) }}"><i class="mdi mdi-magnify-plus"></i></a></li>
+                                            <li class="el-item"><a class="btn default btn-outline image-popup-vertical-fit el-link" href="{{env('APP_ADMIN_URL').$details->car_repair}}"><i class="mdi mdi-magnify-plus"></i></a></li>
                                             <li class="el-item">
-                                                <a class="btn default btn-outline el-link" href="{{route('download.file',['file'=>env('APP_URL').$details->car_repair])}}">
+                                                <a class="btn default btn-outline el-link" href="{{route('download.file',['file'=>env('APP_ADMIN_URL').$details->car_repair])}}">
                                                   <i class="mdi mdi-briefcase-download"></i>
                                                 </a>
                                              </li>   
@@ -353,11 +353,11 @@
                      <div class="col-lg-3 col-md-6">
                         <div class="card">
                             <div class="el-card-item">
-                                <div class="el-card-avatar el-overlay-1"> <img src="{{ asset($details->car_paint) }}" alt="Car Paint" />
+                                <div class="el-card-avatar el-overlay-1"> <img src="{{env('APP_ADMIN_URL').$details->car_paint}}" alt="Car Paint" />
                                     <div class="el-overlay">
                                         <ul class="list-style-none el-info">
-                                            <li class="el-item"><a class="btn default btn-outline image-popup-vertical-fit el-link" href="{{ asset($details->car_paint) }}"><i class="mdi mdi-magnify-plus"></i></a></li>
-                                            <li class="el-item"><a class="btn default btn-outline el-link" href="{{route('download.file',['file'=>env('APP_URL').$details->car_paint])}}">
+                                            <li class="el-item"><a class="btn default btn-outline image-popup-vertical-fit el-link" href="{{env('APP_ADMIN_URL').$details->car_paint}}"><i class="mdi mdi-magnify-plus"></i></a></li>
+                                            <li class="el-item"><a class="btn default btn-outline el-link" href="{{route('download.file',['file'=>env('APP_ADMIN_URL').$details->car_paint])}}">
                                               <i class="mdi mdi-briefcase-download"></i>
                                                </a>
                                              </li>  
@@ -387,11 +387,11 @@
                      <div class="col-lg-3 col-md-6">
                         <div class="card">
                             <div class="el-card-item">
-                                <div class="el-card-avatar el-overlay-1"> <img src="{{ asset($details->car_lift) }}" alt="Car Lift" />
+                                <div class="el-card-avatar el-overlay-1"> <img src="{{env('APP_ADMIN_URL').$details->car_lift}}" alt="Car Lift" />
                                     <div class="el-overlay">
                                         <ul class="list-style-none el-info">
-                                            <li class="el-item"><a class="btn default btn-outline image-popup-vertical-fit el-link" href="{{ asset($details->car_lift) }}"><i class="mdi mdi-magnify-plus"></i></a></li>
-                                            <li class="el-item"><a class="btn default btn-outline el-link" href="{{route('download.file',['file'=>env('APP_URL').$details->car_lift])}}">
+                                            <li class="el-item"><a class="btn default btn-outline image-popup-vertical-fit el-link" href="{{env('APP_ADMIN_URL').$details->car_lift}}"><i class="mdi mdi-magnify-plus"></i></a></li>
+                                            <li class="el-item"><a class="btn default btn-outline el-link" href="{{route('download.file',['file'=>env('APP_ADMIN_URL').$details->car_lift])}}">
                                                <i class="mdi mdi-briefcase-download"></i>
                                                 </a>
                                              </li>  
@@ -420,11 +420,11 @@
                     <div class="col-lg-3 col-md-6">
                         <div class="card">
                             <div class="el-card-item">
-                                <div class="el-card-avatar el-overlay-1"> <img src="{{ asset($details->separate_office) }}" alt="Separate Office" />
+                                <div class="el-card-avatar el-overlay-1"> <img src="{{env('APP_ADMIN_URL').$details->separate_office}}" alt="Separate Office" />
                                     <div class="el-overlay">
                                         <ul class="list-style-none el-info">
-                                            <li class="el-item"><a class="btn default btn-outline image-popup-vertical-fit el-link" href="{{ asset($details->separate_office) }}"><i class="mdi mdi-magnify-plus"></i></a></li>
-                                            <li class="el-item"><a class="btn default btn-outline el-link" href="{{route('download.file',['file'=>env('APP_URL').$details->separate_office])}}">
+                                            <li class="el-item"><a class="btn default btn-outline image-popup-vertical-fit el-link" href="{{env('APP_ADMIN_URL').$details->separate_office}}"><i class="mdi mdi-magnify-plus"></i></a></li>
+                                            <li class="el-item"><a class="btn default btn-outline el-link" href="{{route('download.file',['file'=>env('APP_ADMIN_URL').$details->separate_office])}}">
                                                <i class="mdi mdi-briefcase-download"></i>
                                                 </a>
                                              </li>  
@@ -453,11 +453,11 @@
                     <div class="col-lg-3 col-md-6">
                         <div class="card">
                             <div class="el-card-item">
-                                <div class="el-card-avatar el-overlay-1"> <img src="{{ asset($details->customer_lounge) }}" alt="Customer Lounge" />
+                                <div class="el-card-avatar el-overlay-1"> <img src="{{env('APP_ADMIN_URL').$details->customer_lounge}}" alt="Customer Lounge" />
                                     <div class="el-overlay">
                                         <ul class="list-style-none el-info">
-                                            <li class="el-item"><a class="btn default btn-outline image-popup-vertical-fit el-link" href="{{ asset($details->customer_lounge) }}"><i class="mdi mdi-magnify-plus"></i></a></li>
-                                            <li class="el-item"><a class="btn default btn-outline el-link" href="{{route('download.file',['file'=>env('APP_URL').$details->customer_lounge])}}">
+                                            <li class="el-item"><a class="btn default btn-outline image-popup-vertical-fit el-link" href="{{env('APP_ADMIN_URL').$details->customer_lounge}}"><i class="mdi mdi-magnify-plus"></i></a></li>
+                                            <li class="el-item"><a class="btn default btn-outline el-link" href="{{route('download.file',['file'=>env('APP_ADMIN_URL').$details->customer_lounge])}}">
                                                <i class="mdi mdi-briefcase-download"></i>
                                                 </a>
                                              </li>  

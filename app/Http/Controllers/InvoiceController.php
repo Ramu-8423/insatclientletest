@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Http\Request;
 
-
 date_default_timezone_set('Asia/Calcutta');
 class InvoiceController extends Controller{
             public function invoice(? string $status)
@@ -63,12 +62,11 @@ class InvoiceController extends Controller{
              
           public function costom(){
            return view('report.costom');
-       }     
-             
-        
+       } 
+       
    public function downloadcostompdf()
     {
-        $pdf = Pdf::loadView('report.costom');
+        $pdf = Pdf::loadView('report.costom')->setPaper('A4', 'portrait');
         return $pdf->download('report_costom.pdf');
     }        
              
