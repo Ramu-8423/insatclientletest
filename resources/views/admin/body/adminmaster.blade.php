@@ -10,7 +10,8 @@
     <meta name="description" content="">
     <meta name="author" content="">
     <!-- Favicon icon -->
-    <link rel="icon" type="image/png" sizes="16x16" href="assets/images/favicon.png">
+    <link href="{{asset('assets/libs/magnific-popup/dist/magnific-popup.css')}}" rel="stylesheet">
+    <link rel="icon" type="image/png" sizes="16x16" href="{{asset('assets/images/favicon.png')}}">
     <title>InstaLocate</title>
     <!-- Custom CSS -->
     <link href="{{asset('assets/libs/flot/css/float-chart.css')}}" rel="stylesheet">
@@ -19,13 +20,26 @@
     <link href="{{asset('dist/css/style.min.css')}}" rel="stylesheet">
     <link rel="stylesheet" type="text/css" href="{{asset('assets/extra-libs/multicheck/multicheck.css')}}">
     <link rel="stylesheet" href="{{ asset('assets/css/custombutton.css') }}">
-
+    
+    
+    
+    <!--for search feacher in dropdown-->
+     <link rel="stylesheet" type="text/css" href="{{asset('assets/libs/select2/dist/css/select2.min.css')}}">
+    <!--for search feacher in dropdown-->
+    
+ <!-- Bootstrap 5.3.0 (make sure to include these in your project) -->
     <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
     <!--[if lt IE 9]>
     <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
     <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
     <![endif]-->
+
+<style>
+    .btn{
+    border-radius:3px; /* Ya koi aur value jo aapko chahiye */
+}
+</style>
 </head>
 
 
@@ -68,6 +82,7 @@
 <!-- ============================================================== -->
 <!-- All Jquery -->
 <!-- ============================================================== -->
+<!-- ============================================================== -->
 <script src="{{asset('assets/libs/jquery/dist/jquery.min.js')}}"></script>
 <!-- Bootstrap tether Core JavaScript -->
 <script src="{{asset('assets/libs/popper.js/dist/umd/popper.min.js')}}"></script>
@@ -91,6 +106,21 @@
 <script src="{{asset('dist/js/pages/chart/chart-page-init.js')}}"></script>
 <script src="{{asset('assets/extra-libs/multicheck/jquery.multicheck.js')}}"></script>
 
+
+ <!--for search feacher in dropdown-->
+     
+      <script src="{{asset('assets/libs/select2/dist/js/select2.full.min.js')}}"></script>
+      <script src="{{asset('assets/libs/select2/dist/js/select2.min.js')}}"></script>
+    <!--for search feacher in dropdown-->
+
+
+<script src="{{asset('assets/libs/magnific-popup/dist/jquery.magnific-popup.min.js')}}"></script>
+<script src="{{asset('assets/libs/magnific-popup/meg.init.js')}}"></script>
+<script src="{{asset('assets/libs/popper.js/dist/umd/popper.min.js')}}"></script>
+
+
+
+
 <script src="{{asset('assets/extra-libs/DataTables/datatables.min.js')}}"></script>
     <script>
         /****************************************
@@ -98,13 +128,13 @@
          ****************************************/
         $('#zero_config').DataTable();
     </script>
-        <script>
+    <script src="{{asset('assets/extra-libs/multicheck/datatable-checkbox-init.js')}}"></script>
+    <script>
        function goBack() {
             window.history.back();
         }
     </script>
-    <script src="{{asset('assets/extra-libs/multicheck/datatable-checkbox-init.js')}}"></script>
-  
+
 </body>
 
 </html>
