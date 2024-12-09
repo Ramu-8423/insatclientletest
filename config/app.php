@@ -15,6 +15,20 @@ return [
 ],
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     /*
     |--------------------------------------------------------------------------
     | Application Name
@@ -222,7 +236,18 @@ return [
     'aliases' => Facade::defaultAliases()->merge([
         // 'ExampleClass' => App\Example\ExampleClass::class,
     ])->toArray(),
+    
+    
+    
 
 ];
 
+
+return [
+    'paths' => ['api/*', 'images/*'],  // Adjust the paths as needed
+    'allowed_methods' => ['*'],        // Allow all HTTP methods
+    'allowed_origins' => ['*'],        // Allow all origins (replace with specific origins if needed)
+    'allowed_headers' => ['*'],        // Allow all headers
+    'supports_credentials' => false,   // Set to true if you want to support credentials
+];
 

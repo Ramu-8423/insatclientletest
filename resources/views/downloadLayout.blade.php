@@ -75,6 +75,27 @@
         <!-- Table Content -->
         <div class="responsive-table-container" id="content">
             
+@php
+function convertImageToBase64($imageUrl) {
+    $ch = curl_init($imageUrl);
+    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+    $imageData = curl_exec($ch); // Get image data
+    curl_close($ch); // Close the cURL session
+
+    // Check if we got valid image data
+    if (!$imageData) {
+        return 'Image not found or failed to fetch!';
+    }
+    $base64Image = base64_encode($imageData);
+    return 'data:image/png;base64,' . $base64Image; // Return Base64 image with MIME type
+}
+@endphp
+
+@php
+$image1Base64 = convertImageToBase64('https://admin.instalocate.io/images/com_icon.png');
+$image2Base64 = convertImageToBase64('https://admin.instalocate.io/images/nogift.png');
+$image3Base64 = convertImageToBase64('https://admin.instalocate.io/images/nocash.jpg');
+@endphp
                   
             
             @if($selected_report->project_type == 1 && $selected_report->layout_type == 1)
@@ -82,7 +103,7 @@
                 <div class="row" style="margin-bottom:10px;">
                     <div class="col-12 text-center">
                         <div class="header p-1">
-                            <img src="{{env('APP_ADMIN_URL').'images/com_icon.png'}}" alt="Logo" class="logo float-left" width="70px" height="70px" style="padding-left:5px;border-radius:50%;">
+                            <img src="{{ $image1Base64 }}" alt="Logo" class="logo float-left" width="70px" height="70px" style="padding-left:5px;border-radius:50%;">
                             <h4>INTUITIVE INFO SERVICES PVT. LTD.</h4>
                             <p>BETTER HIRING | SMART SCREENING</p>
                         </div>
@@ -114,10 +135,10 @@
                         <p>यदि क्षेत्र के कार्यकारी किसी भी तरीके से पैसे या अन्य वस्तु के लिए आग्रह करता है तो आपसे निवेदन है की इस नंबर +91 120 4149741  पर तुरंत सूचना करे l आप हमें  ई -मेल के माध्यम से सम्पर्क कर सकते है : Email : supportcs@iis-pl.com</p>
                     </div>
                     <div class="col-sm-2">
-                        <img src="{{env('APP_ADMIN_URL').'images/nogift.png'}}" style="width:100px;height:100px;">
+                        <img src="{{$image2Base64}}" style="width:100px;height:100px;">
                     </div>
                     <div class="col-sm-2">
-                        <img src="{{env('APP_ADMIN_URL').'images/nocash.jpg'}}" style="width:100px;height:100px;">
+                        <img src="{{$image3Base64}}" style="width:100px;height:100px;">
                     </div>
                  </div>
                 
@@ -350,7 +371,7 @@
         <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.4.0/jspdf.umd.min.js"></script>
 
        <script>
-   async function downloadPDF() {
+ async function downloadPDF() {
     const { jsPDF } = window.jspdf;
     const doc = new jsPDF('p', 'mm', 'a4'); // Portrait, A4 size in mm
 
@@ -361,12 +382,13 @@
     }
 
     try {
-        // Capture the content using html2canvas with high resolution
+        // Capture the content using html2canvas with reduced resolution
         const canvas = await html2canvas(content, {
-            scale: 3, // High resolution for better text clarity
+            scale: 2, // Reduced resolution to reduce file size
         });
 
-        const imgData = canvas.toDataURL('image/png');
+        // Convert canvas image to JPEG with reduced quality
+        const imgData = canvas.toDataURL('image/jpeg',1.6); // Reduced quality (0.6 is 60% of the original quality)
 
         // Define A4 dimensions and margins
         const pageWidth = 210; // A4 width in mm
@@ -383,7 +405,7 @@
         const scaleFactor = Math.min(scaleX, scaleY); // Use the smaller scaling factor to fit both width and height
 
         // Add the image to the PDF with the calculated scaling factor
-        doc.addImage(imgData, 'PNG', marginLeft, marginTop, canvas.width * scaleFactor, canvas.height * scaleFactor);
+        doc.addImage(imgData, 'JPEG', marginLeft, marginTop, canvas.width * scaleFactor, canvas.height * scaleFactor);
 
         // Save the PDF
         doc.save('report.pdf');

@@ -7,9 +7,10 @@
         <!-- Sidebar navigation-->
         <nav class="sidebar-nav">
             <ul id="sidebarnav" class="p-t-30">
-                <li class="sidebar-item"> <a class="sidebar-link waves-effect waves-dark sidebar-link" href="{{route('client_onboarding')}}" aria-expanded="false"><i class="mdi mdi-view-dashboard"></i><span class="hide-menu">OnBoarding</span></a>
-                </li>
-     
+                @if($login_row->final_status == 0)
+                    <li class="sidebar-item"> <a class="sidebar-link waves-effect waves-dark sidebar-link" href="{{route('client_onboarding')}}" aria-expanded="false"><i class="mdi mdi-view-dashboard"></i><span class="hide-menu">OnBoarding</span></a>
+                    </li>
+                  @endif
              
                {{--
                @if($login_row->progress_status==5 && $login_row->remark_status==0 && $login_row->final_status ==1 && $data->report_status ==1 && $data->agreement_status ==1 && $data->reg_status ==2)
@@ -49,7 +50,16 @@
                   <li class="sidebar-item">
                        <a class="sidebar-link waves-effect waves-dark sidebar-link" href="{{ route('invoice',1)}}" aria-expanded="false"><i class="mdi mdi-wallet"></i><span class="hide-menu">Invoice </span></a>
                  </li> 
-                      
+                 
+                 
+                  <li class="sidebar-item">
+                       <a class="sidebar-link waves-effect waves-dark sidebar-link" href="{{ route('view_excel')}}" aria-expanded="false"><i class="mdi mdi-wallet"></i><span class="hide-menu">Excel Upload </span></a>
+                 </li> 
+                  @endif
+                  
+                   @if($login_row->final_status == 1)
+                    <li class="sidebar-item"> <a class="sidebar-link waves-effect waves-dark sidebar-link" href="{{route('client_onboarding')}}" aria-expanded="false"><i class="mdi mdi-account-outline"></i><span class="hide-menu">Profile</span></a>
+                    </li>
                   @endif
                  
             </ul>

@@ -10,8 +10,8 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Validation\Rule;
 use Illuminate\Support\Str;
 use App\Models\ClientDetail;
-use App\Models\User;
 
+use App\Models\User;
 
 class DashboardController extends Controller
 {

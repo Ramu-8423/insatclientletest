@@ -9,6 +9,7 @@ use App\Http\Controllers\AllocationController;
 use App\Http\Controllers\WalletController;
 use App\Http\Controllers\ReportPdf\ReportPdfController;
 use App\Http\Controllers\InvoiceController;
+use App\Http\Controllers\ExcelController;
 
 Route::get('/socket',function(){
     return view('websocket.socket');
@@ -119,6 +120,10 @@ Route::get('/download_report/{client_id}/{project_type}/{case_id}', [DashboardCo
 
 Route::get('/addressreportpdf/{case_id}',[ReportPdfController::class, 'addressreportpdf'])->name('addressreportpdf');
 Route::get('/sitereportpdf/{case_id}',[ReportPdfController::class, 'sitereportpdf'])->name('sitereportpdf');
+
+
+Route::get('/view_excel',[ExcelController::class,'view_excel'])->name('view_excel');
+Route::post('/excel_upload',[ExcelController::class,'uploadExcel'])->name('excel_upload');
 
 
 
