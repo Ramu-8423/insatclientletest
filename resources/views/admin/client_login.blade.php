@@ -200,7 +200,7 @@ button.login-btn {
                 $('#error-message').text('Please enter the OTP').show();
             }
         });
-            
+        
             $('#login-form').on('submit', function(e) {
                             let redirect_url;
             if (progress_status <= 3 || (progress_status == 4 && remark_status == 1)) {

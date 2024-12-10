@@ -21,25 +21,37 @@ class ExcelController extends Controller
     }
     
     
-        public function uploadExcel(Request $request){
-             $request->validate([
-                         'file' => 'required|mimes:xlsx,csv',  
-                       ]);
-             $file = $request->file('file');
-             $data = Excel::toCollection(null, $file);  
-             $rows = $data->first(); 
-        
-             foreach ($rows as $row) {
-                    $postname = ', ' . $row[0];
-                  $a =   DB::table('pincodes')
-                        ->where('pincode', $row[1])
-                        ->update([
-                            'post_name' => DB::raw("CONCAT(post_name, '$postname')")
-                        ])->toRawSql();
-                    }
-                    
-                    dd($a);
+   public function uploadExcel(Request $request) {
+    $request->validate([
+        'file' => 'required|mimes:xlsx,csv',
+    ]);
+
+    $file = $request->file('file');
+    $data = Excel::toCollection(null, $file);
+    $rows = $data->first();
+    $updatedRows = 0;
+
+    foreach ($rows as $row) {
+        $postname = ', ' . $row[0];
+        $pincode = $row[1];
+
+        // Use query builder with CONCAT function
+        $affectedRows = DB::table('testpincode')
+            ->where('pincode', $pincode)
+            ->update([
+                'post_name' => DB::raw("CONCAT(IFNULL(post_name, ''), '" . addslashes($postname) . "')")
+            ]);
+
+        if ($affectedRows > 0) {
+            $updatedRows += $affectedRows;
+        }
     }
+
+    session()->flash('success', "$updatedRows rows updated successfully.");
+    return redirect()->back();
+}
+
+
     
     
     

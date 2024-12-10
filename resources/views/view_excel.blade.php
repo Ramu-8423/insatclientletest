@@ -4,7 +4,12 @@
 <div class="page-wrapper">
     <div class="container-fluid">
         
-        <!---->
+        
+        @if(session('success'))
+        <div class="alert alert-success">
+            {{ session('success') }}
+        </div>
+        @endif
         
         <div class="container">
             <div class="row">
