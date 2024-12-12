@@ -20,48 +20,10 @@ class ExcelController extends Controller
         return view('view_excel');
     }
     
-    
-   public function uploadExcel(Request $request) {
-    $request->validate([
-        'file' => 'required|mimes:xlsx,csv',
-    ]);
-
-    $file = $request->file('file');
-    $data = Excel::toCollection(null, $file);
-    $rows = $data->first();
-    $updatedRows = 0;
-
-    foreach ($rows as $row) {
-        $postname = ', ' . $row[0];
-        $pincode = $row[1];
-
-        // Use query builder with CONCAT function
-        $affectedRows = DB::table('testpincode')
-            ->where('pincode', $pincode)
-            ->update([
-                'post_name' => DB::raw("CONCAT(IFNULL(post_name, ''), '" . addslashes($postname) . "')")
-            ]);
-
-        if ($affectedRows > 0) {
-            $updatedRows += $affectedRows;
-        }
-    }
-
-    session()->flash('success', "$updatedRows rows updated successfully.");
-    return redirect()->back();
-}
-
-
-    
-    
-    
-    
-    
-    
-    
-    public function uploadExcel_old(){
+    public function uploadExcel(){
         $request->validate([
-                         'file' => 'required|mimes:xlsx,csv',  
+                         'file' => 'required|mimes:xlsx,csv',
+                         'project_type'=>'required'
                        ]);
              $file = $request->file('file');
              $data = Excel::toCollection(null, $file);  
@@ -88,28 +50,9 @@ class ExcelController extends Controller
                   $site_nm = 0;
                   $digital = 0;
                   
-                foreach ($charges as $charge){
-                    if($charge->project_type==1&&$charge->metro_status==1){
-                        $address_m = $charge->amount;
-                    }elseif($charge->project_type==1&&$charge->metro_status==2){
-                        $address_nm = $charge->amount;
-                    }elseif($charge->project_type==2&&$charge->metro_status==1){
-                        $site_m = $charge->amount;
-                    }elseif($charge->project_type==2&&$charge->metro_status==2){
-                        $site_nm = $charge->amount;
-                    }else{
-                        $digital = $charge->amount;
-                    }
+                
                 }
                 
-                
-                
-                
-            }
-           
-          
-            
-        
             
             /*
          

@@ -7,10 +7,20 @@
           <div class="mr-auto p-2"> <h2>Upload Cases</h2></div>
     </div>
         @if (session('success'))
-            <div class="alert alert-success">{{ session('success') }}</div>
+            <div class="alert alert-success alert-dismissible fade show" role="alert">
+               {{ session('success') }}
+              <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
         @endif
         @if (session('error'))
-            <div class="alert alert-danger">{{ session('error') }}</div>
+            <div class="alert alert-danger alert-dismissible fade show" role="alert">
+               {{ session('error') }}
+              <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
         @endif
 
     <div class="row">
@@ -31,7 +41,7 @@
                                         </button>
                                     </div>
                                     <div class="modal-body">
-                                        <form action="{{env('APP_URL')}}allocation_preview.php" method="POST" enctype="multipart/form-data">
+                                        <form action="{{route('excel_upload')}}" method="POST" enctype="multipart/form-data">
                                             @csrf
                     
                                             <input type="hidden" name="client_id" value="{{ session('client_login_id') }}">
@@ -39,7 +49,7 @@
                                             
                                             <div class="form-group mt-3" style="text-align: left;">
                                                 <label for="projectSelect" style="display: block;">Select Project</label>
-                                                <select name="project" id="projectSelect" class="form-control" required>
+                                                <select name="project_type" id="projectSelect" class="form-control" required>
                                                     <option value="">Select a project</option>
                                                     <option value="1">Address Verification</option>
                                                     <option value="2">Site Investigation</option>
@@ -49,7 +59,7 @@
                                             
                                             <div class="form-group mt-3" style="text-align: left;">
                                                 <label for="fileInput" style="display: block;">Choose file to upload</label>
-                                                <input type="file" id="fileInput" name="excel_file" accept=".xls,.csv,.xlsx" class="form-control" required>
+                                                <input type="file" id="fileInput" name="file" accept=".xls,.csv,.xlsx" class="form-control" required>
                                             </div>
 
                                         

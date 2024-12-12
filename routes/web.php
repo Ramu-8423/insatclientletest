@@ -84,7 +84,6 @@ Route::get('/cases/rejected', [LoginController::class, 'rejectedCases'])->name('
 Route::get('/cases/reopen', [LoginController::class, 'reopenCases'])->name('cases.reopen');
 
 Route::any('/dashboard/{id}', [DashboardController::class, 'dashboard'])->name('dashboard');
-Route::any('/newallocation', [AllocationController::class, 'newallocation'])->name('newallocation');
 Route::get('/wallet', [WalletController::class, 'wallet'])->name('wallet');
 
 
@@ -123,7 +122,9 @@ Route::get('/sitereportpdf/{case_id}',[ReportPdfController::class, 'sitereportpd
 
 
 Route::get('/view_excel',[ExcelController::class,'view_excel'])->name('view_excel');
-Route::post('/excel_upload',[ExcelController::class,'uploadExcel'])->name('excel_upload');
+
+Route::post('/excel_upload', [AllocationController::class, 'excel_upload'])->name('excel_upload');
+Route::any('/newallocation', [AllocationController::class, 'newallocation'])->name('newallocation');
 
 
 

@@ -82,6 +82,7 @@ class ApiClientPublicController extends Controller
                     'message' => 'Mobile number for verify otp',
                     'mobile' => $mobile,
                     'progress_status'=>$data->progress_status,
+                    'final_status'=>$data->final_status,
                     'remark_status'=>$data->remark_status
                     ]);
                 } else {

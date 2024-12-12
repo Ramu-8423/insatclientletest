@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Support\Facades\Response;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
 
 date_default_timezone_set('Asia/Calcutta');

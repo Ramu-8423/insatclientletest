@@ -176,6 +176,7 @@ button.login-btn {
                             var mobile = response.mobile;
                              progress_status = response.progress_status;
                               remark_status = response.remark_status;
+                              final_status = response.final_status;
                          console.log(`mobile is ${mobile}  progress_status is ${progress_status} remark_status is ${remark_status}`);
                             // Verify OTP
                             $.ajax({
@@ -202,13 +203,13 @@ button.login-btn {
         });
         
             $('#login-form').on('submit', function(e) {
-                            let redirect_url;
-            if (progress_status <= 3 || (progress_status == 4 && remark_status == 1)) {
-                  redirect_url = "{{ route('client_onboarding') }}";
-            } else {
+                    let redirect_url;
+                    
+            if (final_status == 1){
                     redirect_url = "{{ route('dashboard', 0) }}";
+            }else{
+                     redirect_url = "{{ route('client_onboarding') }}"; 
             }
-                
                 e.preventDefault();
                 window.location.href = redirect_url;
             });
