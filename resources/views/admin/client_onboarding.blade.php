@@ -418,11 +418,14 @@ $progress = $details->progress_status + 1 ;
                                         </div>
                                         <div class="col-sm-3">
                                             <input type="text" class="form-control" placeholder="Contact Number"
-                                                name="person_phone[]" value="{{$other_person[0]->person_phone}}">
+                                                name="person_phone[]" value="{{$other_person[0]->person_phone}}"
+                                                required 
+                                                pattern="[0-9]{10,12}" 
+                                                title="Contact number must be between 10 and 12 digits.">
                                         </div>
                                         <div class="col-sm-3">
                                             <input type="email" class="form-control" placeholder="Email"
-                                                name="person_email[]" value="{{$other_person[0]->person_email}}">
+                                                name="person_email[]" value="{{$other_person[0]->person_email}}" required>
                                         </div>
                                         <div class="col-sm-2">
                                             <input type="text" class="form-control" placeholder="Designation"
@@ -440,11 +443,14 @@ $progress = $details->progress_status + 1 ;
                                         <div class="col-sm-3">
                                             <input type="text" class="form-control" placeholder="Contact Number"
                                                 id="cono1" name="person_phone[]"
-                                                value="{{$other_person[1]->person_phone}}">
+                                                value="{{$other_person[1]->person_phone}}"
+                                                required 
+                                                pattern="[0-9]{10,12}" 
+                                                title="Contact number must be between 10 and 12 digits.">
                                         </div>
                                         <div class="col-sm-3">
                                             <input type="email" class="form-control" placeholder="Email"
-                                                name="person_email[]" value="{{$other_person[1]->person_email}}">
+                                                name="person_email[]" value="{{$other_person[1]->person_email}}" required>
                                         </div>
                                         <div class="col-sm-2">
                                             <input type="text" class="form-control" placeholder="Designation"
@@ -462,11 +468,14 @@ $progress = $details->progress_status + 1 ;
                                         <div class="col-sm-3">
                                             <input type="text" class="form-control" placeholder="Contact Number"
                                                 id="cono1" name="person_phone[]"
-                                                value="{{$other_person[2]->person_phone}}">
+                                                value="{{$other_person[2]->person_phone}}"
+                                                required 
+                                                pattern="[0-9]{10,12}" 
+                                                title="Contact number must be between 10 and 12 digits.">
                                         </div>
                                         <div class="col-sm-3">
                                             <input type="email" class="form-control" placeholder="Email"
-                                                name="person_email[]" value="{{$other_person[2]->person_email}}">
+                                                name="person_email[]" value="{{$other_person[2]->person_email}}" required>
                                         </div>
                                         <div class="col-sm-2">
                                             <input type="text" class="form-control" placeholder="Designation"

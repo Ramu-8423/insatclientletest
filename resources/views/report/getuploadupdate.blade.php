@@ -35,7 +35,7 @@
                 <button class="btn btn-warning btn-sm ml-2">Update Custom Layout</button>
                 @endif
             </a>
-            @if($report->custom_layout)
+            @if($report->file)
             <a href="{{ route('approve.layout.status', ['client_id' => $details->id, 'layout_status' => $report->layout_status, 'layout_type' => 2 , 'id' => $report->id]) }}"
                 style="margin-left:10px;"><button class="btn btn-success btn-sm ml-2">Approve</button></a>
             @endif
@@ -47,7 +47,7 @@
         <div class="row">
             <div class="col-sm-7">
                 <div style="display: flex; justify-content: center; align-items: center; height: 500px;">
-    @if($report->custom_layout)
+       @if($report->file)
         @if(pathinfo($report->file, PATHINFO_EXTENSION) == 'pdf')
             <iframe src="{{ $report->file }}" width="100%" height="100%" style="border: none;"
                 class="responsive-image"></iframe>

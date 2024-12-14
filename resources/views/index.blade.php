@@ -26,7 +26,7 @@
                    
                     <div class="box bg-info text-center">
                         <h1 class="font-light text-white"><i class="fa fa-globe m-b-5 font-16"></i></h1>
-                        <h5 class=" text-white m-b-0 m-t-5">8540</h5>
+                        <h5 class=" text-white m-b-0 m-t-5">{{$totals->total_case}}</h5>
                         <h6 class="text-white">All Cases</h6>
                     </div>
                 </div>
@@ -37,7 +37,7 @@
                     
                     <div class="box bg-cyan text-center">
                         <h1 class="font-light text-white"><i class="fa fa-user m-b-5 font-16"></i></h1>
-                        <h5 class="text-white m-b-0 m-t-5">2540</h5>
+                        <h5 class="text-white m-b-0 m-t-5">{{ $totals->pending_case }}</h5>
                         <h6 class="text-white">Pending Cases</h6>
                     </div>
                 </div>
@@ -48,29 +48,19 @@
                     
                     <div class="box bg-success text-center">
                         <h1 class="font-light text-white"><i class="fa fa-plus m-b-5 font-16"></i></h1>
-                        <h5 class="text-white m-b-0 m-t-5">120</h5>
+                        <h5 class="text-white m-b-0 m-t-5">{{$totals->insuff_case}}</h5>
                         <h6 class="text-white">Insuff Cases</h6>
                     </div>
                 </div>
             </div>
             <!-- Column -->
-            <div class="col-md-6 col-lg-2 col-xlg-3">
-                <div class="card card-hover">
-                  
-                    <div class="box bg-warning text-center">
-                        <h1 class="font-light text-white"><i class="fa fa-cart-plus m-b-5 font-16"></i></h1>
-                        <h5 class="text-white m-b-0 m-t-5">656</h5>
-                        <h6 class="text-white">Hold Cases</h6>
-                    </div>
-                </div>
-            </div>
             <!-- Column -->
             <div class="col-md-6 col-lg-2 col-xlg-3">
                 <div class="card card-hover">
                    
                     <div class="box bg-danger text-center">
                         <h1 class="font-light text-white"><i class="fa fa-tag m-b-5 font-16"></i></h1>
-                        <h5 class=" text-white m-b-0 m-t-5">100</h5>
+                        <h5 class=" text-white m-b-0 m-t-5">{{$totals->rejected_case}}</h5>
                         <h6 class="text-white">Rejected Cases</h6>
                     </div>
                 </div>
@@ -81,8 +71,17 @@
                    
                     <div class="box bg-info text-center">
                         <h1 class="font-light text-white"><i class="fa fa-table m-b-5 font-16"></i></h1>
-                        <h5 class=" text-white m-b-0 m-t-5">100</h5>
+                        <h5 class=" text-white m-b-0 m-t-5">{{$totals->re_open_case}}</h5>
                         <h6 class="text-white">Reopen Cases</h6>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6 col-lg-2 col-xlg-3">
+                <div class="card card-hover">
+                    <div class="box bg-warning text-center">
+                        <h1 class="font-light text-white"><i class="fa fa-cart-plus m-b-5 font-16"></i></h1>
+                        <h5 class="text-white m-b-0 m-t-5">{{$totals->completed_case}}</h5>
+                        <h6 class="text-white">Completed Cases</h6>
                     </div>
                 </div>
             </div>
