@@ -125,7 +125,8 @@ Route::get('/view_excel',[ExcelController::class,'view_excel'])->name('view_exce
 
 Route::post('/excel_upload', [AllocationController::class, 'excel_upload'])->name('excel_upload');
 Route::any('/newallocation', [AllocationController::class, 'newallocation'])->name('newallocation');
-Route::any('/preview', [AllocationController::class, 'previewblade'])->name('preview');
+Route::get('/preview', [AllocationController::class, 'previewblade'])->name('preview');
+Route::post('/client_case_insert', [AllocationController::class, 'client_case_insert'])->name('client_case_insert');
 
 
 

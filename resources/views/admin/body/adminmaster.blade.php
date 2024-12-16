@@ -127,6 +127,8 @@
          *       Basic Table                   *
          ****************************************/
         $('#zero_config').DataTable();
+        $('#example').DataTable();
+        $('#zero_config2').DataTable();
     </script>
     <script src="{{asset('assets/extra-libs/multicheck/datatable-checkbox-init.js')}}"></script>
     <script>

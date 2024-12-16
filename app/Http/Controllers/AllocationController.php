@@ -17,6 +17,146 @@ use Maatwebsite\Excel\Facades\Excel;
 
 class AllocationController extends Controller
 {
+    public function client_case_insert(Request $request){
+        date_default_timezone_set('Asia/Kolkata');
+        $date = date('Y-m-d H:i:s');
+
+        $metroRows = json_decode($request->metro_rows, true);
+        $nonMetroRows = json_decode($request->non_metro_rows, true);
+        $metroUploadCount = $request->metro_upload_count;
+        $nonMetroUploadCount = $request->non_metro_upload_count;
+        $metroCharge = $request->metro_charge;
+        $nonMetroCharge = $request->non_metro_charge;
+        $newWallet = $request->new_wallet;
+        $wallet = $request->wallet;
+        $total_charge = $request->total_charge;
+        
+        $projectType = $request->project_type;
+        $client_id = $request->client_id;
+        $client_type = $request->client_type;
+        //insert metro and non metro status in case-details table to manage charge in future.
+        
+          $insert_row = [];
+        if($projectType==1||$projectType==3){
+            foreach ($metroRows as $value){
+                $insert_row[] = [
+                    'location'=>$value[0],
+                    'employee_id'=>$value[1],
+                    'candidate_name'=>$value[2],
+                    'mobile'=>$value[3],
+                    'email'=>$value[4],
+                    'father_name'=>$value[5],
+                    'mother_name'=>$value[6],
+                    'address_type'=>$value[7],
+                    'address'=>$value[8],
+                    'city'=>$value[9],
+                    'state'=>$value[10],
+                    'pincode'=>$value[11],
+                    'period_of_stay_from'=>$value[12],
+                    'period_of_stay_to'=>$value[13],
+                    'metro_status' =>1,
+                    'project_type'=>$projectType,
+                    'client_id'=>$client_id
+                    ];
+            }
+            foreach ($nonMetroRows as $value){
+                $insert_row[] = [
+                    'location'=>$value[0],
+                    'employee_id'=>$value[1],
+                    'candidate_name'=>$value[2],
+                    'mobile'=>$value[3],
+                    'email'=>$value[4],
+                    'father_name'=>$value[5],
+                    'mother_name'=>$value[6],
+                    'address_type'=>$value[7],
+                    'address'=>$value[8],
+                    'city'=>$value[9],
+                    'state'=>$value[10],
+                    'pincode'=>$value[11],
+                    'period_of_stay_from'=>$value[12],
+                    'period_of_stay_to'=>$value[13],
+                    'metro_status' =>2,
+                    'project_type'=>$projectType,
+                    'client_id'=>$client_id
+                    ];
+            }
+            
+        }else{
+            foreach ($metroRows as $value){
+                $insert_row[] = [
+                    'location'=>$value[0],
+                    'employee_id'=>$value[1],
+                    'candidate_name'=>$value[2],
+                    'mobile'=>$value[3],
+                    'email'=>$value[4],
+                    'address_type'=>$value[5],
+                    'address'=>$value[6],
+                    'city'=>$value[7],
+                    'state'=>$value[8],
+                    'pincode'=>$value[9],
+                    'period_of_stay_from'=>$value[10],
+                    'period_of_stay_to'=>$value[11],
+                    'gst_number'=>$value[12],
+                    'pan_card_num'=>$value[13],
+                    'contact_person_name'=>$value[14],
+                    'contact_person_desi'=>$value[15],
+                    'metro_status' =>1,
+                    'project_type'=>$projectType,
+                    'client_id'=>$client_id
+                    ];
+            }
+            foreach ($nonMetroRows as $value){
+                $insert_row[] = [
+                    'location'=>$value[0],
+                    'employee_id'=>$value[1],
+                    'candidate_name'=>$value[2],
+                    'mobile'=>$value[3],
+                    'email'=>$value[4],
+                    'address_type'=>$value[5],
+                    'address'=>$value[6],
+                    'city'=>$value[7],
+                    'state'=>$value[8],
+                    'pincode'=>$value[9],
+                    'period_of_stay_from'=>$value[10],
+                    'period_of_stay_to'=>$value[11],
+                    'gst_number'=>$value[12],
+                    'pan_card_num'=>$value[13],
+                    'contact_person_name'=>$value[14],
+                    'contact_person_desi'=>$value[15],
+                    'metro_status' =>2,
+                    'project_type'=>$projectType,
+                    'client_id'=>$client_id
+                    ];
+            }
+        }
+        
+        $ins = DB::table('case_details')->insert($insert_row);
+        
+        if(!$ins){
+           return redirect()->route('newallocation')->with('error','Faild to insert cases!');
+        }
+        
+        if($client_type==1){
+           $wallet_update = DB::table('client_details')->where('id',$client_id)->update([
+               'wallet'=>DB::raw("wallet - $total_charge")
+               ]);
+           if(!$wallet_update){
+               return redirect()->route('newallocation')->with('error','Faild to deduct charge from wallet!');
+           }       
+        }
+        
+        DB::table('case_upload_count')->insert([
+            'client_id'=>$client_id,
+            'project_type'=>$projectType,
+            'case_count'=>$nonMetroUploadCount+$metroUploadCount,
+            'created_at'=>$date
+            ]);
+        return redirect()->route('newallocation')->with('success','Case Uploaded successfully');
+    }
+    
+    
+    
+    
       public function newallocation(){
              $client_id = session('client_login_id');
              $perpage = 10;
@@ -57,15 +197,52 @@ class AllocationController extends Controller
             return !empty(array_filter($row->toArray()));
         });
         
-        if($client_type==2){
-            //call protected function for case insert and return from here, so, will not go for next line.
-        }
         
         if($client_type==1&&$wallet<=0){
             return redirect()->back()->with('error','Insufficient blanace,please recharge yor account!');
         }
         
         $charges = DB::table('client_packages')->where('client_id',$client_id)->where('project_type',$project_type)->get();
+        $metro_rows = [];
+        $non_metro_rows = [];
+        
+        if($project_type==1){
+            $index = 11;
+        }else{
+           $index = 9; 
+        }
+        
+        if($project_type==1||$project_type==2){
+        foreach($rows as $row){
+            $metro_status = DB::table('pincodes')->where('pincode',$row[$index])->value('metro_code');
+            if($metro_status==1){
+                $metro_rows[] = $row;
+            }elseif($metro_status==2){
+                $non_metro_rows[] = $row;
+            }
+        }
+        }else{
+            foreach($rows as $row){
+            $metro_rows[] = $row;
+            //due to $rows is a collection, not a array so that's why.
+            }
+        }
+        
+        if($client_type==2){
+             return view('NewAllocation.preview')
+                ->with('metro_rows',$metro_rows)
+                ->with('non_metro_rows',$non_metro_rows)
+                ->with('metro_upload_count',count($metro_rows))
+                ->with('non_metro_upload_count',count($non_metro_rows))
+                ->with('metro_charge',0)
+                ->with('non_metro_charge',0)
+                ->with('new_wallet',0)
+                ->with('wallet',0)
+                ->with('project_type',$project_type)
+                ->with('total_charge',0)
+                ->with('client_id',$client_id)
+                ->with('client_type',$client_type);
+        }
         
         $non_metro_charge =0;
         $metro_charge = 0;
@@ -78,16 +255,7 @@ class AllocationController extends Controller
             }
         }
         
-        $metro_rows = [];
-        $non_metro_rows = [];
-        
-        foreach($rows as $row){
-            if($row[0]==1){
-                $metro_rows[] = $row;
-            }elseif($row[0]==2){
-                $non_metro_rows[] = $row;
-            }
-        }
+       
         
         $metro_count = count($metro_rows);
         $non_metro_count = count($non_metro_rows);
@@ -102,9 +270,12 @@ class AllocationController extends Controller
                 $metro_upload_count = $metro_count;
                 $new_wallet = $x;
             }else{
-                $metro_upload_count = $new_wallet/$metro_charge;
+                $metro_upload_count = floor($new_wallet/$metro_charge);
                 $new_wallet = $new_wallet%$metro_charge;
+                $metro_rows = array_slice($metro_rows,0,$metro_upload_count);
             }
+        }else{
+            $metro_rows = [];
         }
         
         if($non_metro_count>0&&$non_metro_charge>0){
@@ -113,71 +284,30 @@ class AllocationController extends Controller
                 $non_metro_upload_count = $non_metro_count;
                 $new_wallet = $x;
             }else{
-                $non_metro_upload_count = $new_wallet/$non_metro_charge;
+                $non_metro_upload_count = floor($new_wallet/$non_metro_charge);
                 $new_wallet = $new_wallet%$non_metro_charge;
+                $non_metro_rows = array_slice($non_metro_rows,0,$non_metro_upload_count);
             }
+        }else{
+            $non_metro_rows = [];
         }
+        
+        $total_charge = $metro_charge*$metro_upload_count + $non_metro_charge*$non_metro_upload_count;
         
         return view('NewAllocation.preview')
                 ->with('metro_rows',$metro_rows)
                 ->with('non_metro_rows',$non_metro_rows)
-                ->with('metro_upload_count',$metro_upload_count)
-                ->with('non_metro_upload_count',$non_metro_upload_count)
+                ->with('metro_upload_count',floor($metro_upload_count))
+                ->with('non_metro_upload_count',floor($non_metro_upload_count))
                 ->with('metro_charge',$metro_charge)
                 ->with('non_metro_charge',$non_metro_charge)
-                ->with('new_wallet',$new_wallet);
+                ->with('new_wallet',$new_wallet)
+                ->with('wallet',$wallet)
+                ->with('project_type',$project_type)
+                ->with('total_charge',$total_charge)
+                ->with('client_id',$client_id)
+                ->with('client_type',$client_type);
     }
-    
-    
-    
-    
-    public function uploadExcel_old(){
-        $request->validate([
-                         'file' => 'required|mimes:xlsx,csv',  
-                       ]);
-             $file = $request->file('file');
-             $data = Excel::toCollection(null, $file);  
-             $rows = $data->first(); 
-            
-            
-
-            $client =  session('session_client_details');
-            
-            if($client && $client->status==2){
-                return redirect()->route('client_login');
-            }
-            $client_type = $client->payment_preference; // prepaid = 1; postpaid = 2;
-            if($client_type==1&&$client->wallet<=0){
-                return redirect()->back()->with('error','Insufficient blanace,please recharge yor account!');
-            }
-            
-            if($client_type==1){
-                $charges = DB::table('client_packages')->where('client_id',$client->id)->get();
-                
-                  $address_m = 0;
-                  $address_nm = 0;
-                  $site_m = 0;
-                  $site_nm = 0;
-                  $digital = 0;
-                  
-                foreach ($charges as $charge){
-                    if($charge->project_type==1&&$charge->metro_status==1){
-                        $address_m = $charge->amount;
-                    }elseif($charge->project_type==1&&$charge->metro_status==2){
-                        $address_nm = $charge->amount;
-                    }elseif($charge->project_type==2&&$charge->metro_status==1){
-                        $site_m = $charge->amount;
-                    }elseif($charge->project_type==2&&$charge->metro_status==2){
-                        $site_nm = $charge->amount;
-                    }else{
-                        $digital = $charge->amount;
-                    }
-                }
-                
-            }
-            
-    }
-    
     
     
 }
