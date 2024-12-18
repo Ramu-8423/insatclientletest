@@ -12,7 +12,7 @@ class ReportPdfController    extends Controller
 {
 
      
-    public function addressreportpdf(? string $case_id){ 
+    public function addressreportpdf(? string $report_id){ 
         
         $details = DB::table('v_report_submitted_addre')
         ->leftJoin('case_details', 'v_report_submitted_addre.case_id', '=', 'case_details.case_id')
@@ -49,8 +49,7 @@ class ReportPdfController    extends Controller
             'vendors.name as v_field_agent_name',
             'vendors.signature as v_signature'
         )
-        ->whereIn('v_report_submitted_addre.case_status',[0,2])
-        ->where('v_report_submitted_addre.case_id',$case_id)
+        ->where('v_report_submitted_addre.id',$report_id)
         ->first();
         
         
@@ -60,7 +59,7 @@ class ReportPdfController    extends Controller
     
     
     
-  public function sitereportpdf(?string $case_id){
+  public function sitereportpdf(?string $report_id){
     
         $details = DB::table('v_site_report_sub')
         ->leftJoin('case_details', 'v_site_report_sub.case_id', '=', 'case_details.case_id')
@@ -123,10 +122,8 @@ class ReportPdfController    extends Controller
             'vendors.signature as signature'
        
         )
-        ->whereIn('v_site_report_sub.case_status',[0,2])
-        ->where('v_site_report_sub.case_id',$case_id)
+        ->where('v_site_report_sub.id',$report_id)
         ->first();
-    
     
        return view('report_pdf.sitereport')->with('details',$details);
     }

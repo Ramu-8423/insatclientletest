@@ -47,24 +47,24 @@ class DashboardController extends Controller
                $case_id = $request->case_id;
                $v_id = $request->v_id;
                $reopen_remark = $request->reopen_remark;
-               
-               $allocated_table = DB::table('case_allocated')->where('case_id',$case_id)
-                                   ->where('v_id',$v_id)
-                                   ->where('case_status',8)
-                                   ->value('action_remark');
-                 $action_remark = json_decode($allocated_table,true)??[];       
-                $action_remark['reopen'] = ['reopen_remark'=>$reopen_remark,'date'=>$date];
-               
+
                $track_details = DB::table('case_details')->select('project_type','track_status')->where('case_id',$case_id)->first();
                $track_status = json_decode($track_details->track_status,true)??[];
-               $track_status[] = ['status'=>19,'date'=>$date,'reopen_remark'=>$reopen_remark];
+               $track_status[] = ['status'=>5,'date'=>$date,'reopen_remark'=>$reopen_remark];
                $project_type = $track_details->project_type;
                
               
                $a  = DB::table('case_details')->where('case_id',$case_id)->update(['track_status'=>json_encode($track_status)]);
                $c = DB::table('case_allocated')->where('case_id',$case_id)
                            ->where('v_id',$v_id)->where('case_status',8)
-                           ->update(['case_status'=>19,'action_remark'=>json_encode($action_remark)]);
+                           ->update(['reopen_status'=>1,'reopen_date'=>$date]);
+                           
+              if($project_type==1||$project_type==3){
+                  $b = DB::table('v_report_submitted_addre')->where('')
+              }else{
+                  
+              }               
+                           
                
                if($a&&$c){
                     return redirect()->back()->with('success','Successfully marked for reopen..');

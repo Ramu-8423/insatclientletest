@@ -74,7 +74,8 @@ button.login-btn {
         <div class="col-lg-6 d-flex align-items-center justify-content-center right-side">
             <div class="form-2-wrapper">
                 <div class="logo text-center">
-                    <img src="{{asset('images/green_check.png')}}" alt="Cover Image" height="100" width="100" style="border-radius: 50%;">
+                    <img src="{{ env('CLIENT_URL') .'images/locate.jpeg'}}" alt="Cover Image" 
+                    style="object-fit: contain; height:170px; width: 150px;">
                 </div>
                 <h2 class="text-center mb-4">Sign Into Your Account</h2>
                 <form class="register-form" id="login-form">

@@ -331,9 +331,9 @@
                                                     <td colspan="6">
                                                         <a href="
                                                                 @if($data->project_type == 1)
-                                                                    {{ route('addressreportpdf',$data->case_id) }}
+                                                                    {{ route('addressreportpdf',$item['report_id']) }}
                                                                 @elseif($data->project_type == 2)
-                                                                    {{ route('sitereportpdf', $data->case_id) }}
+                                                                    {{ route('sitereportpdf', $item['report_id']) }}
                                                                 @else
                                                                     #
                                                                 @endif
@@ -355,7 +355,6 @@
                                                 </tr> 
                                                
                                                
-                                               
                                                 @elseif($item['status']==8)
                                                
                                                 <tr>
@@ -364,9 +363,9 @@
                                                     <td colspan="2">
                                                        <a href="
                                                                 @if($data->project_type == 1)
-                                                                    {{ route('addressreportpdf',$data->case_id) }}
+                                                                    {{ route('addressreportpdf',$item['report_id']) }}
                                                                 @elseif($data->project_type == 2)
-                                                                    {{ route('sitereportpdf', $data->case_id) }}
+                                                                    {{ route('sitereportpdf', $item['report_id']) }}
                                                                 @else
                                                                     #
                                                                 @endif
