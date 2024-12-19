@@ -301,11 +301,11 @@
                                                 
                                                  <tr>
                                                     <th colspan="2">Re Open Date</th>
-                                                    <td colspan="10"> </td>
+                                                    <td colspan="10">{{$item['date']}}</td>
                                                 </tr> 
                                                  <tr>
                                                     <th colspan="2">Remark</th>
-                                                    <td colspan="10"> </td>
+                                                    <td colspan="10">{{$item['reopen_remark']}}</td>
                                                 </tr> 
                                                 
                                                 

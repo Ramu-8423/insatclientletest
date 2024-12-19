@@ -30,8 +30,17 @@ class DashboardController extends Controller
                $a  = DB::table('case_details')->where('case_id',$case_id)->update(['track_status'=>json_encode($track_status)]);
                $c = DB::table('case_allocated')->where('case_id',$case_id)
                            ->where('v_id',$v_id)->where('case_status',8)
-                           ->update(['case_status'=>18]);
-               
+                           ->update(['rejected_status'=>1,'rejected_date'=>$date]);
+                $project_type = $track_details->project_type;
+                if($project_type==1||$project_type==3){
+                  $b = DB::table('v_report_submitted_addre')->where('case_id',$case_id)->where('v_id',$v_id)->where('case_status',2)->update([
+                      'case_status'=>5
+                      ]);
+              }else{
+                  $b = DB::table('v_site_report_sub')->where('case_id',$case_id)->where('v_id',$v_id)->where('case_status',2)->update([
+                      'case_status'=>5
+                      ]);
+              }  
                if($a&&$c){
                     return redirect()->back()->with('success','Successfully marked as rejected..');
                }else{
@@ -60,13 +69,16 @@ class DashboardController extends Controller
                            ->update(['reopen_status'=>1,'reopen_date'=>$date]);
                            
               if($project_type==1||$project_type==3){
-                  $b = DB::table('v_report_submitted_addre')->where('')
+                  $b = DB::table('v_report_submitted_addre')->where('case_id',$case_id)->where('v_id',$v_id)->where('case_status',2)->update([
+                      'case_status'=>4
+                      ]);
               }else{
-                  
+                  $b = DB::table('v_site_report_sub')->where('case_id',$case_id)->where('v_id',$v_id)->where('case_status',2)->update([
+                      'case_status'=>4
+                      ]);
               }               
                            
-               
-               if($a&&$c){
+               if($a&&$c&&$b){
                     return redirect()->back()->with('success','Successfully marked for reopen..');
                }else{
                    return redirect()->back()->with('error','Something went wrong!');
@@ -243,10 +255,16 @@ class DashboardController extends Controller
             // Apply filters based on the status ID
             if ($id == 1) {
                 $query->whereNotIn('case_allocated.case_status', [2, 8]);
-            }elseif(in_array($id, [19,5])){
-                $query->whereIn('case_allocated.case_status', [19,5]);
-            }elseif (in_array($id, [2,18,8])) {
-                $query->where('case_allocated.case_status', $id);
+            }elseif($id==2){
+                 $query->where('case_allocated.case_status', 2);
+            }elseif($id==5){
+                $query->where('case_allocated.reopen_status', 1);
+            }elseif($id==18){
+                $query->where('case_allocated.rejected_status', 1);
+            }elseif ($id==8){
+                  $query->where('case_allocated.case_status', 8)
+                  ->where('case_allocated.rejected_status','!=',1)
+                  ->where('case_allocated.reopen_status','!=',1);
             }
         
             // Apply additional filters if they are set
@@ -277,9 +295,14 @@ class DashboardController extends Controller
                     COUNT(CASE WHEN case_details.approved_status IN (0,1,2,3,4) THEN 1 END) AS total_case,
                     COUNT(CASE WHEN case_allocated.case_status NOT IN (2,8) THEN 1 END) AS pending_case,
                     COUNT(CASE WHEN case_allocated.case_status = 2 THEN 1 END) AS insuff_case,
-                    COUNT(CASE WHEN case_allocated.case_status = 18 THEN 1 END) AS rejected_case,
-                    COUNT(CASE WHEN case_allocated.case_status in (19,5) THEN 1 END) AS re_open_case,
-                    COUNT(CASE WHEN case_allocated.case_status = 8 THEN 1 END) AS completed_case
+                    COUNT(CASE WHEN case_allocated.rejected_status = 1 THEN 1 END) AS rejected_case,
+                    COUNT(CASE WHEN case_allocated.reopen_status = 1  THEN 1 END) AS re_open_case,
+                    COUNT(CASE 
+                            WHEN case_allocated.case_status = 8 
+                                 AND case_allocated.rejected_status != 1 
+                                 AND case_allocated.reopen_status != 1 
+                            THEN 1 
+                        END) AS completed_case
                 ")
                 ->where('case_details.client_id',$client_id)
                 ->first();
