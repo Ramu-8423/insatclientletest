@@ -59,7 +59,7 @@ class DashboardController extends Controller
 
                $track_details = DB::table('case_details')->select('project_type','track_status')->where('case_id',$case_id)->first();
                $track_status = json_decode($track_details->track_status,true)??[];
-               $track_status[] = ['status'=>5,'date'=>$date,'reopen_remark'=>$reopen_remark];
+               $track_status[] = ['status'=>19,'date'=>$date,'reopen_remark'=>$reopen_remark];
                $project_type = $track_details->project_type;
                
               
@@ -181,6 +181,7 @@ class DashboardController extends Controller
                 'case_details.track_status as track_status',
                 
                 'case_allocated.reopen_status as reopen_status',
+                'case_allocated.rejected_status as rejected_status',
                 'case_allocated.insuff_status as insuff_status',
                 'case_allocated.overdue_status as overdue_status',
                 'case_allocated.v_id as v_id',
@@ -193,6 +194,7 @@ class DashboardController extends Controller
                 'client_details.payment_preference as payment_preference'
                )
                ->where('case_details.case_id',$id)
+               ->where('case_allocated.status','!=',1)
                ->first();
              
               return view('case_tracking')->with('data', $data);
@@ -283,6 +285,7 @@ class DashboardController extends Controller
             // Paginate the results
             $perPage = 10;
             $cases = $query->where('case_details.client_id', $client_id)
+                           ->where('case_allocated.status','!=',1)
                            ->orderBy('case_details.case_id', 'desc')
                            ->paginate($perPage);
                 
@@ -295,12 +298,19 @@ class DashboardController extends Controller
                     COUNT(CASE WHEN case_details.approved_status IN (0,1,2,3,4) THEN 1 END) AS total_case,
                     COUNT(CASE WHEN case_allocated.case_status NOT IN (2,8) THEN 1 END) AS pending_case,
                     COUNT(CASE WHEN case_allocated.case_status = 2 THEN 1 END) AS insuff_case,
-                    COUNT(CASE WHEN case_allocated.rejected_status = 1 THEN 1 END) AS rejected_case,
+                    
+                    COUNT(CASE 
+                            WHEN case_allocated.rejected_status = 1
+                                 AND case_allocated.status != 1 
+                            THEN 1 
+                        END) AS rejected_case,
+                    
                     COUNT(CASE WHEN case_allocated.reopen_status = 1  THEN 1 END) AS re_open_case,
                     COUNT(CASE 
                             WHEN case_allocated.case_status = 8 
                                  AND case_allocated.rejected_status != 1 
                                  AND case_allocated.reopen_status != 1 
+                                 AND case_allocated.status != 1 
                             THEN 1 
                         END) AS completed_case
                 ")

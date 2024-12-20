@@ -228,7 +228,7 @@
                                         @elseif($item['status']==4)
                                          Rejected By Vendor
                                         @elseif($item['status']==5)
-                                         Case Reopen
+                                         Case Reopend
                                         @elseif($item['status']==6)
                                          Overdue Case
                                         @elseif($item['status']==7)
@@ -251,6 +251,10 @@
                                           Rejected By client
                                         @elseif($item['status']==19)
                                           Case re-opened by client
+                                        @elseif($item['status']==20)
+                                         Case Re-Assigned
+                                         @else
+                                         Unknown Status
                                         @endif
                                     </b></span>
                                 </a>
@@ -374,10 +378,14 @@
                                                     </a>
                                                     </td>
                                                     <td colspan="3">
-                                                        <button data-toggle="modal" data-target="#reject-modal" class="btn btn-danger btn-block waves-effect waves-light" {{$data->case_status==8?'':'disabled'}}>Reject</button>
+                                                        <button data-toggle="modal" data-target="#reject-modal" class="btn btn-danger btn-block waves-effect waves-light" 
+                                                        {{$data->rejected_status==0&&$data->reopen_status==0?'':'disabled'}}
+                                                        >Reject</button>
                                                     </td>
                                                     <td colspan="3">
-                                                        <button data-toggle="modal" data-target="#complete-modal" class="btn btn-success btn-block waves-effect waves-light" {{$data->case_status==8?'':'disabled'}}>Re Open</button>
+                                                        <button data-toggle="modal" data-target="#complete-modal" class="btn btn-success btn-block waves-effect waves-light" 
+                                                        {{$data->rejected_status==0&&$data->reopen_status==0?'':'disabled'}}
+                                                        >Re Open</button>
                                                     </td>
                                                 </tr> 
                                                 
@@ -455,14 +463,18 @@
                                                         <th colspan="2">Remark</th>
                                                         <td colspan="4">{{$item['reopen_remark']}}</td>
                                                     </tr> 
+                                                 @elseif($item['status']==20)
+                                                     <tr>
+                                                        <th colspan="2">Date</th>
+                                                        <td colspan="4">{{$item['date']}}</td>
+                                                        <th colspan="2">Vendor Id</th>
+                                                        <td colspan="4">{{$item['v_id']}}</td>
+                                                    </tr> 
                                                 @else
-                                                
                                                 <tr>
                                                     <td colspan="12">Unknown status</td>
                                                 </tr> 
-
                                                 @endif
-                                                
                                             </tbody>
                                          </table>               
     
