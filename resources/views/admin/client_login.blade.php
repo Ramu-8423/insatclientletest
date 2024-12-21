@@ -112,16 +112,29 @@ button.login-btn {
 <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 <script>
-    $(document).ready(function() {
+    $(document).ready(function () {
         var progress_status;
         var remark_status;
-        
-        $('#generate-otp').on('click', function() {
+        var final_status;
+
+        // Utility functions to manage error messages
+        function showError(message) {
+            $('#error-message').hide().text(message).show();
+        }
+
+        function hideError() {
+            $('#error-message').hide();
+        }
+
+        $('#generate-otp').on('click', function () {
             var referenceId = $('#reference-id').val();
             var password = $('#password').val();
-            
+
+            // Hide any existing error message
+            hideError();
+
             if (referenceId && password) {
-                // Send referenceId and password to the server to verify and get the mobile number
+                // Verify credentials and retrieve mobile number
                 $.ajax({
                     url: '/api/verify_client_credentials', // Your endpoint for verifying credentials
                     method: 'POST',
@@ -129,92 +142,104 @@ button.login-btn {
                         referenceId: referenceId,
                         password: password
                     },
-                    success: function(response) {
+                    success: function (response) {
                         if (response.status == 200) {
                             var mobile = response.mobile;
-                            var status = response.status;
-                            //console.log(mobile,status);
+
                             // Send OTP to the mobile number
                             $.ajax({
                                 url: `https://otp.fctechteam.org/send_otp.php?mode=test&digit=4&mobile=${mobile}`,
                                 method: 'GET',
-                                success: function(otpResponse) {
+                                success: function (otpResponse) {
                                     if (otpResponse.error == 200) {
-                                       // console.log(JSON.stringify(otpResponse));
                                         $('#otp-section').show();
                                         $('#generate-otp').hide();
                                     } else {
-                                         console.log(JSON.stringify(otpResponse));
-                                        $('#error-message').text('Failed to send OTP').show();
+                                        showError('Failed to send OTP');
                                     }
+                                },
+                                error: function () {
+                                    showError('An error occurred while sending OTP');
                                 }
                             });
                         } else {
-                            $('#error-message').text('Invalid reference ID or password').show();
+                            showError('Invalid reference ID or password');
                         }
+                    },
+                    error: function () {
+                        showError('An error occurred while verifying credentials');
                     }
                 });
             } else {
-                $('#error-message').text('Please enter both reference ID and password').show();
+                showError('Please enter both reference ID and password');
             }
         });
 
-        $('#verify-otp').on('click', function() {
+        $('#verify-otp').on('click', function () {
             var otp = $('#otp').val();
             var referenceId = $('#reference-id').val();
 
+            // Hide any existing error message
+            hideError();
+
             if (otp) {
-                // Get the mobile number from the server again or store it in a variable
+                // Retrieve mobile number using reference ID
                 $.ajax({
-                    url: '/api/get_client_mobile', // Your endpoint to get mobile number using referenceId
+                    url: '/api/get_client_mobile', // Your endpoint to get mobile number
                     method: 'POST',
                     data: {
                         referenceId: referenceId
                     },
-                    success: function(response) {
-                      //  console.log(JSON.stringify(response));
-                        if (response.status ==200) {
+                    success: function (response) {
+                        if (response.status == 200) {
                             var mobile = response.mobile;
-                             progress_status = response.progress_status;
-                              remark_status = response.remark_status;
-                              final_status = response.final_status;
-                         console.log(`mobile is ${mobile}  progress_status is ${progress_status} remark_status is ${remark_status}`);
+                            progress_status = response.progress_status;
+                            remark_status = response.remark_status;
+                            final_status = response.final_status;
+
+                            console.log(`Mobile: ${mobile}, Progress Status: ${progress_status}, Remark Status: ${remark_status}`);
+
                             // Verify OTP
                             $.ajax({
                                 url: `https://otp.fctechteam.org/verifyotp.php?mobile=${mobile}&otp=${otp}`,
                                 method: 'GET',
-                                success: function(otpVerifyResponse) {
-                                   // console.log(JSON.stringify(otpVerifyResponse));
+                                success: function (otpVerifyResponse) {
                                     if (otpVerifyResponse.error == 200) {
                                         $('#login-section').show();
                                         $('#verify-otp').hide();
                                     } else {
-                                        $('#error-message').text('Invalid OTP').show();
+                                        showError('Invalid OTP');
                                     }
+                                },
+                                error: function () {
+                                    showError('An error occurred while verifying OTP');
                                 }
                             });
                         } else {
-                            $('#error-message').text('Failed to retrieve mobile number').show();
+                            showError('Failed to retrieve mobile number');
                         }
+                    },
+                    error: function () {
+                        showError('An error occurred while retrieving mobile number');
                     }
                 });
             } else {
-                $('#error-message').text('Please enter the OTP').show();
+                showError('Please enter the OTP');
             }
         });
-        
-            $('#login-form').on('submit', function(e) {
-                    let redirect_url;
-                    
-            if (final_status == 1){
-                    redirect_url = "{{ route('dashboard', 0) }}";
-            }else{
-                     redirect_url = "{{ route('client_onboarding') }}"; 
-            }
-                e.preventDefault();
-                window.location.href = redirect_url;
-            });
+
+        $('#login-form').on('submit', function (e) {
+            e.preventDefault();
+
+            // Redirect based on the final status
+            let redirect_url = final_status == 1 
+                ? "{{ route('dashboard', 0) }}" 
+                : "{{ route('client_onboarding') }}";
+
+            window.location.href = redirect_url;
+        });
     });
 </script>
+
 </body>
 </html>

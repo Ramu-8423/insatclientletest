@@ -50,11 +50,7 @@
                   <li class="sidebar-item">
                        <a class="sidebar-link waves-effect waves-dark sidebar-link" href="{{ route('invoice',1)}}" aria-expanded="false"><i class="mdi mdi-wallet"></i><span class="hide-menu">Invoice </span></a>
                  </li> 
-                 
-                 
-                  <li class="sidebar-item">
-                       <a class="sidebar-link waves-effect waves-dark sidebar-link" href="{{ route('view_excel')}}" aria-expanded="false"><i class="mdi mdi-wallet"></i><span class="hide-menu">Excel Upload </span></a>
-                 </li> 
+
                   @endif
                   
                    @if($login_row->final_status == 1)

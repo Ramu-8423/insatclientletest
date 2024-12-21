@@ -25,4 +25,31 @@ class WalletController extends Controller
     }
     
     
+public function rechargeAccount(Request $request){
+    date_default_timezone_set('Asia/Kolkata');
+    $date = date('Y-m-d H:i:s');
+    $clientId = session('client_login_id'); 
+
+    if (!$clientId) {
+        return redirect()->back()->with('error', 'Client not found');
+    }
+    $request->validate([
+        'amount' => 'required|numeric|min:1'
+    ]);
+    $client = DB::table('client_details')->where('id', $clientId)->first();
+    if (!$client) {
+        return redirect()->back()->with('error', 'Client details not found');
+    }
+    $newBalance = $client->wallet + $request->amount;
+    DB::table('client_details')->where('id', $clientId)->update(['wallet' => $newBalance]);
+    DB::table('client_transaction')->insert([
+        'client_id' => $clientId,
+        'amount' => $request->amount,
+        'type' =>1,
+        'status'=>1,
+        'created_at' =>$date
+    ]);
+    return redirect()->back()->with('success', 'Account recharged successfully. New Balance: ₹' . $newBalance);
+}
+
 }

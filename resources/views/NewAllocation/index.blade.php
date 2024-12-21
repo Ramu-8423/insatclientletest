@@ -51,9 +51,20 @@
                                                 <label for="projectSelect" style="display: block;">Select Project</label>
                                                 <select name="project_type" id="projectSelect" class="form-control" required>
                                                     <option value="">Select a project</option>
-                                                    <option value="1">Address Verification</option>
-                                                    <option value="2">Site Investigation</option>
-                                                    <option value="3">Digital Address Verification</option>
+                                                    
+                                                    @foreach($selected_p as $p)
+                                                    <option value="{{(int)$p}}">
+                                                       @if($p==1)
+                                                         Address Verification
+                                                       @elseif($p==2)
+                                                         Site Investigation
+                                                       @elseif($p==3)
+                                                         Digital Address Verification
+                                                       @else
+                                                         Unknown Type
+                                                       @endif
+                                                    </option>
+                                                    @endforeach
                                                 </select>
                                             </div>
                                             

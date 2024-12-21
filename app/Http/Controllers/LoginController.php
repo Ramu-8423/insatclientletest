@@ -48,47 +48,6 @@ class LoginController extends Controller
        return redirect()->route('dashboard')->with('success', 'User status updated successfully!');
     }
 
-public function rechargeAccount(Request $request)
-{
-    
-    $clientId = session('client_id'); 
-
-    if (!$clientId) {
-        return redirect()->back()->with('error', 'Client not found');
-    }
-
-
-    $request->validate([
-        'amount' => 'required|numeric|min:1'
-    ]);
-
-
-    $client = DB::table('client_details')->where('id', $clientId)->first();
-    
-    if (!$client) {
-        return redirect()->back()->with('error', 'Client details not found');
-    }
-
-    
-    $newBalance = $client->wallet + $request->input('amount');
-
-    
-    DB::table('client_details')->where('id', $clientId)->update(['wallet' => $newBalance]);
-
-
-    DB::table('transactions')->insert([
-        'client_id' => $clientId,
-        'amount' => $request->input('amount'),
-        'type' => 'credit',
-        'created_at' => now(),
-        'updated_at' => now(),
-    ]);
-
-    
-    return redirect()->back()->with('success', 'Account recharged successfully. New Balance: ₹' . $newBalance);
-}
-
-
 public function showBalancePage()
 {
     $clientId = session('client_id'); 

@@ -20,6 +20,7 @@ class ClientPublicController extends Controller
     public function client_login(){
       return view('admin.client_login');  
     }
+    
      public function mark_as_completed(? string $id){
        $up = DB::table('client_details')->where('id',$id)->update([
              'progress_status'=>5

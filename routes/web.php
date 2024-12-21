@@ -9,7 +9,7 @@ use App\Http\Controllers\AllocationController;
 use App\Http\Controllers\WalletController;
 use App\Http\Controllers\ReportPdf\ReportPdfController;
 use App\Http\Controllers\InvoiceController;
-use App\Http\Controllers\ExcelController;
+
 
 Route::get('/socket',function(){
     return view('websocket.socket');
@@ -51,7 +51,7 @@ Route::get('/thank-you', [ClientPublicController::class, 'thank_you'])->name('th
 Route::post('/fileupload', [ClientPublicController::class, 'fileupload'])->name('fileupload');
 
 
-Route::post('/recharge', [LoginController::class, 'rechargeAccount'])->name('recharge.account');
+Route::post('/recharge', [WalletController::class, 'rechargeAccount'])->name('recharge.account');
 
 
 //Route::get('/userlist', [LoginController::class, 'showUserList'])->name('user.list');
@@ -119,9 +119,6 @@ Route::get('/download_report/{client_id}/{project_type}/{case_id}', [DashboardCo
 
 Route::get('/addressreportpdf/{case_id}',[ReportPdfController::class, 'addressreportpdf'])->name('addressreportpdf');
 Route::get('/sitereportpdf/{case_id}',[ReportPdfController::class, 'sitereportpdf'])->name('sitereportpdf');
-
-
-Route::get('/view_excel',[ExcelController::class,'view_excel'])->name('view_excel');
 
 Route::post('/excel_upload', [AllocationController::class, 'excel_upload'])->name('excel_upload');
 Route::any('/newallocation', [AllocationController::class, 'newallocation'])->name('newallocation');

@@ -34,6 +34,12 @@ class AllocationController extends Controller
         $projectType = $request->project_type;
         $client_id = $request->client_id;
         $client_type = $request->client_type;
+        
+        $case_time_line = DB::table('client_details')->where('id',$client_id)->value('a_case_timeline')??20;
+        $created_at = $date; //case rcv date
+        $case_end_date = date('Y-m-d H:i:s', strtotime($date . " + $case_time_line days"));
+        
+        
         //insert metro and non metro status in case-details table to manage charge in future.
         
           $insert_row = [];
@@ -56,7 +62,9 @@ class AllocationController extends Controller
                     'period_of_stay_to'=>$value[13],
                     'metro_status' =>1,
                     'project_type'=>$projectType,
-                    'client_id'=>$client_id
+                    'client_id'=>$client_id,
+                    'created_at'=>$created_at,
+                    'case_end_date'=>$case_end_date
                     ];
             }
             foreach ($nonMetroRows as $value){
@@ -77,7 +85,9 @@ class AllocationController extends Controller
                     'period_of_stay_to'=>$value[13],
                     'metro_status' =>2,
                     'project_type'=>$projectType,
-                    'client_id'=>$client_id
+                    'client_id'=>$client_id,
+                    'created_at'=>$created_at,
+                    'case_end_date'=>$case_end_date
                     ];
             }
             
@@ -102,7 +112,9 @@ class AllocationController extends Controller
                     'contact_person_desi'=>$value[15],
                     'metro_status' =>1,
                     'project_type'=>$projectType,
-                    'client_id'=>$client_id
+                    'client_id'=>$client_id,
+                    'created_at'=>$created_at,
+                    'case_end_date'=>$case_end_date
                     ];
             }
             foreach ($nonMetroRows as $value){
@@ -125,7 +137,9 @@ class AllocationController extends Controller
                     'contact_person_desi'=>$value[15],
                     'metro_status' =>2,
                     'project_type'=>$projectType,
-                    'client_id'=>$client_id
+                    'client_id'=>$client_id,
+                    'created_at'=>$created_at,
+                    'case_end_date'=>$case_end_date
                     ];
             }
         }
@@ -151,6 +165,34 @@ class AllocationController extends Controller
             'case_count'=>$nonMetroUploadCount+$metroUploadCount,
             'created_at'=>$date
             ]);
+            
+            if($client_type==1){
+                  $transaction[] = [
+                                     'client_id'=>$client_id,
+                                     'amount'=>$metroCharge*$metroUploadCount,
+                                     'type'=>2,
+                                     'status'=>1,
+                                     'case_count'=>$metroUploadCount,
+                                     'project_type'=>$projectType,
+                                     'metro_status'=>1,
+                                     'created_at'=>$date
+                                 ];  
+                     
+                     if($projectType != 3){
+                            $transaction[] = [
+                                                 'client_id'=>$client_id,
+                                                 'amount'=>$nonMetroCharge*$nonMetroUploadCount,
+                                                 'type'=>2,
+                                                 'status'=>1,
+                                                 'case_count'=>$nonMetroUploadCount,
+                                                 'project_type'=>$projectType,
+                                                 'metro_status'=>2,
+                                                 'created_at'=>$date
+                                             ];  
+                     } 
+                    DB::table('client_transaction')->insert($transaction);  
+            }
+            
         return redirect()->route('newallocation')->with('success','Case Uploaded successfully');
     }
     
@@ -160,8 +202,10 @@ class AllocationController extends Controller
       public function newallocation(){
              $client_id = session('client_login_id');
              $perpage = 10;
+             $selected_veri = DB::table('client_details')->where('id',$client_id)->value('project_type');
+             $selected_p = json_decode($selected_veri);
              $cases = DB::table('case_upload_count')->where('client_id',$client_id)->orderBy('id','desc')->paginate($perpage);
-             return view('NewAllocation.index')->with('cases',$cases)->with('client_id',$client_id);
+             return view('NewAllocation.index')->with('cases',$cases)->with('client_id',$client_id)->with('selected_p',$selected_p);
      }
      
      

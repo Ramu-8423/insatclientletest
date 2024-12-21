@@ -6,10 +6,21 @@
         <h1>Transactions History</h1>
 
         @if (session('success'))
-            <div class="alert alert-success">{{ session('success') }}</div>
+            <div class="alert alert-success alert-dismissible fade show" role="alert">
+               {{ session('success') }}
+              <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            
         @endif
         @if (session('error'))
-            <div class="alert alert-danger">{{ session('error') }}</div>
+             <div class="alert alert-success alert-dismissible fade show" role="alert">
+               {{ session('error') }}
+              <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
         @endif
         
         <div class="row">
@@ -40,7 +51,9 @@
                                                 <label for="amount">Enter Amount:</label>
                                                 <input type="number" class="form-control" name="amount" required>
                                             </div>
-                                            <button type="submit" class="button-91 small-button">Recharge</button>
+                                            <div class="d-flex justify-content-end">
+                                            <button type="submit" class="btn btn-sm btn-info">Recharge</button>
+                                            </div>
                                         </form>
                                     </div>
                                 </div>
@@ -69,6 +82,9 @@
                                         <th scope="col"><strong>Amount</strong></th>
                                         <th scope="col"><strong>Type</strong></th>
                                         <th scope="col"><strong>Status</strong></th>
+                                        <th scope="col"><strong>case_count</strong></th>
+                                        <th scope="col"><strong>project_type</strong></th>
+                                        <th scope="col"><strong>metro_status</strong></th>
                                         <th scope="col"><strong>Date</strong></th>
                                     </tr>
                                 </thead>
@@ -79,6 +95,13 @@
                                         <td>{{$transaction->amount}}</td>
                                         <td>{{$transaction->type==1?'Credited':'Debited'}}</td>
                                         <td>{{$transaction->status==0?'Pending':($transaction->status==1?'Success':'Failed')}}</td>
+                                         <td>{{$transaction->case_count != 0?$transaction->case_count:'N/A'}}</td>
+                                        <td>{{
+                                        $transaction->project_type==1?'Address Verification':($transaction->project_type==2?'Site Investigation':($transaction->project_type==3?'Digital Address Verification':'N/A'))
+                                        }}</td>
+                                        <td>
+                                          {{$transaction->metro_status==1?'Metor City':($transaction->metro_status==2?'Non Metro City':'N/A')}}  
+                                        </td>
                                         <td>{{$transaction->created_at}}</td>
                                     </tr>
                                     @endforeach

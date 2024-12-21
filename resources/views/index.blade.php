@@ -31,6 +31,7 @@
                     </div>
                 </div>
             </div>
+            
             <!-- Column -->
             <div class="col-md-6 col-lg-2 col-xlg-3">
                 <div class="card card-hover">
@@ -117,6 +118,7 @@
                             All Cases <b style="color:{{ $status_id == 0 ? '#a400ff;font-size:1rem;' : '#4c5d45' }}">({{$totals->total_case}})</b>
                         </a>
                     </li>
+                    
                     <li class="col-6 col-md-2-4 col-lg-2">
                         <a href="{{ route('dashboard', 1) }}" class="btn btn-link fw-bold-4 {{ $status_id == 1 ? 'active-link' : '' }}">
                             Pending Cases <b style="color:{{ $status_id == 1 ? '#a400ff;font-size:1rem;' : '#4c5d45' }}">({{$totals->pending_case}})</b>

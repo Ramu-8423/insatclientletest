@@ -257,6 +257,9 @@ class DashboardController extends Controller
             // Apply filters based on the status ID
             if ($id == 1) {
                 $query->whereNotIn('case_allocated.case_status', [2, 8]);
+            }elseif($id==101){
+                $query->where('case_details.approved_status', 0);
+            }elseif($id==5){
             }elseif($id==2){
                  $query->where('case_allocated.case_status', 2);
             }elseif($id==5){
@@ -289,16 +292,12 @@ class DashboardController extends Controller
                            ->orderBy('case_details.case_id', 'desc')
                            ->paginate($perPage);
                 
-                
-                  
-                           
              $totals = DB::table('case_details')
                 ->leftJoin('case_allocated', 'case_details.case_id', '=', 'case_allocated.case_id')
                 ->selectRaw("
                     COUNT(CASE WHEN case_details.approved_status IN (0,1,2,3,4) THEN 1 END) AS total_case,
                     COUNT(CASE WHEN case_allocated.case_status NOT IN (2,8) THEN 1 END) AS pending_case,
                     COUNT(CASE WHEN case_allocated.case_status = 2 THEN 1 END) AS insuff_case,
-                    
                     COUNT(CASE 
                             WHEN case_allocated.rejected_status = 1
                                  AND case_allocated.status != 1 
