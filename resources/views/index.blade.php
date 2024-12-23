@@ -121,7 +121,7 @@
                     
                     <li class="col-6 col-md-2-4 col-lg-2">
                         <a href="{{ route('dashboard', 1) }}" class="btn btn-link fw-bold-4 {{ $status_id == 1 ? 'active-link' : '' }}">
-                            Pending Cases <b style="color:{{ $status_id == 1 ? '#a400ff;font-size:1rem;' : '#4c5d45' }}">({{$totals->pending_case}})</b>
+                            Pending Cases <b style="color:{{ $status_id == 1 ? '#a400ff;font-size:1rem;' : '#4c5d45' }}">({{$totals->pending_case + $pendings_count}})</b>
                         </a>
                     </li>
                     <li class="col-6 col-md-2-4 col-lg-2">
@@ -331,6 +331,46 @@
                                 
                             </tr>
                             @endforeach
+                            
+                            @if($status_id==1)
+                              @foreach($pendings as $pending)
+                              
+                             <tr>
+                                <td>{{ $case->case_id }}</td>
+                                <td>{{ $case->employee_id??'N/A'; }}</td>
+                                <td>{{ $case->location??'N/A'; }}</td>
+                                <td>{{ $case->project_type ==1?'Address Verification':'Site Investigation'}}</td>
+                                <td>{{ $case->pincode??'N/A'; }}</td>
+                                <td>Not Allocated</td>
+                                <td>{{ $case->candidate_name??'N/A'}}</td>
+                                <td>{{ $case->mobile??'N/A'}}</td>
+                                <td>{{ $case->email??'N/A'}}</td>
+                                <td>{{ $case->father_name??'N/A'}}</td>
+                                <td>{{ $case->mother_name??'N/A'}}</td>
+                                <td>{{ $case->address_type??'N/A'}}</td>
+                                <td>{{ $case->address??'N/A'}}</td>
+                                <td>{{ $case->city??'N/A'}}</td>
+                                <td>{{ $case->state??'N/A'}}</td>
+                                <td>{{ $case->period_of_stay_from??'N/A'}}</td>
+                                <td>{{ $case->period_of_stay_to??'N/A'}}</td>
+                                <td>{{ $case->contact_person_name??'N/A'}}</td>
+                                <td>{{ $case->contact_person_desi??'N/A'}}</td>
+                                <td>{{ $case->site_vendor_name??'N/A'}}</td>
+                                <td>{{ $case->gst_number??'N/A'}}</td>
+                                <td>{{ $case->pan_card_num??'N/A'}}</td>
+                                <td>{{ $case->created_at??'N/A'}}</td>
+                                <td>N/A</td>
+                                <td>N/A</td>
+                                <td>{{ $case->case_end_date??'N/A'}}</td>
+                                <td>N/A</td>
+                                @if($status_id==8)
+                                <td> N/A</td>
+                                @endif
+                            </tr>
+                            
+                              @endforeach
+                            @endif
+
                         </tbody>
                     </table>
 

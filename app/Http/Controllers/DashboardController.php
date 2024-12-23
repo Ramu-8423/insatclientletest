@@ -248,10 +248,16 @@ class DashboardController extends Controller
                     'case_details.created_at as created_at', 
                     'case_details.approved_status as approved_status',
                     
+                    'case_details.created_at as case_rcv_date',
+                    'case_details.case_end_date as end_date',
+                    
                     'case_allocated.case_status as case_status', 
                     'case_allocated.case_closer_date as case_closer_date', 
-                    'case_allocated.case_completed_date as case_completed_date', 
-                    'case_allocated.end_date as end_date'
+                    'case_allocated.case_completed_date as case_completed_date',
+                    'case_allocated.rejected_date as rejected_date',
+                    'case_allocated.insuff_date as insuff_date',
+                    'case_allocated.reopen_date as reopen_date'
+                    
                     );
         
             // Apply filters based on the status ID
@@ -315,9 +321,16 @@ class DashboardController extends Controller
                 ")
                 ->where('case_details.client_id',$client_id)
                 ->first();
+                
+                $pendings = [];
+                 $pendings_count = DB::table('case_details')->whereIn('approved_status',[0,2])->where('client_id',$client_id)->count();
                           
+                if($id==1){
+                  $pendings = DB::table('case_details')->whereIn('approved_status',[0,2])->where('client_id',$client_id)->get();
+                }          
+                    
             // Return the view with the cases and status ID
-            return view('index')->with('cases', $cases)->with('status_id', $id)->with('totals',$totals);
+            return view('index')->with('cases', $cases)->with('status_id', $id)->with('totals',$totals)->with('pendings',$pendings)->with('pendings_count',$pendings_count);
         }
 
     
