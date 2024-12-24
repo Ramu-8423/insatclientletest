@@ -92,14 +92,47 @@ class DashboardController extends Controller
                                 ->where('project_type', $project_type)
                                 ->first();
        $report_design = DB::table('verifications')->where('id',1)->first();  
-       $details = (object)['candidate_name'=>'Akash Kumar Prajapati'];
+      
+      $details = DB::table('v_report_submitted_addre')
+                       ->leftJoin('case_details','v_report_submitted_addre.case_id','=','case_details.case_id')
+                       ->leftJoin('vendors','v_report_submitted_addre.v_id','=','vendors.id')
+                       ->select(
+                           'case_details.candidate_name as candidate_name',
+                           'case_details.address as address',
+                           'case_details.father_name as father_name',
+                           'case_details.period_of_stay_from as period_of_stay_from',
+                           'case_details.period_of_stay_to as period_of_stay_to',
+                           'case_details.mobile as mobile',
+                           
+                           'v_report_submitted_addre.respondent_name as respondent_name',
+                           'v_report_submitted_addre.rel_with_candi as rel_with_candi',
+                           'v_report_submitted_addre.resp_c_num as resp_c_num',
+                           'v_report_submitted_addre.landmark as landmark',
+                           'v_report_submitted_addre.visited_date as visited_date',
+                           'v_report_submitted_addre.residence_status as residence_status',
+                           'v_report_submitted_addre.residence_type as residence_type',
+                           
+                           'v_report_submitted_addre.stay_period_form as stay_period_form',
+                           'v_report_submitted_addre.stay_period_to as stay_period_to',
+                           
+                           'v_report_submitted_addre.respondent_sign as respondent_sign',
+                           'v_report_submitted_addre.complete_remark as complete_remark',
+                           
+                           'vendors.name as v_name',
+                           'vendors.signature as v_signature'
+                           )
+                       ->where('v_report_submitted_addre.case_id','=',$case_id)
+                       ->where('v_report_submitted_addre.case_status','=',2)
+                       ->orderBy('v_report_submitted_addre.id','desc')
+                       ->first();
        
        // write query for case details
        
        return view('downloadLayout')
                ->with('selected_report',$selected_report)
                ->with('report_design',$report_design)
-               ->with('details',$details);
+               ->with('details',$details)
+               ->with('project_type',$project_type);
                
                /*
                project_type  layout_type  
@@ -141,7 +174,7 @@ class DashboardController extends Controller
              $b =   DB::table('case_allocated')->where('case_id',$case_id)
                                        ->where('v_id',$v_id)
                                        ->where('case_status',2)
-                                       ->update(['action_remark'=>json_encode($action_remark),'case_status'=>17,'insuff_status'=>0]);
+                                       ->update(['insuff_clear_date'=>$date,'insuff_clear_remark'=>$remark,'action_remark'=>json_encode($action_remark),'case_status'=>17,'insuff_status'=>0]);
                                        
              if($a&&$b){
                  return redirect()->back()->with('success','Insuff cleared..');
@@ -245,19 +278,17 @@ class DashboardController extends Controller
                     'case_details.site_vendor_name as site_vendor_name', 
                     'case_details.gst_number as gst_number', 
                     'case_details.pan_card_num as pan_card_num', 
-                    'case_details.created_at as created_at', 
                     'case_details.approved_status as approved_status',
-                    
+                    'case_allocated.case_status as case_status', 
+
                     'case_details.created_at as case_rcv_date',
                     'case_details.case_end_date as end_date',
-                    
-                    'case_allocated.case_status as case_status', 
+                    'case_allocated.created_at as allocation_date',
                     'case_allocated.case_closer_date as case_closer_date', 
                     'case_allocated.case_completed_date as case_completed_date',
                     'case_allocated.rejected_date as rejected_date',
                     'case_allocated.insuff_date as insuff_date',
                     'case_allocated.reopen_date as reopen_date'
-                    
                     );
         
             // Apply filters based on the status ID

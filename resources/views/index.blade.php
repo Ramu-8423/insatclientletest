@@ -38,7 +38,7 @@
                     
                     <div class="box bg-cyan text-center">
                         <h1 class="font-light text-white"><i class="fa fa-user m-b-5 font-16"></i></h1>
-                        <h5 class="text-white m-b-0 m-t-5">{{ $totals->pending_case }}</h5>
+                        <h5 class="text-white m-b-0 m-t-5">{{ $totals->pending_case + $pendings_count }}</h5>
                         <h6 class="text-white">Pending Cases</h6>
                     </div>
                 </div>
@@ -230,11 +230,18 @@
                                     <th scope="col"><strong>Site Vendor Name</strong></th>
                                     <th scope="col"><strong>GST Number</strong></th>
                                     <th scope="col"><strong>PAN Card Number</strong></th>
-                                    <th scope="col"><strong>Allocated Date</strong></th>
+                                    
+                                    <th scope="col"><strong>Case Rcv. Date</strong></th>
+                                    <th scope="col"><strong>Case End Date</strong></th>
+                                    <th scope="col"><strong>Allocation Date</strong></th>
                                  
                                     <th scope="col"><strong>Case Closer Date</strong></th>
                                     <th scope="col"><strong>Case Completed Date</strong></th>
-                                    <th scope="col"><strong>End Date</strong></th>
+                                    
+                                    <th scope="col"><strong>Insuff Date</strong></th>
+                                    <th scope="col"><strong>Rejected Date</strong></th>
+                                    <th scope="col"><strong>Reopen Date</strong></th>
+                                    
                                     <th scope="col"><strong>Action</strong></th>
                                     @if($status_id==8)
                                     <th scope="col"><strong>Report</strong></th>
@@ -309,11 +316,16 @@
                                 <td>{{ $case->site_vendor_name??'N/A'}}</td>
                                 <td>{{ $case->gst_number??'N/A'}}</td>
                                 <td>{{ $case->pan_card_num??'N/A'}}</td>
-                                <td>{{ $case->created_at??'N/A'}}</td>
                                 
+                                <td>{{ $case->case_rcv_date??'N/A'}}</td>
+                                <td>{{ $case->end_date??'N/A'}}</td>
+                                <td>{{ $case->allocation_date??'N/A'}}</td>
                                 <td>{{ $case->case_closer_date??'N/A'}}</td>
                                 <td>{{ $case->case_completed_date??'N/A'}}</td>
-                                <td>{{ $case->end_date??'N/A'}}</td>
+                                <td>{{ $case->insuff_date??'N/A'}}</td>
+                                <td>{{ $case->rejected_date??'N/A'}}</td>
+                                <td>{{ $case->reopen_date??'N/A'}}</td>
+                                
                                 <td>
                                     <a href="{{route('casetracking',$case->case_id)}}">
                                         <button class="btn btn-primary btn-sm">view</button>
@@ -336,33 +348,40 @@
                               @foreach($pendings as $pending)
                               
                              <tr>
-                                <td>{{ $case->case_id }}</td>
-                                <td>{{ $case->employee_id??'N/A'; }}</td>
-                                <td>{{ $case->location??'N/A'; }}</td>
-                                <td>{{ $case->project_type ==1?'Address Verification':'Site Investigation'}}</td>
-                                <td>{{ $case->pincode??'N/A'; }}</td>
+                                <td>{{ $pending->case_id }}</td>
+                                <td>{{ $pending->employee_id??'N/A'; }}</td>
+                                <td>{{ $pending->location??'N/A'; }}</td>
+                                <td>{{ $pending->project_type ==1?'Address Verification':'Site Investigation'}}</td>
+                                <td>{{ $pending->pincode??'N/A'; }}</td>
                                 <td>Not Allocated</td>
-                                <td>{{ $case->candidate_name??'N/A'}}</td>
-                                <td>{{ $case->mobile??'N/A'}}</td>
-                                <td>{{ $case->email??'N/A'}}</td>
-                                <td>{{ $case->father_name??'N/A'}}</td>
-                                <td>{{ $case->mother_name??'N/A'}}</td>
-                                <td>{{ $case->address_type??'N/A'}}</td>
-                                <td>{{ $case->address??'N/A'}}</td>
-                                <td>{{ $case->city??'N/A'}}</td>
-                                <td>{{ $case->state??'N/A'}}</td>
-                                <td>{{ $case->period_of_stay_from??'N/A'}}</td>
-                                <td>{{ $case->period_of_stay_to??'N/A'}}</td>
-                                <td>{{ $case->contact_person_name??'N/A'}}</td>
-                                <td>{{ $case->contact_person_desi??'N/A'}}</td>
-                                <td>{{ $case->site_vendor_name??'N/A'}}</td>
-                                <td>{{ $case->gst_number??'N/A'}}</td>
-                                <td>{{ $case->pan_card_num??'N/A'}}</td>
-                                <td>{{ $case->created_at??'N/A'}}</td>
+                                <td>{{ $pending->candidate_name??'N/A'}}</td>
+                                <td>{{ $pending->mobile??'N/A'}}</td>
+                                <td>{{ $pending->email??'N/A'}}</td>
+                                <td>{{ $pending->father_name??'N/A'}}</td>
+                                <td>{{ $pending->mother_name??'N/A'}}</td>
+                                <td>{{ $pending->address_type??'N/A'}}</td>
+                                <td>{{ $pending->address??'N/A'}}</td>
+                                <td>{{ $pending->city??'N/A'}}</td>
+                                <td>{{ $pending->state??'N/A'}}</td>
+                                <td>{{ $pending->period_of_stay_from??'N/A'}}</td>
+                                <td>{{ $pending->period_of_stay_to??'N/A'}}</td>
+                                <td>{{ $pending->contact_person_name??'N/A'}}</td>
+                                <td>{{ $pending->contact_person_desi??'N/A'}}</td>
+                                <td>{{ $pending->site_vendor_name??'N/A'}}</td>
+                                <td>{{ $pending->gst_number??'N/A'}}</td>
+                                <td>{{ $pending->pan_card_num??'N/A'}}</td>
+                                
                                 <td>N/A</td>
                                 <td>N/A</td>
-                                <td>{{ $case->case_end_date??'N/A'}}</td>
                                 <td>N/A</td>
+                                <td>N/A</td>
+                                <td>N/A</td>
+                                <td>N/A</td>
+                                <td>N/A</td>
+                                <td>N/A</td>
+                                
+                                <td>N/A</td>
+                                
                                 @if($status_id==8)
                                 <td> N/A</td>
                                 @endif

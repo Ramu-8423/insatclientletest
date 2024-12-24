@@ -115,8 +115,6 @@ Route::post('/reopen_case_client', [DashboardController::class, 'reopen_case_cli
 Route::get('/download_report/{client_id}/{project_type}/{case_id}', [DashboardController::class, 'download_report'])->name('download_report');
 
 
-
-
 Route::get('/addressreportpdf/{case_id}',[ReportPdfController::class, 'addressreportpdf'])->name('addressreportpdf');
 Route::get('/sitereportpdf/{case_id}',[ReportPdfController::class, 'sitereportpdf'])->name('sitereportpdf');
 

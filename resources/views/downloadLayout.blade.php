@@ -75,7 +75,10 @@
         <!-- Table Content -->
         <div class="responsive-table-container" id="content">
             
-@php
+    @php
+          
+          
+          
 function convertImageToBase64($imageUrl) {
     $ch = curl_init($imageUrl);
     curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
@@ -92,9 +95,18 @@ function convertImageToBase64($imageUrl) {
 @endphp
 
 @php
-$image1Base64 = convertImageToBase64('https://admin.instalocate.io/images/com_icon.png');
-$image2Base64 = convertImageToBase64('https://admin.instalocate.io/images/nogift.png');
-$image3Base64 = convertImageToBase64('https://admin.instalocate.io/images/nocash.jpg');
+$nogift = convertImageToBase64('https://admin.instalocate.io/images/nogif.png');
+$nocash = convertImageToBase64('https://admin.instalocate.io/images/nocash.jpg');
+$instaocate1 = convertImageToBase64('https://admin.instalocate.io/images/instalocate1.png');
+$instaocate2 = convertImageToBase64('https://admin.instalocate.io/images/instalocate3.png');
+
+     if($project_type==1||$project_type==3){
+          $resp_sign = env('APP_ADMIN_URL').$details->respondent_sign;
+          $v_sign = env('APP_ADMIN_URL').$details->v_signature;
+          $resp_sign = convertImageToBase64($resp_sign);
+          $v_sign = convertImageToBase64($v_sign);
+     }
+    
 @endphp
                   
             
@@ -103,7 +115,7 @@ $image3Base64 = convertImageToBase64('https://admin.instalocate.io/images/nocash
                 <div class="row" style="margin-bottom:10px;">
                     <div class="col-12 text-center">
                         <div class="header p-1">
-                            <img src="{{ $image1Base64 }}" alt="Logo" class="logo float-left" width="70px" height="70px" style="padding-left:5px;border-radius:50%;">
+                            <img src="{{ $instaocate1 }}" alt="Logo" class="logo float-left" width="100px" height="70px" style="padding-left:5px;">
                             <h4>INTUITIVE INFO SERVICES PVT. LTD.</h4>
                             <p>BETTER HIRING | SMART SCREENING</p>
                         </div>
@@ -119,7 +131,7 @@ $image3Base64 = convertImageToBase64('https://admin.instalocate.io/images/nocash
                             @php
                                 $htmlContent = json_decode($report_design->$value);
                             @endphp
-                            {!! Blade::render($htmlContent, ['details' => $details]) !!}
+                            {!! Blade::render($htmlContent, ['details' => $details,'resp_sign'=>$resp_sign,'v_sign'=>$v_sign]) !!}
                         @endforeach
                     </tbody>
                 </table>
@@ -135,10 +147,10 @@ $image3Base64 = convertImageToBase64('https://admin.instalocate.io/images/nocash
                         <p>यदि क्षेत्र के कार्यकारी किसी भी तरीके से पैसे या अन्य वस्तु के लिए आग्रह करता है तो आपसे निवेदन है की इस नंबर +91 120 4149741  पर तुरंत सूचना करे l आप हमें  ई -मेल के माध्यम से सम्पर्क कर सकते है : Email : supportcs@iis-pl.com</p>
                     </div>
                     <div class="col-sm-2">
-                        <img src="{{$image2Base64}}" style="width:100px;height:100px;">
+                        <img src="{{$nogift}}" style="width:100px;height:100px;">
                     </div>
                     <div class="col-sm-2">
-                        <img src="{{$image3Base64}}" style="width:100px;height:100px;">
+                        <img src="{{$nocash}}" style="width:100px;height:100px;">
                     </div>
                  </div>
                 
@@ -159,9 +171,10 @@ $image3Base64 = convertImageToBase64('https://admin.instalocate.io/images/nocash
             
                  <div class="row" style="margin-bottom:10px;">
                     <div class="col-12 text-center">
-                            <img src="{{env('APP_ADMIN_URL').'images/sitever.jpg'}}" alt="Logo" width="150px" height="70px">
+                            <img src="{{$instaocate2}}" alt="Logo" width="300px" height="70px">
                     </div>
                  </div>
+                 
                  <div class="row" style="margin-bottom:10px;">
                     <div class="col-12 text-center">
                             <p>Garage / Automobile Verification (Field Visit Form)</p>
